@@ -1,0 +1,638 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>How systems shape Deaf communities</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,500;0,9..144,600;0,9..144,700;1,9..144,500&family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:ital,wght@0,400;0,500;0,600;1,400&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --paper:#f3efe6; --surface:#fffcf6; --ink:#16140f; --muted:#6e685c;
+    --line:#d6d0c4; --forest:#1a472a; --forest-soft:#e8efe9;
+    --ochre:#6b3d12; --ochre-soft:#f3ebe2; --alert:#8f2a2a; --alert-soft:#f3e4e4;
+    --plum:#4a2f5e; --plum-soft:#efe8f3;
+    --rust:#a8391c; --rust-soft:#f7e5dc;
+  }
+  * { box-sizing:border-box; margin:0; padding:0; }
+  html { -webkit-font-smoothing:antialiased; scroll-behavior:smooth; }
+  body { background:var(--paper); color:var(--ink); font-family:"IBM Plex Sans", system-ui, sans-serif; line-height:1.55; }
+  h1,h2,h3 { font-family:"Fraunces", Georgia, serif; text-wrap:balance; }
+  p { text-wrap:pretty; }
+  a { color:var(--ochre); }
+  header { background:var(--ink); color:var(--paper); }
+  header .inner, main, footer .inner { width:min(1120px,100%); margin:0 auto; padding:22px 16px; }
+  header .kicker { font-family:"IBM Plex Mono", monospace; font-size:10px; letter-spacing:.18em; text-transform:uppercase; color:rgba(255,252,246,.6); }
+  header h1 { font-size:clamp(1.5rem,3.4vw,2.1rem); margin-top:6px; }
+  header .lede { font-family:"IBM Plex Mono", monospace; font-size:11px; color:rgba(255,252,246,.7); max-width:32em; }
+  header .bar { display:flex; justify-content:space-between; gap:16px; flex-wrap:wrap; align-items:end; }
+  .intro { font-size:15.5px; max-width:46em; margin:6px 0 18px; }
+  .intro strong { color:var(--forest); }
+  .sub { font-family:"Fraunces", Georgia, serif; font-style:italic; color:var(--ochre); font-size:clamp(1.05rem,2.2vw,1.35rem); margin:4px 0 12px; }
+  .muted { color:var(--muted); font-size:14px; }
+  .ribbon { display:grid; grid-template-columns:repeat(2,1fr); gap:8px; margin:20px 0; }
+  @media (min-width:720px) { .ribbon { grid-template-columns:repeat(5,1fr); } }
+  .kpi { background:var(--surface); border:1px solid var(--line); border-radius:6px; padding:12px; }
+  .kpi b { display:block; font-family:"Fraunces", Georgia, serif; font-size:1.5rem; color:var(--forest); }
+  .kpi span { display:block; margin-top:4px; font-family:"IBM Plex Mono", monospace; font-size:10px; letter-spacing:.12em; text-transform:uppercase; color:var(--muted); }
+  .note { background:var(--ochre-soft); border:1px solid color-mix(in srgb, var(--ochre) 30%, var(--line)); border-radius:8px; padding:14px 16px; margin:8px 0 28px; }
+  .tag { font-family:"IBM Plex Mono", monospace; font-size:10px; letter-spacing:.14em; text-transform:uppercase; color:var(--ochre); display:block; margin-bottom:6px; }
+  .tag.rust { color:var(--rust); }
+  .tag.alert { color:var(--alert); }
+  section { margin:40px 0; }
+  h2 { color:var(--forest); font-size:1.5rem; border-bottom:1px solid var(--line); padding-bottom:8px; margin-bottom:6px; }
+  h2 + .muted { margin-bottom:16px; }
+
+  /* mode switch */
+  .modeswitch { display:flex; gap:6px; margin:18px 0 22px; background:var(--surface); border:1px solid var(--line); border-radius:10px; padding:5px; max-width:fit-content; flex-wrap:wrap; }
+  .modeswitch button {
+    min-height:44px; padding:8px 16px; border:0; border-radius:7px; background:transparent; color:var(--muted);
+    font:600 14px "IBM Plex Sans", sans-serif; cursor:pointer;
+  }
+  .modeswitch button.on.mode-interp { background:var(--forest); color:var(--paper); }
+  .modeswitch button.on.mode-money { background:var(--plum); color:var(--paper); }
+  .modeswitch button.on.mode-voices { background:var(--rust); color:var(--paper); }
+  .mode-panel { display:none; }
+  .mode-panel.on { display:block; }
+
+  .grid2 { display:grid; gap:10px; }
+  @media (min-width:760px) { .grid2 { grid-template-columns:1fr 1fr; } }
+  .design { text-align:left; border:0; border-left:4px solid var(--forest); background:var(--forest-soft); border-radius:8px; padding:14px 16px; cursor:pointer; font:inherit; color:inherit; }
+  .design.money { border-left-color:var(--plum); background:var(--plum-soft); }
+  .design strong { font-family:"Fraunces", Georgia, serif; font-size:1.05rem; display:block; margin-bottom:6px; }
+  .filters { display:flex; flex-wrap:wrap; gap:8px; margin:12px 0 18px; }
+  .filters button {
+    min-height:44px; padding:8px 12px; border:2px solid var(--ink);
+    background:transparent; color:var(--ink); font:500 14px "IBM Plex Sans", sans-serif; cursor:pointer;
+  }
+  .filters button.on { background:var(--ink); color:var(--paper); }
+  .sys { background:var(--surface); border:1px solid var(--line); border-radius:8px; margin:0 0 10px; }
+  .sys.home { border-left:4px solid var(--ochre); }
+  .sys.off { display:none; }
+  .sys > button.head {
+    width:100%; background:none; border:0; text-align:left; cursor:pointer;
+    display:flex; justify-content:space-between; gap:12px; padding:14px 16px; font:inherit; color:inherit;
+    min-height:56px; align-items:flex-start;
+  }
+  .sys h3 { font-size:1.15rem; }
+  .sys .dl { color:var(--muted); font-size:13px; margin-top:4px; }
+  .pill { font-family:"IBM Plex Mono", monospace; font-size:10px; letter-spacing:.1em; text-transform:uppercase; border:1px solid var(--ochre); color:var(--ochre); padding:2px 7px; }
+  .body { display:none; border-top:1px solid var(--line); padding:12px 16px 16px; }
+  .sys.open .body { display:block; }
+  .five { display:grid; gap:8px; }
+  @media (min-width:900px) { .five { grid-template-columns:repeat(5,1fr); } }
+  @media (min-width:640px) and (max-width:899px) { .five { grid-template-columns:1fr 1fr; } }
+  .cell { background:var(--paper); border:1px solid var(--line); border-radius:6px; padding:10px 12px; }
+  .cell .q { font-family:"IBM Plex Mono", monospace; font-size:10px; letter-spacing:.12em; text-transform:uppercase; color:var(--ochre); margin-bottom:6px; }
+  .mode-panel.money .cell .q { color:var(--plum); }
+  .cell p { font-size:13px; }
+  .lesson { margin-top:10px; padding-top:10px; border-top:1px solid var(--line); color:var(--forest); font-size:14px; }
+  .mode-panel.money .lesson { color:var(--plum); }
+  ol.steal { list-style:none; counter-reset:s; }
+  ol.steal li { counter-increment:s; display:flex; gap:12px; margin:10px 0; }
+  ol.steal li::before {
+    content:counter(s); flex:0 0 28px; height:28px; border-radius:50%;
+    background:var(--forest); color:var(--paper); font-family:"Fraunces", Georgia, serif;
+    display:flex; align-items:center; justify-content:center; font-size:14px;
+  }
+  .mode-panel.money ol.steal li::before { background:var(--plum); }
+  .fix { background:var(--alert-soft); border:1px solid color-mix(in srgb, var(--alert) 25%, var(--line)); border-radius:8px; padding:14px 16px; font-size:14px; }
+  .closing { background:var(--surface); border:1px solid var(--line); border-radius:10px; padding:20px 22px; font-size:15px; }
+  .closing h2 { border:0; padding:0; margin-bottom:10px; }
+  footer { border-top:1px solid var(--line); font-family:"IBM Plex Mono", monospace; font-size:10px; letter-spacing:.08em; text-transform:uppercase; color:var(--muted); }
+  footer .inner a { color:var(--muted); }
+
+  /* ---- lived experience (mode 3) ---- */
+  .voice-country { background:var(--surface); border:1px solid var(--line); border-radius:10px; padding:18px 20px 20px; margin:0 0 16px; }
+  .vc-head { display:flex; justify-content:space-between; align-items:baseline; gap:12px; flex-wrap:wrap; border-bottom:1px solid var(--line); padding-bottom:10px; margin-bottom:14px; }
+  .vc-head h3 { font-size:1.3rem; }
+  .vc-head .dl { color:var(--muted); font-size:13.5px; margin-top:2px; }
+  .vc-domain { margin:14px 0; }
+  .vc-domain:first-of-type { margin-top:0; }
+  .vquote {
+    font-family:"Fraunces", Georgia, serif; font-style:italic; color:var(--ink);
+    font-size:1.06rem; line-height:1.5; border-left:3px solid var(--rust);
+    padding:2px 0 2px 16px; margin:12px 0;
+  }
+  .vquote cite { display:block; font-style:normal; font-family:"IBM Plex Mono", monospace; font-size:10.5px; letter-spacing:.06em; color:var(--muted); margin-top:7px; }
+  .vctx { font-size:13.5px; color:var(--muted); margin:8px 0 2px; }
+  .vctx:first-child { margin-top:0; }
+  .voice-bright .vquote { border-left-color:var(--forest); }
+  .care-note { background:var(--alert-soft); border:1px solid color-mix(in srgb, var(--alert) 22%, var(--line)); border-radius:8px; padding:13px 16px; font-size:13.5px; margin:12px 0 0; }
+  .care-note .tag.alert { margin-bottom:4px; }
+  .finland-note { background:var(--rust-soft); border:1px solid color-mix(in srgb, var(--rust) 25%, var(--line)); border-radius:8px; padding:14px 16px; margin:8px 0 24px; font-size:14px; }
+</style>
+</head>
+<body>
+<header>
+  <div class="inner bar">
+    <div>
+      <p class="kicker">Food for thought · international</p>
+      <h1>How systems shape Deaf communities</h1>
+    </div>
+    <p class="lede">Nine countries. Three layers — what the law says, what it costs, and what people actually say happened.</p>
+  </div>
+</header>
+<main>
+  <p class="sub">Duty, payer, booker, VRS, Deafblind — and then, the people underneath it</p>
+  <p class="intro">Every country answers the same five questions differently, and the answers quietly decide what a Deaf or DeafBlind person's life actually looks like — whether they can phone a doctor tomorrow, whether an interpreter shows up, whether a benefit pays for that interpreter or just tops up their income. This page holds up eight countries against the same five questions, twice: once for <strong>who arranges an interpreter</strong>, and once for <strong>who pays cash</strong>. Underneath both sits a third view: <strong>what people who actually live inside these systems say happened to them</strong> — in clinics, classrooms, and the years in between. None of this is offered as a ranking. A country that scores well on paper can still fail at the appointment, a generous cash benefit is not the same thing as a booked interpreter, and a strong statute is not the same thing as a childhood spent inside a language you could fully understand. The point isn't to declare a winner — it's to see the shape of each machine clearly enough to ask better questions of your own.</p>
+
+  <div class="ribbon">
+    <div class="kpi"><b>8</b><span>countries</span></div>
+    <div class="kpi"><b>5</b><span>questions</span></div>
+    <div class="kpi"><b>3</b><span>layers</span></div>
+    <div class="kpi"><b>4+2</b><span>designs found</span></div>
+    <div class="kpi"><b>1</b><span>not a ranking</span></div>
+  </div>
+
+  <div class="note">
+    <span class="tag">Not a ranking</span>
+    A statute on the books is not proof an interpreter turns up. A bigger cash benefit is not proof an appointment gets booked. A first-hand account is not proof of what happens everywhere in that country, either — it's one person's true experience, not a statistic. Every system here has gaps its own government doesn't fully measure — that absence of data is itself part of the picture, not a footnote to it.
+  </div>
+
+  <div class="modeswitch" id="modeswitch">
+    <button class="on mode-interp" data-mode="interp" type="button">Interpreter systems</button>
+    <button class="mode-money" data-mode="money" type="button">Money pipes (UK)</button>
+    <button class="mode-voices" data-mode="voices" type="button">Lived experience</button>
+  </div>
+
+  <!-- ============ MODE 1: INTERPRETER SYSTEMS ============ -->
+  <div class="mode-panel interp on" id="panel-interp">
+    <section style="margin-top:0">
+      <h2>Four designs for arranging an interpreter</h2>
+      <p class="muted">Who is legally on the hook to make sure a Deaf or DeafBlind person has an interpreter in the room, or on the line.</p>
+      <div class="grid2">
+        <button class="design" data-f="clinic"><strong>Clinic-pays</strong> The health body is legally the booker and the payer. Norway (Tolkeloven). England, on paper, via the Equality Act and the Accessible Information Standard — but the patient usually has to invoke it themselves.</button>
+        <button class="design" data-f="hours"><strong>User-hours</strong> A pot of hours sits with the person (Netherlands UWV; England's Access to Work, but work only). Health appointments still need a separate duty, or the hours simply run out.</button>
+        <button class="design" data-f="levy"><strong>Telecoms-levy</strong> Any-number video relay funded like a utility (US FCC TRS). On-site clinical interpreting is a completely different legal pot. Scotland is the UK-internal version of this phone layer.</button>
+        <button class="design" data-f="mixed"><strong>Mixed pots</strong> Australia: NDIS, plus NSLP/NABS, plus the health department, each covering a different slice. More programmes can still add up to no interpreter in the GP room.</button>
+      </div>
+    </section>
+
+    <section>
+      <h2>The grid</h2>
+      <p class="muted">Filter by design. Open a country for the five-question breakdown.</p>
+      <div class="filters" id="filters-interp">
+        <button class="on" data-f="all">All</button>
+        <button data-f="home">UK nations</button>
+        <button data-f="clinic">Clinic-pays</button>
+        <button data-f="hours">User-hours</button>
+        <button data-f="levy">Telecoms-levy</button>
+        <button data-f="mixed">Mixed pots</button>
+      </div>
+
+      <article class="sys home open" data-home="1" data-design="clinic mixed">
+        <button class="head" type="button" aria-expanded="true"><div><h3>England</h3><p class="dl">Clinic-duty on paper · mixed pots in practice</p></div><span class="pill">UK</span></button>
+        <div class="body">
+          <div class="five">
+            <div class="cell"><div class="q">1 Duty</div><p>Equality Act reasonable adjustments, plus the Accessible Information Standard. The BSL Act 2022 is recognition and reporting only — it does not create an individual service right.</p></div>
+            <div class="cell"><div class="q">2 Payer</div><p>The local NHS body, integrated care board, or GP practice's own contract. Access to Work pays for work-related interpreting (cap £69,260, frozen). There's no single ring-fenced national BSL budget.</p></div>
+            <div class="cell"><div class="q">3 Booker</div><p>The clinic, usually through a contracted intermediary. Face-to-face and video interpreting are typically outsourced to specialist agencies working under NHS framework contracts.</p></div>
+            <div class="cell"><div class="q">4 VRS</div><p>Not any-number. 999 and 111 have BSL routes; beyond that it's whatever a given organisation has separately contracted. A national any-number video relay service was considered and rejected by the regulator in 2011.</p></div>
+            <div class="cell"><div class="q">5 Deafblind</div><p>Nineteen registered Deafblind interpreters nationally; one is based in London. Deafblind provision is usually subcontracted a further step down the chain, and how often it's actually fulfilled isn't published anywhere.</p></div>
+          </div>
+          <p class="lesson">A duty exists on paper. What's missing everywhere in this row is whether the interpreter actually arrives — no public body tracks that number.</p>
+        </div>
+      </article>
+
+      <article class="sys home" data-home="1" data-design="levy clinic">
+        <button class="head" type="button" aria-expanded="false"><div><h3>Scotland</h3><p class="dl">Clinic-duty + national any-number video relay</p></div><span class="pill">UK</span></button>
+        <div class="body">
+          <div class="five">
+            <div class="cell"><div class="q">1 Duty</div><p>The BSL (Scotland) Act 2015 requires national and local BSL plans — a stronger statutory footing than the rest of the UK. Health boards still owe an interpreter under equality law separately.</p></div>
+            <div class="cell"><div class="q">2 Payer</div><p>The Scottish Government funds a national video relay service. Face-to-face interpreting in a clinic remains a health board's own budget.</p></div>
+            <div class="cell"><div class="q">3 Booker</div><p>The person themselves can place a video relay call directly. Face-to-face appointments still go through the health board's own booking process.</p></div>
+            <div class="cell"><div class="q">4 VRS</div><p>Any UK phone number, available around the clock, for Scottish residents. Not for international or work calls. In public consultation, a majority of respondents said they'd never actually used it.</p></div>
+            <div class="cell"><div class="q">5 Deafblind</div><p>The national interpreter register lists a very small number of Deafblind manual interpreters and guide communicators for the whole of Scotland.</p></div>
+          </div>
+          <p class="lesson">Proof that any-number video relay is achievable inside the UK. But a service existing and a service being used are two different facts.</p>
+        </div>
+      </article>
+
+      <article class="sys home" data-home="1" data-design="clinic">
+        <button class="head" type="button" aria-expanded="false"><div><h3>Wales</h3><p class="dl">Clinic-duty + limited-hours health video relay</p></div><span class="pill">UK</span></button>
+        <div class="body">
+          <div class="five">
+            <div class="cell"><div class="q">1 Duty</div><p>A BSL (Wales) Bill passed into law in March 2026. The Equality Act remains the main individual-level hook in the meantime.</p></div>
+            <div class="cell"><div class="q">2 Payer</div><p>Local health boards, individually. There's no Wales-wide ring-fenced BSL budget found in public records.</p></div>
+            <div class="cell"><div class="q">3 Booker</div><p>The health board books face-to-face or video interpreting. At least one board has added a video relay option directly to its own switchboard — but that's organisation-level, not a national service.</p></div>
+            <div class="cell"><div class="q">4 VRS</div><p>999 has a BSL route. NHS 111 Wales offers BSL video relay seven days a week, 08:00 to midnight — not 24 hours, and not any-number.</p></div>
+            <div class="cell"><div class="q">5 Deafblind</div><p>The national interpreter register lists a single Deafblind-registered interpreter for the whole of Wales.</p></div>
+          </div>
+          <p class="lesson">Limited hours is a real service, not the same as having none — but it's also not a 24/7 any-number line.</p>
+        </div>
+      </article>
+
+      <article class="sys" data-design="levy">
+        <button class="head" type="button" aria-expanded="false"><div><h3>United States</h3><p class="dl">Telecoms-levy video relay + a separate clinical duty</p></div></button>
+        <div class="body">
+          <div class="five">
+            <div class="cell"><div class="q">1 Duty</div><p>Federal telecoms law requires the regulator to ensure functionally equivalent phone access. Hospitals carry a completely separate disability-rights duty to provide on-site or video interpreting.</p></div>
+            <div class="cell"><div class="q">2 Payer</div><p>A dedicated relay fund, paid for by a levy on telecoms carriers, funds the phone-relay layer — nearly $1.5 billion a year. The person pays nothing for that call. Clinical interpreting is funded completely separately.</p></div>
+            <div class="cell"><div class="q">3 Booker</div><p>The person dials any number themselves through video relay. The clinic separately arranges whoever is physically in the room.</p></div>
+            <div class="cell"><div class="q">4 VRS</div><p>Any-number, 24/7, with regulated answer-time standards. This is the exact design the UK regulator considered and declined in 2011.</p></div>
+            <div class="cell"><div class="q">5 Deafblind</div><p>The relay fund also supports DeafBlind users, and a separate federal programme distributes communication equipment to DeafBlind people at no cost — something the UK has no national equivalent of. Tactile interpreting in a clinic is still the clinic's own responsibility.</p></div>
+          </div>
+          <p class="lesson">The phone-layer design is genuinely portable. The dollar figure isn't a healthcare saving — it's a telecoms utility, funding a different problem than clinical booking.</p>
+        </div>
+      </article>
+
+      <article class="sys" data-design="clinic">
+        <button class="head" type="button" aria-expanded="false"><div><h3>Norway</h3><p class="dl">Clinic-pays, under a dedicated interpreting law</p></div></button>
+        <div class="body">
+          <div class="five">
+            <div class="cell"><div class="q">1 Duty</div><p>Public bodies are legally required to use a qualified interpreter. The patient can request one; a clinician assesses need. Family members are explicitly not treated as the model.</p></div>
+            <div class="cell"><div class="q">2 Payer</div><p>The health service pays directly — free to the patient in public care (with a narrow dental exception). A separate welfare fund also covers interpreting hours for work, education and daily life.</p></div>
+            <div class="cell"><div class="q">3 Booker</div><p>The health service itself books the interpreter. Screen or phone interpreting is allowed but isn't automatically treated as a legal substitute for in-person.</p></div>
+            <div class="cell"><div class="q">4 VRS</div><p>Video interpreting runs as an extension of the same public interpreter service, rather than as a separate telecoms product.</p></div>
+            <div class="cell"><div class="q">5 Deafblind</div><p>Covered inside the same public service in principle. Actual headcount and fulfilment data for Deafblind provision specifically wasn't found in public sources.</p></div>
+          </div>
+          <p class="lesson">The clearest example of a clinic already being legally on the hook, rather than the patient having to invoke a general equality right. Whether that translates into every appointment being covered is still an open question — the data isn't public.</p>
+        </div>
+      </article>
+
+      <article class="sys" data-design="clinic">
+        <button class="head" type="button" aria-expanded="false"><div><h3>Sweden</h3><p class="dl">One interpreter centre per region</p></div></button>
+        <div class="body">
+          <div class="five">
+            <div class="cell"><div class="q">1 Duty</div><p>A regional responsibility under national health law.</p></div>
+            <div class="cell"><div class="q">2 Payer</div><p>Each region pays through its own dedicated interpreter centre. The patient doesn't pay for the interpreter in public care.</p></div>
+            <div class="cell"><div class="q">3 Booker</div><p>A single specialist desk per region handles bookings — a much smaller, dedicated structure than a general multi-language contracting model.</p></div>
+            <div class="cell"><div class="q">4 VRS</div><p>National video interpreting exists. Research describes queues at times — it isn't an instant, zero-wait service.</p></div>
+            <div class="cell"><div class="q">5 Deafblind</div><p>Runs through the same regional centre. No national tactile-interpreting wait-time data was found.</p></div>
+          </div>
+          <p class="lesson">Worth asking of any local health system: is there one dedicated desk that knows this population, or is BSL/sign-language booking buried inside a general interpreting contract alongside dozens of spoken languages?</p>
+        </div>
+      </article>
+
+      <article class="sys" data-design="hours">
+        <button class="head" type="button" aria-expanded="false"><div><h3>Netherlands</h3><p class="dl">User-hours, held by the person</p></div></button>
+        <div class="body">
+          <div class="five">
+            <div class="cell"><div class="q">1 Duty</div><p>A recognised right to a sign-language, live-captioning, or tactile interpreter for work, school and private life — including medical appointments. Care providers can also arrange interpreting inside their own services.</p></div>
+            <div class="cell"><div class="q">2 Payer</div><p>A national employment agency awards an annual bank of interpreting hours; a separate body pays the invoices.</p></div>
+            <div class="cell"><div class="q">3 Booker</div><p>The person books a named interpreter themselves, drawing down from their awarded hours. A care provider may separately book interpreting for sessions it runs.</p></div>
+            <div class="cell"><div class="q">4 VRS</div><p>A national video-relay telephone service exists. The scarce resource here is the hours in a person's account, not access to a phone line.</p></div>
+            <div class="cell"><div class="q">5 Deafblind</div><p>Tactile interpreting is named as its own category, and at least one scheme gives DeafBlind people a substantially larger annual hour allowance than Deaf people receive under a comparable scheme.</p></div>
+          </div>
+          <p class="lesson">The clearest illustration of "hours in your own pocket" as a design. England's Access to Work is the nearest UK cousin — but it's work-only, capped, frozen, and doesn't touch a GP booking at all.</p>
+        </div>
+      </article>
+
+      <article class="sys" data-design="mixed">
+        <button class="head" type="button" aria-expanded="false"><div><h3>Australia</h3><p class="dl">Mixed pots across disability, community and health budgets</p></div></button>
+        <div class="body">
+          <div class="five">
+            <div class="cell"><div class="q">1 Duty</div><p>A recognised right to an Auslan interpreter. A government health department review of primary care found actual use fell short — citing awareness, procedural friction, workforce shortage and split funding as the causes.</p></div>
+            <div class="cell"><div class="q">2 Payer</div><p>A national disability insurance plan if the person is eligible; a separate community-language-service scheme for older people not on that plan; another scheme for some private medical settings; a workplace fund for employment. A national telephone interpreting service explicitly excludes sign language.</p></div>
+            <div class="cell"><div class="q">3 Booker</div><p>Whichever pot happens to apply on a given day. A federal services agency has also added its own on-demand Auslan video option inside its own offices.</p></div>
+            <div class="cell"><div class="q">4 VRS</div><p>A national relay service includes video relay, but it's entirely separate from whoever is physically arranged to be in the GP room.</p></div>
+            <div class="cell"><div class="q">5 Deafblind</div><p>Named explicitly in scheme documentation. No national tactile-interpreting fulfilment data was found.</p></div>
+          </div>
+          <p class="lesson">A caution as much as a model: more funding programmes did not, in the government's own review, add up to more interpreters actually appearing at appointments. The booking logic is worth studying; the fragmented pot-split probably isn't worth copying.</p>
+        </div>
+      </article>
+    </section>
+
+    <section>
+      <h2>Same appointment, eight countries — GP tomorrow morning</h2>
+      <p class="muted">Strip away the legal language and ask one plain question: can this person actually get seen, with an interpreter, tomorrow?</p>
+      <div class="tablewrap" style="overflow-x:auto">
+        <table style="width:100%; border-collapse:collapse; font-size:13px">
+          <thead>
+            <tr><th style="text-align:left; font-family:'IBM Plex Mono',monospace; font-size:10px; letter-spacing:.1em; text-transform:uppercase; color:var(--muted); padding:8px 8px 8px 0; border-bottom:2px solid var(--forest)">Country</th><th style="text-align:left; font-family:'IBM Plex Mono',monospace; font-size:10px; letter-spacing:.1em; text-transform:uppercase; color:var(--muted); padding:8px 8px 8px 0; border-bottom:2px solid var(--forest)">Phone the surgery today?</th><th style="text-align:left; font-family:'IBM Plex Mono',monospace; font-size:10px; letter-spacing:.1em; text-transform:uppercase; color:var(--muted); padding:8px 8px 8px 0; border-bottom:2px solid var(--forest)">Who books the room?</th><th style="text-align:left; font-family:'IBM Plex Mono',monospace; font-size:10px; letter-spacing:.1em; text-transform:uppercase; color:var(--muted); padding:8px 8px 8px 0; border-bottom:2px solid var(--forest)">If nobody arrives</th></tr>
+          </thead>
+          <tbody>
+            <tr><td style="padding:10px 8px 10px 0; border-bottom:1px solid var(--line); color:var(--ochre); font-weight:600">England</td><td style="padding:10px 8px 10px 0; border-bottom:1px solid var(--line)">Only if that practice separately bought a video relay slot</td><td style="padding:10px 8px 10px 0; border-bottom:1px solid var(--line)">The practice, via a chain of contracted intermediaries</td><td style="padding:10px 8px 10px 0; border-bottom:1px solid var(--line)">An equality-law complaint. No automatic replacement</td></tr>
+            <tr><td style="padding:10px 8px 10px 0; border-bottom:1px solid var(--line); color:var(--ochre); font-weight:600">Scotland</td><td style="padding:10px 8px 10px 0; border-bottom:1px solid var(--line)">Yes — a national video relay line, any UK number</td><td style="padding:10px 8px 10px 0; border-bottom:1px solid var(--line)">The health board for in-person; the person can start the phone leg themselves</td><td style="padding:10px 8px 10px 0; border-bottom:1px solid var(--line)">Board duty, plus a phone path the person already holds</td></tr>
+            <tr><td style="padding:10px 8px 10px 0; border-bottom:1px solid var(--line); color:var(--ochre); font-weight:600">Wales</td><td style="padding:10px 8px 10px 0; border-bottom:1px solid var(--line)">A national health video line, but only 08:00–midnight</td><td style="padding:10px 8px 10px 0; border-bottom:1px solid var(--line)">The health board</td><td style="padding:10px 8px 10px 0; border-bottom:1px solid var(--line)">The board, or an equality-law complaint</td></tr>
+            <tr><td style="padding:10px 8px 10px 0; border-bottom:1px solid var(--line)">United States</td><td style="padding:10px 8px 10px 0; border-bottom:1px solid var(--line)">Yes — any number, no cost to the caller</td><td style="padding:10px 8px 10px 0; border-bottom:1px solid var(--line)">The clinic, under disability law, separately from the phone relay</td><td style="padding:10px 8px 10px 0; border-bottom:1px solid var(--line)">A disability-rights complaint on the clinic; the phone relay is rarely the failure point</td></tr>
+            <tr><td style="padding:10px 8px 10px 0; border-bottom:1px solid var(--line)">Norway</td><td style="padding:10px 8px 10px 0; border-bottom:1px solid var(--line)">Via the public interpreter service</td><td style="padding:10px 8px 10px 0; border-bottom:1px solid var(--line)">The clinic, by statute</td><td style="padding:10px 8px 10px 0; border-bottom:1px solid var(--line)">A public-body legal failure</td></tr>
+            <tr><td style="padding:10px 8px 10px 0; border-bottom:1px solid var(--line)">Sweden</td><td style="padding:10px 8px 10px 0; border-bottom:1px solid var(--line)">A national video service exists, though it may queue</td><td style="padding:10px 8px 10px 0; border-bottom:1px solid var(--line)">The regional interpreter centre</td><td style="padding:10px 8px 10px 0; border-bottom:1px solid var(--line)">A regional-level failure</td></tr>
+            <tr><td style="padding:10px 8px 10px 0; border-bottom:1px solid var(--line)">Netherlands</td><td style="padding:10px 8px 10px 0; border-bottom:1px solid var(--line)">A national video-relay phone service exists</td><td style="padding:10px 8px 10px 0; border-bottom:1px solid var(--line)">The person, from their own awarded hours — or the care provider</td><td style="padding:10px 8px 10px 0; border-bottom:1px solid var(--line)">Hours can simply run out partway through the year</td></tr>
+            <tr><td style="padding:10px 8px 10px 0; border-bottom:1px solid var(--line)">Australia</td><td style="padding:10px 8px 10px 0; border-bottom:1px solid var(--line)">A national relay service covers the phone call</td><td style="padding:10px 8px 10px 0; border-bottom:1px solid var(--line)">Whichever funding pot happens to apply that day</td><td style="padding:10px 8px 10px 0; border-bottom:1px solid var(--line)">A government review already found GP-level use weak</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <section>
+      <h2>What's genuinely worth borrowing — and what isn't</h2>
+      <ol class="steal">
+        <li><div><strong>Scotland's any-number video relay</strong> proves the design is achievable inside a UK legal and funding system. It doesn't prove people use it — most surveyed residents hadn't.</div></li>
+        <li><div><strong>Norway's named clinic-as-booker statute</strong> is the clearest example of the duty sitting with the health service, not the patient. It isn't evidence of short waiting times — that data isn't public there either.</div></li>
+        <li><div><strong>Sweden's one dedicated desk per region</strong> is a genuinely portable structural idea, worth asking any local health system about directly.</div></li>
+        <li><div><strong>The Netherlands naming tactile interpreting as its own category</strong>, distinct from general sign-language interpreting, is worth copying as a principle. Copying the specific hour-caps into a different country's appointment system is not.</div></li>
+        <li><div><strong>The US telecoms-levy model</strong> is a genuinely portable idea for the phone layer only. The headline dollar figure is a telecoms utility cost, not a healthcare saving, and shouldn't be quoted as one.</div></li>
+        <li><div><strong>Australia's own finding</strong> — that more funding programmes did not translate into more interpreters actually showing up — is arguably the single most exportable lesson on this page.</div></li>
+      </ol>
+    </section>
+  </div>
+
+  <!-- ============ MODE 2: MONEY PIPES (UK) ============ -->
+  <div class="mode-panel money" id="panel-money">
+    <section style="margin-top:0">
+      <h2>Two designs for paying a Deaf or DeafBlind person</h2>
+      <p class="muted">The same five questions, asked of the UK's own benefit and grant system rather than of other countries — because inside the UK itself, "who arranges an interpreter" and "who pays a person cash" turn out to be almost entirely separate machines.</p>
+      <div class="grid2">
+        <button class="design money" data-f="cash"><strong>Extra-cost cash</strong> A benefit paid to the person because disability makes daily life more expensive — not tied to any specific appointment or interpreter booking. PIP, ADP, DLA, Attendance Allowance all work this way.</button>
+        <button class="design money" data-f="workhours"><strong>Work-hours grant</strong> A capped, discretionary grant that pays for interpreting specifically in employment. Access to Work is the only UK pot in this whole picture that pays for interpreting directly, and it stops at the office door.</button>
+      </div>
+    </section>
+
+    <section>
+      <h2>Six UK pots, the same five questions</h2>
+      <p class="muted">Filter by design. Open a pot for the five-question breakdown. This reveals the same shape a bar chart hides: money and booking are not the same system, and mixing them up is where most public confusion about Deaf benefits comes from.</p>
+      <div class="filters" id="filters-money">
+        <button class="on" data-f="all">All</button>
+        <button data-f="cash">Extra-cost cash</button>
+        <button data-f="workhours">Work-hours grant</button>
+      </div>
+
+      <article class="sys open" data-design="cash">
+        <button class="head" type="button" aria-expanded="true"><div><h3>PIP — England, Wales, Northern Ireland</h3><p class="dl">Extra-cost cash, not an interpreter booking</p></div></button>
+        <div class="body">
+          <div class="five">
+            <div class="cell"><div class="q">1 Duty</div><p>A statutory, points-based benefit. Eligibility is assessed against fixed activities, including how someone communicates verbally — the usual route by which BSL use becomes relevant to an award.</p></div>
+            <div class="cell"><div class="q">2 Payer</div><p>The Department for Work and Pensions. Paid directly to the claimant as cash, with no requirement to spend it on communication support specifically.</p></div>
+            <div class="cell"><div class="q">3 Booker</div><p>Nobody — there's no booking function here at all. A BSL interpreter for the assessment itself can be requested as a reasonable adjustment, separately from the benefit being assessed.</p></div>
+            <div class="cell"><div class="q">4 VRS</div><p>Not applicable to the benefit itself. A video relay route exists for some assessment providers' phone assessments.</p></div>
+            <div class="cell"><div class="q">5 Deafblind</div><p>No PIP-specific Deafblind category. A DeafBlind claimant is assessed on the same general activities as any other claimant.</p></div>
+          </div>
+          <p class="lesson">Government data does not break down award or appeal outcomes by deafness or BSL use at all — so whether Deaf claimants are systematically under-awarded is currently a question nobody can answer with official figures, in either direction.</p>
+        </div>
+      </article>
+
+      <article class="sys" data-design="cash">
+        <button class="head" type="button" aria-expanded="false"><div><h3>ADP — Scotland</h3><p class="dl">The Scottish equivalent of PIP</p></div></button>
+        <div class="body">
+          <div class="five">
+            <div class="cell"><div class="q">1 Duty</div><p>Runs on the same activity-based assessment skeleton as PIP.</p></div>
+            <div class="cell"><div class="q">2 Payer</div><p>Social Security Scotland, as cash to the claimant.</p></div>
+            <div class="cell"><div class="q">3 Booker</div><p>Nobody books an interpreter through this pot. A claim can be started through Scotland's national BSL video relay line, which is a separate service entirely.</p></div>
+            <div class="cell"><div class="q">4 VRS</div><p>Not part of the benefit; the national video relay line exists as a separate, general-purpose contact route.</p></div>
+            <div class="cell"><div class="q">5 Deafblind</div><p>No DeafBlind-specific category within the benefit itself.</p></div>
+          </div>
+          <p class="lesson">Structurally identical to PIP. The main practical difference is that the claim process itself is easier to start in BSL.</p>
+        </div>
+      </article>
+
+      <article class="sys" data-design="workhours">
+        <button class="head" type="button" aria-expanded="false"><div><h3>Access to Work</h3><p class="dl">The one UK pot that pays for interpreting directly — but only at work</p></div></button>
+        <div class="body">
+          <div class="five">
+            <div class="cell"><div class="q">1 Duty</div><p>A discretionary grant scheme, not a statutory entitlement in the way PIP is.</p></div>
+            <div class="cell"><div class="q">2 Payer</div><p>The Department for Work and Pensions, with an award cap currently frozen at just over sixty-nine thousand pounds.</p></div>
+            <div class="cell"><div class="q">3 Booker</div><p>The employee arranges their own interpreter or video relay service and claims the cost against their award.</p></div>
+            <div class="cell"><div class="q">4 VRS</div><p>Can fund video relay for work calls and meetings specifically.</p></div>
+            <div class="cell"><div class="q">5 Deafblind</div><p>Not a separate category; a DeafBlind employee applies through the same general scheme.</p></div>
+          </div>
+          <p class="lesson">The only UK pot in this whole comparison that pays for interpreting directly rather than handing over general cash — but the moment the person leaves the workplace, this pot has nothing to say about a GP or hospital appointment.</p>
+        </div>
+      </article>
+
+      <article class="sys" data-design="cash">
+        <button class="head" type="button" aria-expanded="false"><div><h3>Care Act Deafblind assessment</h3><p class="dl">A council duty to assess, not a duty to book</p></div></button>
+        <div class="body">
+          <div class="five">
+            <div class="cell"><div class="q">1 Duty</div><p>A local council must arrange for a DeafBlind person to be assessed by someone with specific training in DeafBlind needs, rather than a generalist social worker.</p></div>
+            <div class="cell"><div class="q">2 Payer</div><p>The local council, out of its own social care budget, if the assessment identifies eligible needs.</p></div>
+            <div class="cell"><div class="q">3 Booker</div><p>The council itself, for whatever support the assessment identifies — which can include a communicator-guide, distinct from a BSL interpreter.</p></div>
+            <div class="cell"><div class="q">4 VRS</div><p>Not part of this duty.</p></div>
+            <div class="cell"><div class="q">5 Deafblind</div><p>This is the one pot in the whole comparison built specifically around DeafBlind need, rather than folding it into a general disability category.</p></div>
+          </div>
+          <p class="lesson">A genuinely DeafBlind-specific duty exists here — but it's a duty to assess properly, not a duty that creates more registered DeafBlind interpreters. Those remain separately, severely scarce.</p>
+        </div>
+      </article>
+
+      <article class="sys" data-design="cash">
+        <button class="head" type="button" aria-expanded="false"><div><h3>DLA / Child Disability Payment</h3><p class="dl">Extra-cost cash for children</p></div></button>
+        <div class="body">
+          <div class="five">
+            <div class="cell"><div class="q">1 Duty</div><p>The under-16 statutory benefit, structurally similar to PIP for adults.</p></div>
+            <div class="cell"><div class="q">2 Payer</div><p>The Department for Work and Pensions (England, Wales, Northern Ireland) or Social Security Scotland, as cash to the family.</p></div>
+            <div class="cell"><div class="q">3 Booker</div><p>Nobody — no booking function. A school's BSL support runs through an entirely separate education budget and process.</p></div>
+            <div class="cell"><div class="q">4 VRS</div><p>Not part of the benefit; a BSL video relay route exists for the general helpline.</p></div>
+            <div class="cell"><div class="q">5 Deafblind</div><p>No specific category within the benefit.</p></div>
+          </div>
+          <p class="lesson">A recurring, understandable confusion: this cash payment is not the same pot as a school's BSL support budget, and receiving one says nothing about the other.</p>
+        </div>
+      </article>
+
+      <article class="sys" data-design="cash">
+        <button class="head" type="button" aria-expanded="false"><div><h3>Attendance Allowance / PADP</h3><p class="dl">Pension-age extra-cost cash</p></div></button>
+        <div class="body">
+          <div class="five">
+            <div class="cell"><div class="q">1 Duty</div><p>The pension-age equivalent of PIP/ADP for care costs — most modelled DeafBlind people over state pension age fall into this pot rather than PIP.</p></div>
+            <div class="cell"><div class="q">2 Payer</div><p>The Department for Work and Pensions, or Social Security Scotland, as cash.</p></div>
+            <div class="cell"><div class="q">3 Booker</div><p>Nobody — no booking function.</p></div>
+            <div class="cell"><div class="q">4 VRS</div><p>Not part of the benefit.</p></div>
+            <div class="cell"><div class="q">5 Deafblind</div><p>No specific category, and — unlike the working-age benefits — no mobility component at all, which matters for a population that often also needs support getting to an appointment in the first place.</p></div>
+          </div>
+          <p class="lesson">The pot where a large, ageing part of the DeafBlind population sits, and the one with the least built-in recognition of communication or mobility need.</p>
+        </div>
+      </article>
+    </section>
+
+    <section>
+      <h2>The one sentence this layer is really about</h2>
+      <p class="muted" style="margin-bottom:12px">Every pot in this list, with one exception, hands someone money. None of them hand someone an interpreter.</p>
+      <div class="closing" style="margin:0">
+        <p>Of six UK pots that touch Deaf or DeafBlind people's finances, five pay cash with no connection to booking an interpreter at all, and the sixth — Access to Work — only reaches as far as the workplace door. Meanwhile, official statistics don't break down benefit outcomes by deafness or BSL use in the first place, so even the cash side of this picture is measured only in outline. Put the two layers on this page side by side, and a pattern becomes hard to miss: a country can build a genuinely generous cash system and a genuinely thin booking system at the same time, and from inside, those can feel like the same thing failing. They aren't. They're two different machines, and fixing one does nothing to the other.</p>
+      </div>
+    </section>
+  </div>
+
+  <!-- ============ MODE 3: LIVED EXPERIENCE ============ -->
+  <div class="mode-panel voices" id="panel-voices">
+    <section style="margin-top:0">
+      <h2>What people actually say happened</h2>
+      <p class="intro" style="margin-top:0">Statutes and budgets describe what a system is supposed to do. This layer is different: first-hand accounts from Deaf people, parents, and educators about what it actually felt like — in a clinic, in a classroom, across a childhood. It covers two domains, health and interpreting, and education, in six of the countries above, plus one that isn't in the grid at all.</p>
+      <div class="finland-note">
+        <span class="tag rust">Why Finland is here</span>
+        Finland never made it into the eight-country systems grid above. But Finnish Sign Language has held constitutional-level recognition since 1995 — stronger, on paper, than any UK nation's — and that gap between Finland's legal footing and everyone else's is what sent this whole layer looking for first-hand accounts in the first place. It's included here on its own merits, not as a ninth column bolted onto the original grid.
+      </div>
+    </section>
+
+    <section>
+      <h2>Health &amp; interpreting</h2>
+      <p class="muted">Underneath the duty/payer/booker grid: what getting — or not getting — an interpreter for an appointment actually felt like.</p>
+
+      <article class="voice-country">
+        <div class="vc-head"><h3>Finland</h3><p class="dl">Stronger law, real friction underneath it</p></div>
+        <div class="vc-domain">
+          <p class="vctx">On what a constitutional right looks like day to day — interpreter hours rationed unpredictably:</p>
+          <blockquote class="vquote">"Tomorrow you'll understand for four hours, the day after tomorrow for three."<cite>Older Deaf sign language user, Finland — peer-reviewed qualitative study</cite></blockquote>
+          <p class="vctx">On isolation persisting even with services nominally in place:</p>
+          <blockquote class="vquote">"I always feel lonely during leisure-time activities with hearing people... I sit alone while other people talk to each other."<cite>Same study, Finland</cite></blockquote>
+          <p class="vctx">An outsider's account, pushing back on a rosier professional take:</p>
+          <blockquote class="vquote">"The support you get in reality depends on age, whether you use sign, hearing aids or cochlear implants."<cite>Robert Mandara, British cochlear-implant user living in Finland</cite></blockquote>
+          <p class="vctx">The genuine bright spot — Finland trains Deaf and hearing interpreters together, in the same four-year programme, since 2001:</p>
+          <blockquote class="vquote">"We need to work together so Deaf people get the best access."<cite>Markus Aro, Finnish Deaf interpreter</cite></blockquote>
+        </div>
+      </article>
+
+      <article class="voice-country">
+        <div class="vc-head"><h3>Norway</h3><p class="dl">A named legal duty, undermined by staff knowledge gaps</p></div>
+        <div class="vc-domain">
+          <p class="vctx">On having to advocate for a need already on file:</p>
+          <blockquote class="vquote">"I have to go to the receptionist and ask, 'What's happening?' But I already told them I have poor hearing!"<cite>Deaf patient, Norwegian health-services study</cite></blockquote>
+          <p class="vctx">On the exhaustion of being left to lip-read:</p>
+          <blockquote class="vquote">"I was completely exhausted — hadn't slept for three days. To stand there and have to lip-read and all of that."<cite>Same study, Norway</cite></blockquote>
+          <p class="vctx">A doctor to a Deaf patient's mother, treating deafness as cognitive impairment:</p>
+          <blockquote class="vquote">"Can she read?"<cite>Clinician, quoted in the same study</cite></blockquote>
+          <p class="vctx">The hopeful thread: outcomes improved sharply when staff were, in the researchers' words, "solution-oriented and did their best" — suggesting the gap is training and attitude, not the law itself.</p>
+        </div>
+      </article>
+
+      <article class="voice-country">
+        <div class="vc-head"><h3>Sweden</h3><p class="dl">Excellent when it's designed around you — and a fight to help design it</p></div>
+        <div class="vc-domain">
+          <p class="vctx">A Deaf or hard-of-hearing applicant turned down for a job running their own region's interpreter bookings:</p>
+          <blockquote class="vquote">"Only a hearing individual was capable of handling DHH interpreter bookings."<cite>County council official, quoted in a Swedish Journal of Disability Research study — challenged via Sweden's Equality Ombudsman</cite></blockquote>
+          <p class="vctx">The genuine bright spot: mobile care teams supporting older Deaf people directly in Swedish Sign Language.</p>
+          <blockquote class="vquote">"I feel happy now; I am very happy for the mobile care team."<cite>Older Deaf participant, Sweden</cite></blockquote>
+          <blockquote class="vquote">"Before [the mobile care team], I felt sad and disappointed, but now I feel energised and happy."<cite>Same study, Sweden</cite></blockquote>
+        </div>
+      </article>
+
+      <article class="voice-country">
+        <div class="vc-head"><h3>Netherlands</h3><p class="dl">Generous hours, fought for by the community that holds them</p></div>
+        <div class="vc-domain">
+          <p class="vctx">Less first-hand testimony surfaced here than for the other countries — what exists is mostly advocacy-organisation pushback rather than individual accounts, worth naming rather than papering over.</p>
+          <p class="vctx">Dovenschap, the Dutch Deaf advocacy body, opposed a 2015 push to devolve interpreter provision to individual municipalities, fearing exactly the kind of fragmentation England's own interpreting chain shows on this page's first tab. They also fought a proposal to stop paying interpreters for appointments cancelled with under 48 hours' notice — arguing it would damage the ongoing relationship between a Deaf person and their regular interpreter.</p>
+          <p class="vctx">One telling contrast with Finland: the first three Deaf native signers graduated as interpreters in the Netherlands only recently — roughly forty years after hearing interpreters first did. Finland built that integration into its training pipeline back in 2001.</p>
+        </div>
+      </article>
+
+      <article class="voice-country">
+        <div class="vc-head"><h3>United States</h3><p class="dl">The phone layer genuinely works; the room still fails on its own</p></div>
+        <div class="vc-domain">
+          <p class="vctx">The National Association of the Deaf, describing video relay at its best:</p>
+          <blockquote class="vquote">Conversation over VRS "flows so much more smoothly, naturally, and faster than communicating by typing."<cite>National Association of the Deaf</cite></blockquote>
+          <p class="vctx">But federal enforcement records tell a different story about the clinic door. A Seattle medical group paid $400,000 to settle claims it repeatedly denied interpreters to Deaf and DeafBlind patients — the fourth such case against a medical provider in three years, per the Department of Justice. A Knoxville patient offered only video interpreting, which he found ineffective, later said:</p>
+          <blockquote class="vquote">He "did not understand why he was being admitted, his treatment plan or his discharge instructions."<cite>Patient complaint, Covenant Health ADA settlement, Tennessee</cite></blockquote>
+        </div>
+      </article>
+
+      <article class="voice-country">
+        <div class="vc-head"><h3>Australia</h3><p class="dl">The most serious documented outcome in this whole comparison</p></div>
+        <div class="vc-domain">
+          <p class="vctx">Deaf Australia's public advocacy centres on the death of Bruce Drabsch at Westmead Hospital, where — per their own statement — he was denied access to an Auslan interpreter during critical care, described as a preventable death and a breach of both clinical standards and human rights. Their own diagnosis of why splits into primary-care Deaf-awareness gaps, an interpreter workforce shortage, and funding fragmented across programmes — closely matching what this page's "mixed pots" design was already flagged as a caution rather than a model.</p>
+          <p class="vctx">Their reform ask is telling in itself: they're calling for "legislated interpreter rights with enforceable standards and penalties" — a request that only makes sense if current rights aren't reliably enforceable in practice.</p>
+        </div>
+      </article>
+    </section>
+
+    <section>
+      <h2>Education</h2>
+      <p class="muted">A different domain entirely — and in some countries, a sharper divergence from their healthcare reputation than you'd expect.</p>
+
+      <article class="voice-country">
+        <div class="vc-head"><h3>Norway</h3><p class="dl">Closed every state Deaf school — and the fallout is self-documented</p></div>
+        <div class="vc-domain">
+          <p class="vctx">Norway's own 2023 government commission on sign language found that 44% of students receiving sign-language education are the only Deaf student in their entire school, a critical shortage of sign-fluent teachers, and — the starkest figure — only 16 Deaf students nationally completed university-track upper-secondary education in some recent years.</p>
+          <blockquote class="vquote">"It can be lonely to be integrated."<cite>Marte Kvinnegard, Deaf lawyer, on her own mainstream schooling in Norway</cite></blockquote>
+          <p class="vctx">A teacher's response, when a Deaf third-grader's access needs were raised:</p>
+          <blockquote class="vquote">"There are also other students in this class."<cite>Teacher, quoted in a Norwegian education study</cite></blockquote>
+        </div>
+      </article>
+
+      <article class="voice-country voice-bright">
+        <div class="vc-head"><h3>Sweden</h3><p class="dl">Kept its special schools — and the data backs the choice</p></div>
+        <div class="vc-domain">
+          <p class="vctx">Where Norway closed its Deaf schools, Sweden kept six national ones specifically to preserve a signing peer environment. Stockholm University's own linguistics research confirms "stronger sign language users in special schools" than in mainstream settings. The cost: only one national upper-secondary school for Deaf students exists, in Örebro — so a teenager anywhere else who wants that environment still has to leave home for it.</p>
+          <p class="vctx">One 2021 study, titled directly from a participant's own words, captures the pull of that peer environment even for a student who could speak:</p>
+          <blockquote class="vquote">"But I feel more at home in the Deaf world even if I can talk."<cite>Study title, D/deaf adolescents transitioning from mainstream to Deaf school, Sweden</cite></blockquote>
+        </div>
+      </article>
+
+      <article class="voice-country">
+        <div class="vc-head"><h3>United States</h3><p class="dl">A wave of school closures, and a wave of students returning</p></div>
+        <div class="vc-domain">
+          <blockquote class="vquote">"It's one of the most lonely feelings a human can have. To be in a room where you may be with your family... but you can't understand their conversation."<cite>Rachel Zemach, Deaf educator, on mainstream schooling</cite></blockquote>
+          <p class="vctx">A structural cause: federal policy is often interpreted so a Deaf child must first "fail" in a mainstream classroom before being moved to a language-rich setting. State Deaf schools have closed in a real, dated wave — Nebraska (1998), Wyoming (2000), North Carolina (2001), South Dakota (2011), Vermont (2014) — but the students who returned tell a consistent story:</p>
+          <blockquote class="vquote">"I was placed in special education just because I came from the deaf school. I was too smart for that and it was an awful experience for me."<cite>Amelia England, alumna, North Carolina</cite></blockquote>
+          <blockquote class="vquote">"It was harder to learn without an interpreter." — later made all As after transferring to a Deaf school.<cite>Kristen Evans, age 15, North Carolina</cite></blockquote>
+          <blockquote class="vquote">"It was hard to socialize with hearing people, even with my cochlear implant." — transferred and "hasn't looked back."<cite>Akrit Risal, age 17, North Carolina</cite></blockquote>
+        </div>
+      </article>
+
+      <article class="voice-country">
+        <div class="vc-head"><h3>Australia</h3><p class="dl">Where mainstream schooling shows up as a measured mental-health risk, not just a preference</p></div>
+        <div class="vc-domain">
+          <p class="vctx">A Deakin University study of Deaf adults found that those educated in mainstream schools <em>with</em> a dedicated Deaf unit were four times more likely to report having had suicidal thoughts than those who attended a Deaf school — and those in mainstream schools with no Deaf facilities at all faced five times greater odds. The researchers described the strength of that link as "more striking than" they had anticipated.</p>
+          <div class="care-note">
+            <span class="tag alert">A note on this figure</span>
+            This is population-level research, not a claim about any individual's future — and it's presented here because burying it would understate what's actually at stake in these design choices. If this touches you personally, your national Deaf association or a local crisis service is a good place to start; we haven't listed a specific number here because they vary by country.
+          </div>
+        </div>
+      </article>
+    </section>
+
+    <section>
+      <h2>What the wider research says</h2>
+      <p class="muted">Australia's finding isn't an outlier — it's part of a consistent, cross-national pattern.</p>
+      <div class="closing" style="margin:0">
+        <p>A 2025 systematic review of Deaf and hard-of-hearing youth mental health research states plainly that "mainstream schools exacerbated mental health challenges, whereas specialized schools provided a supportive environment," with sign language competency emerging as the protective factor across the studies it reviewed. A separate qualitative study of 16 Deaf adults found all 16 traced their adult mental health struggles back to inadequate childhood communication access — not any single country's failure, but a pattern that recurs wherever a child is cut off from a language they can fully receive and a community who shares it. The reviewers are careful not to claim the school building itself is the cause: parental involvement, how early a diagnosis came, and which communication method a family chose are all entangled with the outcome. What the evidence points to more precisely is early, full language access and a real peer community — a Deaf school is simply the most reliable way most of these countries currently guarantee both at once.</p>
+      </div>
+    </section>
+  </div>
+
+  <section class="closing" style="margin-top:56px">
+    <h2>Why this page exists</h2>
+    <p>None of this is offered as a scoreboard. Every system compared here has real, undocumented gaps — the recurring finding across almost every country on this page is that the government running the system doesn't itself publish the number that would actually tell you whether it's working: how often an interpreter arrives, how often a claim is granted, how long someone waits, how a childhood actually went. That absence shows up so consistently it's arguably the most exportable finding of all. If a Deaf or DeafBlind reader anywhere in the world takes one thing from this page, we hope it's a sharper set of questions to ask their own system: who is legally the booker here, not just who is legally recognised; is this pot cash or is it a booking; and if nobody shows up — at the clinic, or across a whole childhood — what actually happens next?</p>
+  </section>
+</main>
+<footer>
+  <div class="inner">Deaf Network Health Group · international comparison, food for thought, not a ranking · sources dated September 2026 · self-contained HTML</div>
+</footer>
+<script>
+  // ----- mode switch -----
+  const modeButtons = document.querySelectorAll("#modeswitch button");
+  const panels = { interp: document.getElementById("panel-interp"), money: document.getElementById("panel-money"), voices: document.getElementById("panel-voices") };
+  modeButtons.forEach((b) => b.addEventListener("click", () => {
+    modeButtons.forEach((x) => x.classList.toggle("on", x === b));
+    Object.entries(panels).forEach(([k, el]) => el.classList.toggle("on", k === b.dataset.mode));
+  }));
+
+  // ----- interpreter-systems filters -----
+  const filtersInterp = document.querySelectorAll("#filters-interp button, #panel-interp .design");
+  const cardsInterp = document.querySelectorAll("#panel-interp .sys");
+  function applyInterp(f) {
+    document.querySelectorAll("#filters-interp button").forEach((b) => b.classList.toggle("on", b.dataset.f === f));
+    cardsInterp.forEach((c) => {
+      let show = true;
+      if (f === "home") show = c.dataset.home === "1";
+      else if (f !== "all") show = (c.dataset.design || "").split(/\s+/).includes(f);
+      c.classList.toggle("off", !show);
+    });
+  }
+  filtersInterp.forEach((b) => b.addEventListener("click", () => applyInterp(b.dataset.f)));
+
+  // ----- money-pipes filters -----
+  const filtersMoney = document.querySelectorAll("#filters-money button, #panel-money .design");
+  const cardsMoney = document.querySelectorAll("#panel-money .sys");
+  function applyMoney(f) {
+    document.querySelectorAll("#filters-money button").forEach((b) => b.classList.toggle("on", b.dataset.f === f));
+    cardsMoney.forEach((c) => {
+      let show = true;
+      if (f !== "all") show = (c.dataset.design || "").split(/\s+/).includes(f);
+      c.classList.toggle("off", !show);
+    });
+  }
+  filtersMoney.forEach((b) => b.addEventListener("click", () => applyMoney(b.dataset.f)));
+
+  // ----- accordion, modes 1 & 2 -----
+  document.querySelectorAll(".sys > .head").forEach((btn) => {
+    btn.addEventListener("click", () => {
+      const art = btn.parentElement;
+      const open = !art.classList.contains("open");
+      art.classList.toggle("open", open);
+      btn.setAttribute("aria-expanded", open ? "true" : "false");
+    });
+  });
+</script>
+</body>
+</html>

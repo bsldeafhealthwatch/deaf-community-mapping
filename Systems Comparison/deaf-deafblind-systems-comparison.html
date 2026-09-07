@@ -1,0 +1,334 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>How the system is built — Deaf &amp; DeafBlind systems comparison</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,500;0,9..144,600;0,9..144,700;1,9..144,500&family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:ital,wght@0,400;0,500;0,600;1,400&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --paper:#f3efe6; --surface:#fffcf6; --ink:#16140f; --muted:#6e685c;
+    --line:#d6d0c4; --forest:#1a472a; --forest-soft:#e8efe9;
+    --ochre:#6b3d12; --ochre-soft:#f3ebe2; --alert:#8f2a2a; --alert-soft:#f3e4e4;
+  }
+  * { box-sizing:border-box; margin:0; padding:0; }
+  html { -webkit-font-smoothing:antialiased; }
+  body { background:var(--paper); color:var(--ink); font-family:"IBM Plex Sans", system-ui, sans-serif; line-height:1.5; }
+  h1,h2,h3 { font-family:"Fraunces", Georgia, serif; text-wrap:balance; }
+  p { text-wrap:pretty; }
+  header { background:var(--ink); color:var(--paper); }
+  header .inner, main, footer .inner { width:min(1120px,100%); margin:0 auto; padding:22px 16px; }
+  header .kicker { font-family:"IBM Plex Mono", monospace; font-size:10px; letter-spacing:.18em; text-transform:uppercase; color:rgba(255,252,246,.6); }
+  header h1 { font-size:clamp(1.4rem,3vw,1.9rem); margin-top:6px; }
+  header .lede { font-family:"IBM Plex Mono", monospace; font-size:11px; color:rgba(255,252,246,.7); max-width:28em; }
+  header .bar { display:flex; justify-content:space-between; gap:16px; flex-wrap:wrap; align-items:end; }
+  .sub { font-family:"Fraunces", Georgia, serif; font-style:italic; color:var(--ochre); font-size:clamp(1.05rem,2.2vw,1.35rem); margin:4px 0 12px; }
+  .muted { color:var(--muted); font-size:14px; }
+  .ribbon { display:grid; grid-template-columns:repeat(2,1fr); gap:8px; margin:20px 0; }
+  @media (min-width:720px) { .ribbon { grid-template-columns:repeat(5,1fr); } }
+  .kpi { background:var(--surface); border:1px solid var(--line); border-radius:6px; padding:12px; }
+  .kpi b { display:block; font-family:"Fraunces", Georgia, serif; font-size:1.5rem; color:var(--forest); }
+  .kpi span { display:block; margin-top:4px; font-family:"IBM Plex Mono", monospace; font-size:10px; letter-spacing:.12em; text-transform:uppercase; color:var(--muted); }
+  .note { background:var(--ochre-soft); border:1px solid color-mix(in srgb, var(--ochre) 30%, var(--line)); border-radius:8px; padding:14px 16px; margin:8px 0 28px; }
+  .tag { font-family:"IBM Plex Mono", monospace; font-size:10px; letter-spacing:.14em; text-transform:uppercase; color:var(--ochre); display:block; margin-bottom:6px; }
+  section { margin:40px 0; }
+  h2 { color:var(--forest); font-size:1.45rem; border-bottom:1px solid var(--line); padding-bottom:8px; margin-bottom:14px; }
+  .grid2 { display:grid; gap:10px; }
+  @media (min-width:760px) { .grid2 { grid-template-columns:1fr 1fr; } }
+  .design { text-align:left; border:0; border-left:4px solid var(--forest); background:var(--forest-soft); border-radius:8px; padding:14px 16px; cursor:pointer; font:inherit; color:inherit; }
+  .design strong { font-family:"Fraunces", Georgia, serif; font-size:1.05rem; display:block; margin-bottom:6px; }
+  .filters { display:flex; flex-wrap:wrap; gap:8px; margin:12px 0 18px; }
+  .filters button {
+    min-height:44px; padding:8px 12px; border:2px solid var(--ink);
+    background:transparent; color:var(--ink); font:500 14px "IBM Plex Sans", sans-serif; cursor:pointer;
+  }
+  .filters button.on { background:var(--ink); color:var(--paper); }
+  .sys { background:var(--surface); border:1px solid var(--line); border-radius:8px; margin:0 0 10px; }
+  .sys.home { border-left:4px solid var(--ochre); }
+  .sys.off { display:none; }
+  .sys > button.head {
+    width:100%; background:none; border:0; text-align:left; cursor:pointer;
+    display:flex; justify-content:space-between; gap:12px; padding:14px 16px; font:inherit; color:inherit;
+    min-height:56px; align-items:flex-start;
+  }
+  .sys h3 { font-size:1.15rem; }
+  .sys .dl { color:var(--muted); font-size:13px; margin-top:4px; }
+  .pill { font-family:"IBM Plex Mono", monospace; font-size:10px; letter-spacing:.1em; text-transform:uppercase; border:1px solid var(--ochre); color:var(--ochre); padding:2px 7px; }
+  .body { display:none; border-top:1px solid var(--line); padding:12px 16px 16px; }
+  .sys.open .body { display:block; }
+  .five { display:grid; gap:8px; }
+  @media (min-width:900px) { .five { grid-template-columns:repeat(5,1fr); } }
+  @media (min-width:640px) and (max-width:899px) { .five { grid-template-columns:1fr 1fr; } }
+  .cell { background:var(--paper); border:1px solid var(--line); border-radius:6px; padding:10px 12px; }
+  .cell .q { font-family:"IBM Plex Mono", monospace; font-size:10px; letter-spacing:.12em; text-transform:uppercase; color:var(--ochre); margin-bottom:6px; }
+  .cell p { font-size:13px; }
+  .lesson { margin-top:10px; padding-top:10px; border-top:1px solid var(--line); color:var(--forest); font-size:14px; }
+  .cards { display:flex; flex-direction:column; gap:10px; }
+  @media (min-width:900px) { .cards { display:none; } }
+  .appt { background:var(--surface); border:1px solid var(--line); border-radius:8px; padding:14px 16px; }
+  .appt.home { border-left:4px solid var(--ochre); }
+  .appt h3 { margin-bottom:8px; }
+  .appt dt { font-family:"IBM Plex Mono", monospace; font-size:10px; letter-spacing:.1em; text-transform:uppercase; color:var(--muted); }
+  .appt dd { font-size:14px; margin:0 0 10px; }
+  .tablewrap { display:none; overflow-x:auto; }
+  @media (min-width:900px) { .tablewrap { display:block; } }
+  table { width:100%; border-collapse:collapse; font-size:13px; }
+  th { text-align:left; font-family:"IBM Plex Mono", monospace; font-size:10px; letter-spacing:.1em; text-transform:uppercase; color:var(--muted); padding:8px 8px 8px 0; border-bottom:2px solid var(--forest); }
+  td { padding:10px 8px 10px 0; border-bottom:1px solid var(--line); vertical-align:top; }
+  tr.home td:first-child { color:var(--ochre); font-weight:600; }
+  ol.steal { list-style:none; counter-reset:s; }
+  ol.steal li { counter-increment:s; display:flex; gap:12px; margin:10px 0; }
+  ol.steal li::before {
+    content:counter(s); flex:0 0 28px; height:28px; border-radius:50%;
+    background:var(--forest); color:var(--paper); font-family:"Fraunces", Georgia, serif;
+    display:flex; align-items:center; justify-content:center; font-size:14px;
+  }
+  .fix { background:var(--alert-soft); border:1px solid color-mix(in srgb, var(--alert) 25%, var(--line)); border-radius:8px; padding:14px 16px; font-size:14px; }
+  footer { border-top:1px solid var(--line); font-family:"IBM Plex Mono", monospace; font-size:10px; letter-spacing:.08em; text-transform:uppercase; color:var(--muted); }
+</style>
+</head>
+<body>
+<header>
+  <div class="inner bar">
+    <div>
+      <p class="kicker">Evidence dossier · Deaf &amp; DeafBlind access</p>
+      <h1>How the system is built</h1>
+    </div>
+    <p class="lede">Same five questions. Unknown cells stay visible. Not a league table.</p>
+  </div>
+  <div class="inner" style="padding-top:0">
+    <p style="font-family:'IBM Plex Mono', monospace; font-size:11px; color:rgba(255,252,246,.85)">Companion page: <a href="deaf-benefits-systems-comparison.html" style="color:#f3efe6">Cash, not booking</a> (PIP / ADP / Access to Work / Care Act / DLA / Attendance Allowance) — who pays extra-cost cash, not who books an interpreter. Unverified Grok draft.</p>
+  </div>
+</header>
+<main>
+  <p class="sub">Duty, payer, booker, VRS, Deafblind — eight machines</p>
+  <p class="muted" style="max-width:40em">Compare how interpreting is constructed. Grassroots view: can you phone the GP tomorrow. Professional view: who pays, who books, what is unpublished.</p>
+
+  <div class="ribbon">
+    <div class="kpi"><b>8</b><span>systems</span></div>
+    <div class="kpi"><b>5</b><span>questions</span></div>
+    <div class="kpi"><b>4</b><span>designs</span></div>
+    <div class="kpi"><b>3</b><span>UK home</span></div>
+    <div class="kpi"><b>1</b><span>RIDB London</span></div>
+  </div>
+
+  <div class="note">
+    <span class="tag">Not a ranking</span>
+    Norway’s statute is not proof every clinic has an interpreter. The US $1.48bn TRS fund is a telecoms levy, not an NHS saving. Fulfilment rates are unpublished in most rows — the same gap already flagged for England.
+  </div>
+
+  <section>
+    <h2>Four designs</h2>
+    <div class="grid2">
+      <button class="design" data-f="clinic"><strong>Clinic-pays</strong> The health body is legally the booker and the payer. Norway (Tolkeloven). England on paper via Equality Act + AIS — but the patient must usually invoke it.</button>
+      <button class="design" data-f="hours"><strong>User-hours</strong> A pot of hours sits with the person (Netherlands UWV; England Access to Work for work only). Health appointments still need a separate duty or they vanish when hours run out.</button>
+      <button class="design" data-f="levy"><strong>Telecoms-levy</strong> Any-number VRS funded like a utility (US FCC TRS). Clinical on-site interpreting is a different legal pot. Scotland is the UK-internal version of the phone layer.</button>
+      <button class="design" data-f="mixed"><strong>Mixed pots</strong> Australia: NDIS + NSLP/NABS + health department. More programmes can still mean no interpreter in the GP room.</button>
+    </div>
+  </section>
+
+  <section>
+    <h2>The grid</h2>
+    <p class="muted">Filter by design. Home rows are England, Scotland, Wales. Open a system for the five cells.</p>
+    <div class="filters" id="filters">
+      <button class="on" data-f="all">All</button>
+      <button data-f="home">UK home rows</button>
+      <button data-f="clinic">Clinic-pays</button>
+      <button data-f="hours">User-hours</button>
+      <button data-f="levy">Telecoms-levy</button>
+      <button data-f="mixed">Mixed pots</button>
+    </div>
+
+    <article class="sys home open" data-home="1" data-design="clinic mixed">
+      <button class="head" type="button" aria-expanded="true"><div><h3>England</h3><p class="dl">Clinic-duty on paper · mixed pots in practice</p></div><span class="pill">Home</span></button>
+      <div class="body">
+        <div class="five">
+          <div class="cell"><div class="q">1 Duty</div><p>Equality Act reasonable adjustments + AIS. BSL Act 2022 is recognition/reporting only — no individual service right.</p></div>
+          <div class="cell"><div class="q">2 Payer</div><p>NHS body / ICB / GP contract. AtW pays work interpreting (cap £69,260 frozen). No isolated national BSL spend.</p></div>
+          <div class="cell"><div class="q">3 Booker</div><p>Clinic via a prime. SWL GP: ICB holds DAL from Oct 2024; Sign Solutions VRI sub. Hospitals often LanguageLine packages.</p></div>
+          <div class="cell"><div class="q">4 VRS</div><p>Not any-number. 999 BSL + 111 BSL. Else per-organisation contracts. Ofcom rejected unrestricted VRS in 2011.</p></div>
+          <div class="cell"><div class="q">5 Deafblind</div><p>RIDB 19 national / London 1. DAL and LanguageLine subcontract to Deafblind Enablement. No fulfilment series.</p></div>
+        </div>
+        <p class="lesson">Steal nothing from the chain. Publish fulfilment next to the 878 requests. Duty exists; arrival is the missing column.</p>
+      </div>
+    </article>
+
+    <article class="sys home" data-home="1" data-design="levy clinic">
+      <button class="head" type="button" aria-expanded="false"><div><h3>Scotland</h3><p class="dl">Clinic-duty + national any-number VRS</p></div><span class="pill">Home</span></button>
+      <div class="body">
+        <div class="five">
+          <div class="cell"><div class="q">1 Duty</div><p>BSL (Scotland) Act 2015 requires plans — stronger than the UK 2022 Act. Boards still owe an interpreter under equality law.</p></div>
+          <div class="cell"><div class="q">2 Payer</div><p>Scottish Government funds Contact Scotland BSL (£3m ex VAT to Sign Solutions from 1 Dec 2025). F2F is a board pot.</p></div>
+          <div class="cell"><div class="q">3 Booker</div><p>User can place the phone call. Face-to-face remains the board’s booking.</p></div>
+          <div class="cell"><div class="q">4 VRS</div><p>Any UK number, 24/7, for residents. Not international or work calls. 60% of consultation respondents never used it.</p></div>
+          <div class="cell"><div class="q">5 Deafblind</div><p>SRLPDC 2024–25: 2 Deafblind manual interpreters, 1 guide communicator. Tiny bench.</p></div>
+        </div>
+        <p class="lesson">Any-number VRS already exists inside the UK. The design stops at the border. Existence is not take-up.</p>
+      </div>
+    </article>
+
+    <article class="sys home" data-home="1" data-design="clinic">
+      <button class="head" type="button" aria-expanded="false"><div><h3>Wales</h3><p class="dl">Clinic-duty + limited health VRS</p></div><span class="pill">Home</span></button>
+      <div class="body">
+        <div class="five">
+          <div class="cell"><div class="q">1 Duty</div><p>BSL (Wales) Bill passed 11 Mar 2026. Equality Act remains the individual hook.</p></div>
+          <div class="cell"><div class="q">2 Payer</div><p>Local health boards. No Wales-wide isolated BSL spend found.</p></div>
+          <div class="cell"><div class="q">3 Booker</div><p>Board books F2F/VRI. Cardiff &amp; Vale added Convo VRS to switchboard — organisation-level, not national.</p></div>
+          <div class="cell"><div class="q">4 VRS</div><p>999 BSL. NHS 111 Wales BSL via SignVideo <strong>08:00–midnight</strong> on the official contact page. Not 24/7, not any-number.</p></div>
+          <div class="cell"><div class="q">5 Deafblind</div><p>NRCPD Wales = 1 RIDB. No fulfilment series.</p></div>
+        </div>
+        <p class="lesson">Correct the earlier “no 111 BSL in Wales” lead. Limited hours is still not a national VRS.</p>
+      </div>
+    </article>
+
+    <article class="sys" data-design="levy">
+      <button class="head" type="button" aria-expanded="false"><div><h3>United States</h3><p class="dl">Telecoms-levy VRS + separate ADA clinical duty</p></div></button>
+      <div class="body">
+        <div class="five">
+          <div class="cell"><div class="q">1 Duty</div><p>ADA Title IV: FCC must ensure functionally equivalent calls. Hospitals have a separate ADA on-site/VRI duty.</p></div>
+          <div class="cell"><div class="q">2 Payer</div><p>TRS Fund net $1.480bn FY2025–26 (carrier levy). User pays $0 for the relay leg. Broadband is the hidden cost.</p></div>
+          <div class="cell"><div class="q">3 Booker</div><p>User dials any number on VRS. Clinic separately books the person in the room.</p></div>
+          <div class="cell"><div class="q">4 VRS</div><p>Any-number, 24/7, answer-time rules. The design Ofcom declined in 2011.</p></div>
+          <div class="cell"><div class="q">5 Deafblind</div><p>TRS includes Deafblind users. iCanConnect distributes equipment — no UK equivalent. Tactile clinical work still clinic duty.</p></div>
+        </div>
+        <p class="lesson">Steal the phone-layer design. Do not paste the dollar figure into an NHS case. Two pots remain two pots.</p>
+      </div>
+    </article>
+
+    <article class="sys" data-design="clinic">
+      <button class="head" type="button" aria-expanded="false"><div><h3>Norway</h3><p class="dl">Clinic-pays · Tolkeloven</p></div></button>
+      <div class="body">
+        <div class="five">
+          <div class="cell"><div class="q">1 Duty</div><p>Public bodies must use a qualified interpreter. Patient can request; clinician assesses. Family is not the model.</p></div>
+          <div class="cell"><div class="q">2 Payer</div><p>Health service pays. Free to the patient in public care (dental exception). NAV also funds work/education/daily-life hours.</p></div>
+          <div class="cell"><div class="q">3 Booker</div><p>The health service books. Screen/phone allowed, not a legal substitute by default.</p></div>
+          <div class="cell"><div class="q">4 VRS</div><p>Video interpreting is an extension of the public interpreter service — not a US telecoms product.</p></div>
+          <div class="cell"><div class="q">5 Deafblind</div><p>Inside the public service in principle. Headcount/fulfilment not opened as a series here.</p></div>
+        </div>
+        <p class="lesson">Closest legal contrast: the clinic is already on the hook. Fulfilment data still missing — do not romanticise.</p>
+      </div>
+    </article>
+
+    <article class="sys" data-design="clinic">
+      <button class="head" type="button" aria-expanded="false"><div><h3>Sweden</h3><p class="dl">Regional interpreter centres</p></div></button>
+      <div class="body">
+        <div class="five">
+          <div class="cell"><div class="q">1 Duty</div><p>Regional responsibility under health law (HSL).</p></div>
+          <div class="cell"><div class="q">2 Payer</div><p>The region pays via its tolkcentral. Patient does not pay the interpreter in public care.</p></div>
+          <div class="cell"><div class="q">3 Booker</div><p>One specialist desk per region — ICS-comparable geography. Not a spoken-language multi-lot prime as the default.</p></div>
+          <div class="cell"><div class="q">4 VRS</div><p>National video interpreting exists; qualitative research describes queues. Not “no wait.”</p></div>
+          <div class="cell"><div class="q">5 Deafblind</div><p>Design runs through the same centre. Tactile wait series not opened here.</p></div>
+        </div>
+        <p class="lesson">Ask whether any English ICB runs a dedicated BSL/Deafblind centre rather than DAL → Sign Solutions → DBE.</p>
+      </div>
+    </article>
+
+    <article class="sys" data-design="hours">
+      <button class="head" type="button" aria-expanded="false"><div><h3>Netherlands</h3><p class="dl">User-hours · UWV + Tolkcontact</p></div></button>
+      <div class="body">
+        <div class="five">
+          <div class="cell"><div class="q">1 Duty</div><p>Right to gebarentolk / schrijftolk / tactile NGT for work, school and private life, including a doctor. Care providers also arrange in their own services.</p></div>
+          <div class="cell"><div class="q">2 Payer</div><p>UWV awards hours (OCW/SZW/VWS). Tolkcontact pays invoices.</p></div>
+          <div class="cell"><div class="q">3 Booker</div><p>User books a named interpreter from awarded hours. Provider may book clinical sessions they run.</p></div>
+          <div class="cell"><div class="q">4 VRS</div><p>KPN Teletolk. Hours, not a US any-number TRS, are the scarce resource.</p></div>
+          <div class="cell"><div class="q">5 Deafblind</div><p>Tactile NGT is a named category. Some schemes give Deafblind a much higher private-hour cap (168 vs 30 in a parallel scheme).</p></div>
+        </div>
+        <p class="lesson">Shows hours-in-the-pocket clearly. England’s AtW is the cousin — work-only, capped, frozen, and not a GP booking.</p>
+      </div>
+    </article>
+
+    <article class="sys" data-design="mixed">
+      <button class="head" type="button" aria-expanded="false"><div><h3>Australia</h3><p class="dl">Mixed pots · NDIS + NSLP/NABS + health</p></div></button>
+      <div class="body">
+        <div class="five">
+          <div class="cell"><div class="q">1 Duty</div><p>Right to an Auslan interpreter. Health Department primary-care review found use suboptimal — awareness, procedure, workforce, split funding.</p></div>
+          <div class="cell"><div class="q">2 Payer</div><p>NDIS if eligible; NSLP via Deaf Connect for 65+ (50+ First Nations) not on NDIS; NABS for some private medical; EAF at work. TIS National = spoken languages only.</p></div>
+          <div class="cell"><div class="q">3 Booker</div><p>Whoever’s pot applies that day. Services Australia added on-demand Auslan video in its own centres (Dec 2025).</p></div>
+          <div class="cell"><div class="q">4 VRS</div><p>National Relay Service includes video relay. Separate from the person in the GP room.</p></div>
+          <div class="cell"><div class="q">5 Deafblind</div><p>Named in NABS/NSLP text. No national tactile fulfilment series opened here.</p></div>
+        </div>
+        <p class="lesson">Warning: more programmes ≠ more interpreters at the GP. Steal their booking flowchart, not their pot-split.</p>
+      </div>
+    </article>
+  </section>
+
+  <section>
+    <h2>Same appointment — GP tomorrow morning</h2>
+    <p class="muted" style="margin-bottom:12px">Who the patient asks, who books, whether they can phone the surgery today.</p>
+    <div class="cards">
+      <div class="appt home"><h3>England</h3><dl><dt>Phone today</dt><dd>Only if that practice bought a VRS slot</dd><dt>Who books the room</dt><dd>Practice → DAL → Sign Solutions / DBE</dd><dt>Deafblind</dt><dd>Gated by DBE (London RIDB = 1)</dd><dt>If nobody arrives</dt><dd>Equality Act complaint. No automatic replacement desk</dd></dl></div>
+      <div class="appt home"><h3>Scotland</h3><dl><dt>Phone today</dt><dd>Yes — Contact Scotland, any UK number</dd><dt>Who books the room</dt><dd>Health board for F2F; patient can start the phone leg</dd><dt>Deafblind</dt><dd>2 manual + 1 guide on SRLPDC</dd><dt>If nobody arrives</dt><dd>Board duty plus a phone path the patient already holds</dd></dl></div>
+      <div class="appt home"><h3>Wales</h3><dl><dt>Phone today</dt><dd>111 BSL 08:00–midnight; not any-number</dd><dt>Who books the room</dt><dd>Health board</dd><dt>Deafblind</dt><dd>Unknown local tactile bench</dd><dt>If nobody arrives</dt><dd>Board / Equality Act</dd></dl></div>
+      <div class="appt"><h3>United States</h3><dl><dt>Phone today</dt><dd>Yes — any number, $0 relay</dd><dt>Who books the room</dt><dd>Clinic under ADA, separate from VRS</dd><dt>Deafblind</dt><dd>TRS + iCanConnect kit; tactile still clinic</dd><dt>If nobody arrives</dt><dd>ADA / OCR on the room; VRS rarely the gap</dd></dl></div>
+      <div class="appt"><h3>Norway</h3><dl><dt>Phone today</dt><dd>Via the public interpreter service</dd><dt>Who books the room</dt><dd>The clinic, by statute</dd><dt>Deafblind</dt><dd>Inside the public service in principle</dd><dt>If nobody arrives</dt><dd>Public-body legal failure</dd></dl></div>
+      <div class="appt"><h3>Sweden</h3><dl><dt>Phone today</dt><dd>National video exists; may queue</dd><dt>Who books the room</dt><dd>Regional tolkcentral</dd><dt>Deafblind</dt><dd>Same centre</dd><dt>If nobody arrives</dt><dd>Region-level failure</dd></dl></div>
+      <div class="appt"><h3>Netherlands</h3><dl><dt>Phone today</dt><dd>KPN Teletolk — not US VRS</dd><dt>Who books the room</dt><dd>User hours via Tolkcontact, or the provider</dd><dt>Deafblind</dt><dd>Named tactile; higher caps in some schemes</dd><dt>If nobody arrives</dt><dd>Hours can run out mid-year</dd></dl></div>
+      <div class="appt"><h3>Australia</h3><dl><dt>Phone today</dt><dd>National Relay Service for the phone</dd><dt>Who books the room</dt><dd>Whichever pot applies that day</dd><dt>Deafblind</dt><dd>Named in NABS/NSLP text</dd><dt>If nobody arrives</dt><dd>Review already found GP use weak</dd></dl></div>
+    </div>
+    <div class="tablewrap">
+      <table>
+        <thead>
+          <tr><th>System</th><th>Phone the surgery today?</th><th>Who books the room?</th><th>Deafblind variant</th><th>If nobody arrives</th></tr>
+        </thead>
+        <tbody>
+          <tr class="home"><td>England</td><td>Only if that practice bought a VRS slot</td><td>Practice → DAL → Sign Solutions / DBE</td><td>Gated by DBE (London RIDB = 1)</td><td>Equality Act complaint. No automatic replacement desk</td></tr>
+          <tr class="home"><td>Scotland</td><td>Yes — Contact Scotland, any UK number</td><td>Health board for F2F; patient can start the phone leg</td><td>2 manual + 1 guide on SRLPDC</td><td>Board duty plus a phone path the patient already holds</td></tr>
+          <tr class="home"><td>Wales</td><td>111 BSL 08:00–midnight; not any-number</td><td>Health board</td><td>Unknown local tactile bench</td><td>Board / Equality Act</td></tr>
+          <tr><td>United States</td><td>Yes — any number, $0 relay</td><td>Clinic under ADA, separate from VRS</td><td>TRS + iCanConnect kit; tactile still clinic</td><td>ADA / OCR on the room; VRS rarely the gap</td></tr>
+          <tr><td>Norway</td><td>Via the public interpreter service</td><td>The clinic, by statute</td><td>Inside the public service in principle</td><td>Public-body legal failure</td></tr>
+          <tr><td>Sweden</td><td>National video exists; may queue</td><td>Regional tolkcentral</td><td>Same centre</td><td>Region-level failure</td></tr>
+          <tr><td>Netherlands</td><td>KPN Teletolk — not US VRS</td><td>User hours via Tolkcontact, or the provider</td><td>Named tactile; higher caps in some schemes</td><td>Hours can run out mid-year</td></tr>
+          <tr><td>Australia</td><td>National Relay Service for the phone</td><td>Whichever pot applies that day</td><td>Named in NABS/NSLP text</td><td>Review already found GP use weak</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <section>
+    <h2>What to steal for SWL — and what not to</h2>
+    <ol class="steal">
+      <li><div><strong>Scotland’s any-number VRS</strong> as proof the design is possible inside the UK. Do not ignore the 60% never-used figure.</div></li>
+      <li><div><strong>Norway’s named clinic-booker statute.</strong> Do not invent Nordic wait times.</div></li>
+      <li><div><strong>Sweden’s one desk per region.</strong> FOI whether any English ICB has one.</div></li>
+      <li><div><strong>Netherlands naming tactile as its own category.</strong> Do not import annual hour-caps into NHS appointments.</div></li>
+      <li><div><strong>US levy + functional equivalence</strong> for the phone layer only. Do not treat $1.48bn as an NHS line.</div></li>
+      <li><div><strong>Australia’s GP booking flowchart and the “rights ≠ use” finding.</strong> Do not copy the pot-split.</div></li>
+    </ol>
+  </section>
+
+  <section>
+    <h2>Correction logged this build</h2>
+    <div class="fix">
+      An earlier lead treated Wales NHS 111 BSL as possibly absent. Official NHS 111 Wales “Contact us” states SignVideo access <strong>seven days, 08:00–midnight</strong>, with Relay UK as the non-BSL path. Welsh Ambulance confirms 999 BSL. Status: limited-hours health VRS, not “no service,” not any-number.
+    </div>
+  </section>
+</main>
+<footer>
+  <div class="inner">GeometricMind / Deaf Network Health Group · sources dated 4–7 September 2026 · team working visual · self-contained HTML</div>
+</footer>
+<script>
+  const filters = document.querySelectorAll("#filters button, .design");
+  const cards = document.querySelectorAll(".sys");
+  function apply(f) {
+    document.querySelectorAll("#filters button").forEach((b) => b.classList.toggle("on", b.dataset.f === f));
+    cards.forEach((c) => {
+      let show = true;
+      if (f === "home") show = c.dataset.home === "1";
+      else if (f !== "all") show = (c.dataset.design || "").split(/\s+/).includes(f);
+      c.classList.toggle("off", !show);
+    });
+  }
+  filters.forEach((b) => b.addEventListener("click", () => apply(b.dataset.f)));
+  document.querySelectorAll(".sys > .head").forEach((btn) => {
+    btn.addEventListener("click", () => {
+      const art = btn.parentElement;
+      const open = !art.classList.contains("open");
+      art.classList.toggle("open", open);
+      btn.setAttribute("aria-expanded", open ? "true" : "false");
+    });
+  });
+</script>
+</body>
+</html>
