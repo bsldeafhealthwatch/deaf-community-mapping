@@ -1,0 +1,937 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Deaf &amp; DeafBlind Healthcare Access — Accessible Edition</title>
+<style>
+  :root {
+    --bg: #ffffff;
+    --surface: #ffffff;
+    --border: #444444;
+    --text: #0a0a0a;
+    --muted: #454545;
+    --link: #0b3d91;
+    --focus: #d0006f;
+    --q1: #0f3d20; --q1-bg: #eaf3ec;
+    --q2: #5c3000; --q2-bg: #f7efe4;
+    --q3: #062c4a; --q3-bg: #e9f0f7;
+    --q4: #3a0b26; --q4-bg: #f4e9ef;
+    --db: #34206e; --db-bg: #ece7f7;
+    --warn-bg: #fff0e0;
+    --warn-text: #6b2c00;
+    --base-font: 17px;
+    --content-max: 860px;
+  }
+
+  * { box-sizing: border-box; }
+
+  html { font-size: var(--base-font); scroll-behavior: smooth; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: Arial, Helvetica, sans-serif;
+    line-height: 1.6;
+    margin: 0;
+    padding: 0 0 80px;
+  }
+
+  /* ══════ SKIP LINK ══════ */
+  .skip-link {
+    position: absolute; left: -9999px; top: 0;
+    background: var(--focus); color: #fff;
+    padding: 12px 20px; z-index: 1000;
+    font-weight: bold; text-decoration: none;
+  }
+  .skip-link:focus { left: 10px; top: 10px; }
+
+  /* ══════ FOCUS VISIBILITY — never remove this ══════ */
+  a:focus, button:focus, [tabindex]:focus {
+    outline: 4px solid var(--focus);
+    outline-offset: 2px;
+  }
+
+  /* ══════ CONTROLS BAR ══════ */
+  .controls-bar {
+    background: #1a1a1a;
+    color: #fff;
+    padding: 14px 16px;
+    position: sticky; top: 0; z-index: 100;
+  }
+  .controls-inner {
+    max-width: var(--content-max);
+    margin: 0 auto;
+    display: flex; flex-wrap: wrap; align-items: center; gap: 10px;
+  }
+  .controls-label { font-weight: bold; font-size: 0.95rem; margin-right: 4px; }
+  .mode-btn {
+    font-family: inherit; font-size: 0.95rem; font-weight: bold;
+    background: #2c2c2c; color: #fff; border: 2px solid #6a6a6a;
+    padding: 9px 16px; border-radius: 4px; cursor: pointer;
+    min-height: 44px;
+  }
+  .mode-btn[aria-pressed="true"] { background: var(--focus); border-color: var(--focus); }
+  .mode-btn:hover { border-color: #fff; }
+
+  /* ══════ HEADER ══════ */
+  header {
+    max-width: var(--content-max); margin: 0 auto;
+    padding: 30px 20px 20px;
+  }
+  header h1 { font-size: 1.9rem; line-height: 1.25; margin: 0 0 10px; }
+  header p.subtitle { font-size: 1rem; color: var(--muted); margin: 4px 0; }
+
+  main { max-width: var(--content-max); margin: 0 auto; padding: 0 20px; }
+
+  /* ══════ NOTICE BOXES ══════ */
+  .notice {
+    border: 2px solid var(--border);
+    border-left-width: 8px;
+    border-left-color: var(--q1);
+    background: var(--q1-bg);
+    padding: 16px 18px;
+    margin: 20px 0;
+    border-radius: 4px;
+  }
+  .notice.warn { border-left-color: var(--warn-text); background: var(--warn-bg); }
+  .notice.db { border-left-color: var(--db); background: var(--db-bg); }
+  .notice h2 { font-size: 1.15rem; margin: 0 0 8px; }
+  .notice p { margin: 6px 0; }
+  .notice ul { margin: 8px 0 0 22px; padding: 0; }
+  .notice li { margin-bottom: 6px; }
+
+  /* ══════ TABLE OF CONTENTS ══════ */
+  nav.toc {
+    background: #f2f2f2; border: 2px solid var(--border);
+    border-radius: 4px; padding: 16px 18px; margin: 24px 0;
+  }
+  nav.toc h2 { font-size: 1.1rem; margin: 0 0 10px; }
+  nav.toc ol { margin: 0; padding-left: 22px; }
+  nav.toc li { margin-bottom: 6px; }
+  nav.toc a { color: var(--link); font-weight: bold; }
+
+  /* ══════ SECTION HEADERS ══════ */
+  section { margin: 36px 0; }
+  section > h2 {
+    font-size: 1.5rem; border-bottom: 3px solid var(--border);
+    padding-bottom: 8px; margin-bottom: 6px;
+  }
+  section > p.section-intro { color: var(--muted); margin: 6px 0 18px; }
+
+  /* ══════ ORG ACCORDION ══════ */
+  .org {
+    border: 2px solid var(--border); border-radius: 6px;
+    margin-bottom: 14px; overflow: hidden;
+  }
+  .org-toggle {
+    width: 100%; text-align: left; font-family: inherit;
+    background: var(--surface); border: none; cursor: pointer;
+    padding: 16px 18px; display: flex; align-items: center; gap: 12px;
+    min-height: 44px;
+  }
+  .org-toggle:hover { background: #f0f0f0; }
+  .org-toggle .arrow {
+    font-size: 1.1rem; flex-shrink: 0; width: 1.2em;
+    transition: transform 0.15s;
+  }
+  .org-toggle[aria-expanded="true"] .arrow { transform: rotate(90deg); }
+  .org-title-block { flex: 1; min-width: 0; }
+  .org-name { font-size: 1.1rem; font-weight: bold; display: block; }
+  .org-strategy-line { font-size: 0.9rem; color: var(--muted); display: block; margin-top: 2px; }
+  .org-panel { padding: 4px 18px 20px; border-top: 2px solid var(--border); }
+  .org-panel[hidden] { display: none; }
+
+  .strat-badge {
+    display: inline-block; font-size: 0.8rem; font-weight: bold;
+    padding: 3px 10px; border-radius: 4px; border: 2px solid;
+    margin-top: 4px;
+  }
+  .strat-q1 { color: var(--q1); border-color: var(--q1); background: var(--q1-bg); }
+  .strat-q2 { color: var(--q2); border-color: var(--q2); background: var(--q2-bg); }
+  .strat-q3 { color: var(--q3); border-color: var(--q3); background: var(--q3-bg); }
+  .strat-q4 { color: var(--q4); border-color: var(--q4); background: var(--q4-bg); }
+
+  .meta-line { font-size: 0.92rem; color: var(--muted); margin: 8px 0 14px; }
+  .meta-line span { display: inline-block; margin-right: 14px; }
+
+  h3.sub-label {
+    font-size: 1rem; text-transform: uppercase; letter-spacing: 0.04em;
+    margin: 18px 0 6px; color: var(--muted); border-bottom: 1px solid var(--border);
+    padding-bottom: 4px;
+  }
+  .org-panel p { margin: 8px 0; }
+
+  .stat-list { margin: 10px 0; padding-left: 22px; }
+  .stat-list li { margin-bottom: 6px; font-weight: bold; }
+  .stat-list li.warn-stat { color: var(--warn-text); }
+
+  ul.action-list { margin: 8px 0; padding-left: 22px; }
+  ul.action-list li { margin-bottom: 6px; }
+
+  blockquote {
+    border-left: 4px solid var(--border); margin: 12px 0; padding: 8px 16px;
+    font-style: italic; background: #f7f7f7;
+  }
+
+  /* ══════ LARGE PRINT MODE ══════ */
+  body.large-print { --base-font: 22px; }
+  body.large-print .controls-bar { padding: 18px 16px; }
+  body.large-print header h1 { font-size: 2.3rem; }
+  body.large-print .org-name { font-size: 1.3rem; }
+  body.large-print .mode-btn { font-size: 1.1rem; padding: 12px 20px; }
+
+  /* ══════ SCREEN READER MODE — visually simplified, semantically identical ══════ */
+  body.sr-mode { background: #fff; }
+  body.sr-mode .notice { border-width: 1px; border-left-width: 6px; }
+  body.sr-mode .org-toggle .arrow { display: none; }
+  body.sr-mode .stat-list li { font-weight: normal; }
+
+  /* Screen-reader-only text: present in DOM, read aloud, never shown visually */
+  .sr-only {
+    position: absolute; width: 1px; height: 1px;
+    padding: 0; margin: -1px; overflow: hidden;
+    clip: rect(0,0,0,0); white-space: nowrap; border: 0;
+  }
+
+  footer {
+    max-width: var(--content-max); margin: 40px auto 0; padding: 20px;
+    border-top: 2px solid var(--border); font-size: 0.9rem; color: var(--muted);
+  }
+
+  @media (max-width: 600px) {
+    header h1 { font-size: 1.5rem; }
+    .controls-inner { gap: 8px; }
+  }
+</style>
+</head>
+<body>
+
+<a href="#main-content" class="skip-link">Skip to main content</a>
+
+<div class="controls-bar" role="region" aria-label="Display settings">
+  <div class="controls-inner">
+    <span class="controls-label" id="display-mode-label">Display mode:</span>
+    <button type="button" class="mode-btn" id="btn-standard" aria-pressed="true" aria-describedby="display-mode-label">Standard</button>
+    <button type="button" class="mode-btn" id="btn-large" aria-pressed="false" aria-describedby="display-mode-label">Large Print</button>
+    <button type="button" class="mode-btn" id="btn-sr" aria-pressed="false" aria-describedby="display-mode-label">Screen Reader Optimised</button>
+    <button type="button" class="mode-btn" id="btn-expand-all" style="margin-left:auto">Expand All Sections</button>
+  </div>
+</div>
+
+<header>
+  <h1>Deaf &amp; DeafBlind Healthcare Access<br>Accessible Edition</h1>
+  <p class="subtitle">National organisations and the South West London ICB footprint (Croydon, Kingston upon Thames, Merton, Richmond upon Thames, Sutton, Wandsworth)</p>
+  <p class="subtitle">Verified 31 August 2026. This edition contains the same information as the visual stakeholder matrix, restructured for screen readers, braille displays, and low-vision reading.</p>
+</header>
+
+<main id="main-content">
+
+  <div class="notice db">
+    <h2>About this document</h2>
+    <p>This page has three display modes, selectable with the buttons at the top of the page. Your choice is saved automatically for next time.</p>
+    <ul>
+      <li><strong>Standard</strong> — normal text size, as most people will read it.</li>
+      <li><strong>Large Print</strong> — larger text throughout, for low vision reading. Zooming your browser (Ctrl and + or Cmd and +) also works normally on any mode.</li>
+      <li><strong>Screen Reader Optimised</strong> — removes decorative colour and visual grouping cues and relies only on text and heading structure, for people using a screen reader with a refreshable braille display or speech output.</li>
+    </ul>
+    <p>Every organisation is listed as an expandable section. Use the "Expand All Sections" button to open everything at once, or press Enter or Space on any organisation's name to open just that one. All sections are reachable and operable by keyboard alone — no mouse is required.</p>
+  </div>
+
+  <nav class="toc" aria-label="Table of contents">
+    <h2>Contents</h2>
+    <ol>
+      <li><a href="#sec-population">Population data — UK and South West London</a></li>
+      <li><a href="#sec-policy">Policy summary — what has changed and what it means</a></li>
+      <li><a href="#sec-manage">Organisations: Manage Closely</a></li>
+      <li><a href="#sec-satisfied">Organisations: Keep Satisfied</a></li>
+      <li><a href="#sec-informed">Organisations: Keep Informed</a></li>
+      <li><a href="#sec-monitor">Organisations: Monitor</a></li>
+      <li><a href="#sec-funding">Funding crisis and NHS commissioning routes</a></li>
+    </ol>
+  </nav>
+
+  <!-- ══════════════ POPULATION ══════════════ -->
+  <section id="sec-population" aria-labelledby="h-population">
+    <h2 id="h-population">1. Population data</h2>
+    <p class="section-intro">UK-wide figures, then South West London ICB local figures where they exist. Where no reliable local figure exists, this is stated plainly rather than guessed.</p>
+
+    <h3 class="sub-label">UK-wide</h3>
+    <ul class="stat-list">
+      <li>18 million adults in the UK are deaf or have hearing loss or tinnitus. (RNID, still the current working figure as of January 2026.)</li>
+      <li>The number of British Sign Language users is genuinely disputed and depends on definition. Do not quote one number as "the" figure. Four figures are all in current official and advisory use: 22,000 people gave British Sign Language as their main language in the 2021 Census for England and Wales; around 25,000 is the UK-wide main-language estimate; 87,000 is the estimated number of deaf British Sign Language users; 151,000 is the total estimate of British Sign Language users of any kind, used throughout the November 2025 Locked Out report. An older figure of 73,000, used in earlier versions of this briefing, should be considered replaced by this range.</li>
+      <li>53,225 deaf children and young people live in the UK, a 2 per cent decrease from the year before. Of these, 45,902 are in England. (Consortium for Research into Deaf Education, 2025 report.)</li>
+      <li>More than 450,000 people in the UK are deafblind, projected to rise past 610,000 by 2035 as the population ages. (Sense and Deafblind UK, modelled estimate.)</li>
+      <li>Estimates for Usher syndrome, the leading cause of acquired deafblindness, range from 5,200 people who are BSL users and affected by Usher syndrome, up to 10,000 to 11,000 people affected by all forms of Usher syndrome combined. The range exists because sources use different definitions.</li>
+    </ul>
+
+    <h3 class="sub-label">South West London ICB — verified local data</h3>
+    <p>The six boroughs together have a population of approximately 1.55 million people: Croydon about 410,000; Wandsworth about 340,000; Merton about 219,000; Sutton about 214,000; Richmond about 197,000; Kingston about 173,000.</p>
+    <ul class="stat-list">
+      <li>878 requests for a British Sign Language interpreter were logged at GP practices across South West London between October 2024 and June 2025. This counts requests, not unique patients. By borough: Wandsworth 466, Croydon 185, Sutton 72, Merton 68, Kingston 61, Richmond 26. The high Wandsworth figure is explained by two Deaf care homes run by Achieving Together, and by Oak Lodge School, a specialist Deaf school, both located in that borough.</li>
+      <li>Sutton has the highest hearing loss prevalence in the South West London footprint, at 15.4 per cent of its population, according to an April 2026 analysis of the NHS Hearing Loss Data Tool ranking London boroughs.</li>
+      <li>A rough planning estimate for the deafblind population across the six boroughs, applying national prevalence rates to local population figures, is between 8,000 and 11,000 people. This is a modelled estimate only. No NHS or council dataset specific to deafblind people in South West London currently exists publicly.</li>
+    </ul>
+
+    <div class="notice warn">
+      <h2>Gap: no published local authority sensory registers</h2>
+      <p>No published 2025 to 2026 register totals for deaf or deafblind residents were found for any of the six South West London boroughs: Croydon, Kingston, Merton, Richmond, Sutton, or Wandsworth. Local authorities are required by law to keep such a record for deafblind people. See the Gap Tracker document for the full list of items requiring direct contact to resolve.</p>
+    </div>
+  </section>
+
+  <!-- ══════════════ POLICY ══════════════ -->
+  <section id="sec-policy" aria-labelledby="h-policy">
+    <h2 id="h-policy">2. Policy summary</h2>
+    <p class="section-intro">What has actually changed in NHS policy, and what it does and does not require in practice.</p>
+
+    <h3 class="sub-label">The Accessible Information Standard, updated 30 June 2025</h3>
+    <p>NHS England published an updated version of the Accessible Information Standard, known as AIS, on 30 June 2025. Two changes matter most. First, a new sixth step called "Review" was added: services must now regularly recheck a person's communication needs, not just record them once and leave the record unchanged. Second, every NHS organisation must now name a senior, executive-level person responsible for the standard being met, not only an operational lead.</p>
+    <p>A separate and more powerful legal change happened alongside this. A section of the Health and Care Act 2022, called section 95, came into force on 7 July 2025. This section allows information standards like the AIS to become legally compulsory, not just advisory. This is a genuine and significant legal change — the Accessible Information Standard is no longer simply "guidance" in the way it was before July 2025.</p>
+    <p>However, full enforcement is still being built. The Care Quality Commission currently treats the standard as something services "must have regard to," alongside its own inspections, rather than running a separate inspection regime purely for the standard. Every provider is expected to publish a formal self-assessment of how well it meets the standard, but the deadline for that is <strong>March 2027</strong>, so the practical, on-the-ground enforcement is still around a year away from being fully visible.</p>
+    <p>A related finding matters here: a Freedom of Information request by RNID, published 27 January 2026, found that <strong>92 per cent of NHS staff in England have not completed training on the Accessible Information Standard</strong>. This is the clearest evidence that policy change on paper has not yet reached most frontline staff.</p>
+
+    <h3 class="sub-label">The Single Patient Record</h3>
+    <p>As part of the Government's 10 Year Health Plan, published July 2025, the NHS committed to a Single Patient Record: one secure record for each patient instead of separate records at every service. The full version, accessible through the NHS App, is planned from 2028. An earlier interim target is for clinicians to have improved access to patient records for at least 80 per cent of patients by March 2027. This record is intended to carry a person's communication needs — for example, that someone needs a British Sign Language interpreter — consistently across every NHS service they use, rather than having to explain this every time. A related technical requirement, the Reasonable Adjustment Digital Flag, has a compliance deadline for providers of 30 September 2026.</p>
+
+    <h3 class="sub-label">Locked Out — the BSL Advisory Board report, 27 November 2025</h3>
+    <p>This is the most significant Deaf and DeafBlind health policy document published since Still Ignored in April 2025. It was written by Dr Joanna Atkinson for a subgroup of the Government's BSL Advisory Board. It sets out twelve priorities, including: giving people control over booking their own interpreters; full enforcement of the Accessible Information Standard including the new legal powers described above; a national video relay service operating 24 hours a day; a rule that only properly registered interpreters should be used, and specifically that children should never be used as interpreters for their family members; and bringing back specialist sensory impairment teams within councils and the NHS, which have been cut in many areas.</p>
+    <p>Importantly, the report contains a separate section listing fourteen specific, urgent improvements needed for deafblind people — the first time a major national report has given deafblind people this level of dedicated attention, rather than treating deafblindness as a footnote to deafness.</p>
+
+    <h3 class="sub-label">Care Act 2014 — duties to deafblind people</h3>
+    <p>Local councils have had legal duties toward deafblind people since 2014, and these duties are still current — there is no newer national guidance replacing them. Councils must: keep a record of deafblind people in their area; make sure that anyone assessing a deafblind person's care needs has specific training in deafblindness, not just general social care training; provide specialist one-to-one support workers, called communicator-guides, where needed; and name one senior, director-level officer with overall responsibility for deafblind people's services. This last point mirrors the AIS requirement for a named senior lead described above, and is worth checking for each of the six South West London councils.</p>
+  </section>
+
+  <!-- ══════════════ MANAGE CLOSELY ══════════════ -->
+  <section id="sec-manage" aria-labelledby="h-manage">
+    <h2 id="h-manage">3. Organisations: Manage Closely</h2>
+    <p class="section-intro">High power or influence, and high interest or direct involvement in Deaf and DeafBlind healthcare access. These are the most important relationships to maintain actively.</p>
+
+    <!-- RNID -->
+    <div class="org">
+      <h3>
+        <button type="button" class="org-toggle" aria-expanded="false" aria-controls="panel-rnid" id="toggle-rnid">
+          <span class="arrow" aria-hidden="true">▶</span>
+          <span class="org-title-block">
+            <span class="org-name">RNID</span>
+            <span class="org-strategy-line">National organisation. <span class="strat-badge strat-q1">Manage Closely</span></span>
+          </span>
+        </button>
+      </h3>
+      <div class="org-panel" id="panel-rnid" role="region" aria-labelledby="toggle-rnid" hidden>
+        <p class="meta-line"><span>Founded 1911</span><span>18 million+ deaf and hard of hearing people supported UK-wide</span><span>rnid.org.uk</span></p>
+        <p>The UK's largest charity for deaf people and those with hearing loss. Led the campaign that secured official recognition of British Sign Language as a language of England, Scotland and Wales under the BSL Act 2022. A primary architect of national NHS accessibility policy for deaf people.</p>
+
+        <h4 class="sub-label">Still Ignored, April 2025, co-authored with SignHealth</h4>
+        <p>The most significant deaf healthcare access report published in the UK, based on responses from over 1,100 deaf and hard of hearing people.</p>
+        <ul class="stat-list">
+          <li>70 per cent of respondents were never asked about their communication needs at an NHS appointment.</li>
+          <li>67 per cent of British Sign Language users had been denied interpretation.</li>
+          <li>56 per cent said they did not fully understand what they were told at their appointment.</li>
+          <li>Fewer than 1 in 5 British Sign Language users said they trust the NHS to meet their needs.</li>
+          <li>1 in 10 have avoided calling an ambulance or attending Accident and Emergency.</li>
+          <li>1 in 4 have avoided seeking help for a new health concern altogether.</li>
+        </ul>
+        <blockquote>RNID's Director of Health, Crystal Rolfe, said: "Imagine not being able to understand a cancer diagnosis, or having to rely on a family member to tell you that you're seriously ill or even dying."</blockquote>
+
+        <h4 class="sub-label">Follow-up finding, 27 January 2026</h4>
+        <p>A Freedom of Information request by RNID found that <strong>92 per cent of NHS staff in England have not completed training</strong> on the Accessible Information Standard — the clearest evidence that the June 2025 policy update has not yet reached frontline practice. RNID has said publicly that the update "does too little" on enforcement.</p>
+
+        <h4 class="sub-label">British Sign Language user population — corrected figures</h4>
+        <p>RNID's own prevalence page, updated June 2026, confirms there is no single agreed number for how many people use British Sign Language. Treat any single figure with caution. See the Population section above for the full range of figures now in use.</p>
+
+        <h4 class="sub-label">How to use this relationship</h4>
+        <ul class="action-list">
+          <li>Co-develop Accessible Information Standard compliance tools</li>
+          <li>Use as a route to policy endorsement</li>
+          <li>Reference for British Sign Language Act compliance guidance</li>
+          <li>Consider as a campaign partner</li>
+          <li>Use the 92 per cent training gap figure as the baseline ask for any South West London training programme</li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- SIGNHEALTH -->
+    <div class="org">
+      <h3>
+        <button type="button" class="org-toggle" aria-expanded="false" aria-controls="panel-signhealth" id="toggle-signhealth">
+          <span class="arrow" aria-hidden="true">▶</span>
+          <span class="org-title-block">
+            <span class="org-name">SignHealth</span>
+            <span class="org-strategy-line">National organisation. <span class="strat-badge strat-q1">Manage Closely</span></span>
+          </span>
+        </button>
+      </h3>
+      <div class="org-panel" id="panel-signhealth" role="region" aria-labelledby="toggle-signhealth" hidden>
+        <p class="meta-line"><span>Deaf health specialist</span><span>signhealth.org.uk</span></p>
+        <p>The UK's only charity dedicated specifically to Deaf health. Provides direct services in British Sign Language: psychological therapy, domestic abuse support, social care, and children and families services across England.</p>
+        <blockquote>Philippa Wynne, Director of Engagement, said: "The NHS is not working for deaf people. Every day the health of deaf people is put at risk."</blockquote>
+
+        <h4 class="sub-label">Key data and policy work</h4>
+        <p>Co-authored Still Ignored with RNID in April 2025. Worked directly with Healthwatch South West London on the review that led to the DA Languages British Sign Language interpreter service being rolled out to South West London GP practices in October 2024.</p>
+        <ul class="stat-list">
+          <li>NHS failures are estimated to cost £80 million to £100 million a year, an update on a 2014 estimate of £30 million a year, adjusted for inflation and wider costs.</li>
+          <li>88 per cent of people say inaccessible communication affects their mental health.</li>
+          <li>82 per cent say it affects their physical health.</li>
+        </ul>
+
+        <h4 class="sub-label">Campaign activity since April 2025</h4>
+        <p>SignHealth has presented to over 500 NHS professionals, met government ministers, and run more than 90 Deaf Health Roadshow workshops. On 14 November 2025, SignHealth coordinated an open letter to the Health Secretary, signed by over 50 Deaf organisations — the largest coordinated sector action on this issue to date. In April 2026, SignHealth ran focus groups for the National Maternity and Neonatal Investigation with deaf and deafblind women.</p>
+
+        <h4 class="sub-label">How to use this relationship</h4>
+        <ul class="action-list">
+          <li>Primary national clinical partner</li>
+          <li>Route into Accessible Information Standard compliance within the NHS</li>
+          <li>Model for British Sign Language accessible services</li>
+          <li>Possible gateway into South West London ICB commissioning discussions</li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- BSL ADVISORY BOARD -->
+    <div class="org">
+      <h3>
+        <button type="button" class="org-toggle" aria-expanded="false" aria-controls="panel-bslboard" id="toggle-bslboard">
+          <span class="arrow" aria-hidden="true">▶</span>
+          <span class="org-title-block">
+            <span class="org-name">BSL Advisory Board — Locked Out report</span>
+            <span class="org-strategy-line">National, government-appointed board. <span class="strat-badge strat-q1">Manage Closely — leading current policy document</span></span>
+          </span>
+        </button>
+      </h3>
+      <div class="org-panel" id="panel-bslboard" role="region" aria-labelledby="toggle-bslboard" hidden>
+        <p class="meta-line"><span>Published 27 November 2025</span><span>Board refreshed December 2025</span></p>
+        <p>This is the most significant national Deaf and DeafBlind healthcare policy document since Still Ignored, and the first major report to give deafblind British Sign Language users equal attention rather than treating them as a footnote to deafness generally. Written by Dr Joanna Atkinson, who is now co-chair of the refreshed board.</p>
+
+        <h4 class="sub-label">Twelve priorities</h4>
+        <p>User-controlled interpreter booking; full enforcement of the Accessible Information Standard including its new legal powers; a national video relay service available 24 hours a day; digital accessibility; mandatory recording of British Sign Language as a person's primary language in NHS data systems; a national complaints service specifically for British Sign Language users; mandatory staff training; a rule that only properly registered interpreters should be used, and specifically that children should never interpret for family members; structured engagement between NHS commissioners and the Deaf community; reinstating specialist sensory impairment teams that have been cut in many areas; early exposure to British Sign Language for deaf children; and specialist care for older Deaf people.</p>
+
+        <h4 class="sub-label">Fourteen urgent improvements for deafblind people</h4>
+        <p>The report includes a separate section listing fourteen specific actions needed for deafblind people. This should be treated as the primary source for making the case for any deafblind-specific service in South West London, given how little published local data exists for this group.</p>
+
+        <h4 class="sub-label">How to use this relationship</h4>
+        <ul class="action-list">
+          <li>Primary current policy document to cite in any South West London briefing</li>
+          <li>Compare the twelve priorities against what South West London ICB already does</li>
+          <li>Use the fourteen deafblind actions as the foundation for a deafblind commissioning case</li>
+          <li>Consider contacting the Health and Social Care Subgroup directly</li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- SWLSTG -->
+    <div class="org">
+      <h3>
+        <button type="button" class="org-toggle" aria-expanded="false" aria-controls="panel-swlstg" id="toggle-swlstg">
+          <span class="arrow" aria-hidden="true">▶</span>
+          <span class="org-title-block">
+            <span class="org-name">SWLSTG — National Deaf Services</span>
+            <span class="org-strategy-line">South West London ICB, NHS. <span class="strat-badge strat-q1">Manage Closely</span></span>
+          </span>
+        </button>
+      </h3>
+      <div class="org-panel" id="panel-swlstg" role="region" aria-labelledby="toggle-swlstg" hidden>
+        <p class="meta-line"><span>Springfield University Hospital, Tooting, SW17 7DJ</span><span>Outpatients Monday to Friday 9am to 5pm</span><span>Inpatient telephone answered 24 hours</span></p>
+        <p>South West London and St George's Mental Health NHS Trust delivers the National Deaf Mental Health Service from Springfield University Hospital in Tooting — the UK's leading NHS body for Deaf mental health, and the closest major NHS deaf services facility to the southern boroughs of the South West London ICB, roughly 15 to 20 minutes from Sutton.</p>
+
+        <h4 class="sub-label">Services</h4>
+        <p>Bluebell Ward, in the Morrison Building, entrance 3, is the national inpatient deaf mental health unit. The Deaf Adult Community Team, in the Newton Building, entrance 7, provides outpatient and community mental health support for Deaf adults with British Sign Language fluent clinical staff. National Deaf CAMHS, for children and young people, is also based here. Referrals are accepted from GPs, the voluntary sector, and directly from patients themselves — you do not need a GP referral to access this service.</p>
+
+        <h4 class="sub-label">Status check, August 2026</h4>
+        <p>No published capacity change, new service, or waiting time information for National Deaf Services was found as of August 2026. Current waiting times are not published and would need to be requested directly from the Trust.</p>
+
+        <h4 class="sub-label">How to use this relationship</h4>
+        <ul class="action-list">
+          <li>Self-refer or refer directly — no GP referral is required</li>
+          <li>Primary NHS deaf mental health gateway for South West London</li>
+          <li>Deaf CAMHS pathway available for people under 18</li>
+          <li>Request current waiting times directly, as these are not published</li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- SENSE -->
+    <div class="org">
+      <h3>
+        <button type="button" class="org-toggle" aria-expanded="false" aria-controls="panel-sense" id="toggle-sense">
+          <span class="arrow" aria-hidden="true">▶</span>
+          <span class="org-title-block">
+            <span class="org-name">Sense</span>
+            <span class="org-strategy-line">National, DeafBlind specialist. <span class="strat-badge strat-q1">Manage Closely — DeafBlind lead</span></span>
+          </span>
+        </button>
+      </h3>
+      <div class="org-panel" id="panel-sense" role="region" aria-labelledby="toggle-sense" hidden>
+        <p class="meta-line"><span>National</span><span>sense.org.uk</span></p>
+        <p>Sense is the UK's leading national charity for people with deafblindness and multiple sensory impairment. It holds the primary research authority on deafblind population data in the UK and has strong NHS and local authority commissioning relationships.</p>
+
+        <h4 class="sub-label">2024 to 2025 annual report</h4>
+        <p>Sense reached 5,232 children and families in the reporting year, expanded its hub network including a new Belfast hub, and set a target to reach 75 new adults through council or ICB commissioned services. 2025 to 2026 marks Sense's 70th anniversary year. Sense's specialist Usher syndrome casework transferred to Deafblind UK in July 2024.</p>
+
+        <h4 class="sub-label">NHS and policy role</h4>
+        <p>Sense co-created the official video overview of the Accessible Information Standard with NHS England. The updated Accessible Information Standard explicitly defines deafblindness using the 2014 Department of Health and Social Care definition, and recognises Deafblind Manual interpreting — a hands-on, tactile form of British Sign Language — as a valid form of communication support.</p>
+
+        <h4 class="sub-label">How to use this relationship</h4>
+        <ul class="action-list">
+          <li>Primary national partner for anything relating to deafblind people</li>
+          <li>Guidance on Accessible Information Standard compliance for deafblind patients</li>
+          <li>Route into local authority Care Act duty engagement</li>
+          <li>Source of population data and evidence base</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- ══════════════ KEEP SATISFIED ══════════════ -->
+  <section id="sec-satisfied" aria-labelledby="h-satisfied">
+    <h2 id="h-satisfied">4. Organisations: Keep Satisfied</h2>
+    <p class="section-intro">High power or influence, broader remit. Worth regular positive contact even where Deaf and DeafBlind health access is not their sole focus.</p>
+
+    <!-- NDCS -->
+    <div class="org">
+      <h3>
+        <button type="button" class="org-toggle" aria-expanded="false" aria-controls="panel-ndcs" id="toggle-ndcs">
+          <span class="arrow" aria-hidden="true">▶</span>
+          <span class="org-title-block">
+            <span class="org-name">National Deaf Children's Society</span>
+            <span class="org-strategy-line">National. <span class="strat-badge strat-q2">Keep Satisfied</span></span>
+          </span>
+        </button>
+      </h3>
+      <div class="org-panel" id="panel-ndcs" role="region" aria-labelledby="toggle-ndcs" hidden>
+        <p class="meta-line"><span>Children and families focus</span><span>ndcs.org.uk</span></p>
+        <p>The UK's leading children's deaf charity with very high institutional reach. Primary focus is children and families: Education, Health and Care Plans, special educational needs systems, school audiology support, and family healthcare navigation.</p>
+
+        <h4 class="sub-label">Population — 2025 update</h4>
+        <p>53,225 deaf children and young people live in the UK, a 2 per cent decrease from the year before. Of these, 45,902 are in England.</p>
+
+        <h4 class="sub-label">Kingdon Review, November 2025</h4>
+        <p>The Kingdon Review of children's hearing services published its final report on 10 November 2025, later updated 4 December 2025. It found that nearly 300 children had been harmed by failures in newborn hearing screening. Commissioning of the Newborn Hearing Screening Programme is expected to move toward local ICBs, which will directly affect how South West London identifies and refers deaf children in future.</p>
+        <p>Separately, the National Deaf Children's Society has previously reported that 48 per cent of Teachers of the Deaf are due to retire within 10 to 15 years — a long-standing workforce risk with no newer figure available.</p>
+
+        <h4 class="sub-label">How to use this relationship</h4>
+        <ul class="action-list">
+          <li>Track how newborn hearing screening commissioning moves to South West London ICB</li>
+          <li>Cite the Kingdon Review in any safeguarding case for children's pathways</li>
+          <li>Route into the health components of Education, Health and Care Plans</li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- BSMHD -->
+    <div class="org">
+      <h3>
+        <button type="button" class="org-toggle" aria-expanded="false" aria-controls="panel-bsmhd" id="toggle-bsmhd">
+          <span class="arrow" aria-hidden="true">▶</span>
+          <span class="org-title-block">
+            <span class="org-name">British Society for Mental Health and Deaf People</span>
+            <span class="org-strategy-line">National, clinical network. <span class="strat-badge strat-q2">Keep Satisfied</span></span>
+          </span>
+        </button>
+      </h3>
+      <div class="org-panel" id="panel-bsmhd" role="region" aria-labelledby="toggle-bsmhd" hidden>
+        <p>The only UK charity solely dedicated to the intersection of deafness and mental health. Connects NHS clinicians, psychologists, psychiatrists and academics working with Deaf patients. Staff from the SWLSTG National Deaf Services team at Springfield actively participate in this network, making it a direct bridge between national clinical standards and local South West London provision.</p>
+        <h4 class="sub-label">How to use this relationship</h4>
+        <ul class="action-list">
+          <li>Clinical endorsement route for NHS-facing work</li>
+          <li>Connection into the Springfield and South West London ICB clinical network</li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- RAD -->
+    <div class="org">
+      <h3>
+        <button type="button" class="org-toggle" aria-expanded="false" aria-controls="panel-rad" id="toggle-rad">
+          <span class="arrow" aria-hidden="true">▶</span>
+          <span class="org-title-block">
+            <span class="org-name">Royal Association for Deaf People</span>
+            <span class="org-strategy-line">National, with South West London presence. <span class="strat-badge strat-q2">Keep Satisfied</span></span>
+          </span>
+        </button>
+      </h3>
+      <div class="org-panel" id="panel-rad" role="region" aria-labelledby="toggle-rad" hidden>
+        <p class="meta-line"><span>Founded 1841</span><span>Royal Patron His Majesty King Charles the Third, since 2025</span><span>royaldeaf.org.uk</span></p>
+        <p>One of the oldest deaf charities in the UK. A Deaf-led organisation providing services in British Sign Language: advice, advocacy, employment, social care, interpreting, and community engagement.</p>
+
+        <h4 class="sub-label">South West London local presence</h4>
+        <p>In Croydon, a RAD caseworker is formally embedded within the council's Sensory Impairment Service, supporting profoundly deaf residents following social care assessments. In Lambeth, a RAD-trained adviser delivers an advice session every other Wednesday, 10am to 3:30pm, from the Disability Advice Service Lambeth office. In Wandsworth, RAD is listed on the council's Family Information Service for families with deaf children.</p>
+
+        <h4 class="sub-label">Financial position and 2026 activity</h4>
+        <p>RAD's accounts for the year to 31 March 2025 show a deficit: income of £3.12 million against spending of £3.48 million, including £1.40 million from 91 government contracts. This reflects the sector-wide funding pressure described in the funding section below. RAD marked its 185th anniversary from 29 January 2026, and currently delivers free accredited British Sign Language courses, Levels 1 to 3, for London residents. RAD is not currently an ICB contractor in South West London on the public record, despite its embedded Croydon and Lambeth presence.</p>
+
+        <h4 class="sub-label">How to use this relationship</h4>
+        <ul class="action-list">
+          <li>Gateway into Croydon social care</li>
+          <li>Fortnightly advice access in Lambeth via the Disability Advice Service Lambeth partnership</li>
+          <li>Route into GP Deaf awareness training</li>
+          <li>Royal Patron gives useful credibility for NHS-facing briefings</li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- HEALTHWATCH SWL -->
+    <div class="org">
+      <h3>
+        <button type="button" class="org-toggle" aria-expanded="false" aria-controls="panel-hwswl" id="toggle-hwswl">
+          <span class="arrow" aria-hidden="true">▶</span>
+          <span class="org-title-block">
+            <span class="org-name">Healthwatch South West London</span>
+            <span class="org-strategy-line">South West London ICB, all six boroughs. <span class="strat-badge strat-q2">Keep Satisfied</span></span>
+          </span>
+        </button>
+      </h3>
+      <div class="org-panel" id="panel-hwswl" role="region" aria-labelledby="toggle-hwswl" hidden>
+        <p>The coordinated patient voice network for all six South West London ICB boroughs. Holds formal accountability powers over NHS commissioners and is the primary route for patient experience to reach ICB decision-making.</p>
+
+        <h4 class="sub-label">DA Languages British Sign Language service, from October 2024</h4>
+        <p>Following a Healthwatch review, the ICB commissioned a new interpreter provider, DA Languages, replacing the previous provider Language Line, from 1 October 2024. This introduced on-demand video interpretation, in-person interpretation, and staff training materials across all six boroughs.</p>
+
+        <h4 class="sub-label">Survey results, published, in circulation 2026</h4>
+        <p>Healthwatch surveyed British Sign Language users and GP staff between April and June 2025, six to eight months after the new service began. The headline finding is that patients report "continued frustrations" despite the change of provider — the underlying access problem has not been resolved, only the supplier has changed. Specific issues raised: appointment cancellations with little notice; the interpreter service contacting the individual who booked the appointment directly rather than the GP practice, creating a single point of failure; and a clear patient wish for an online booking and confirmation system, which matches Priority 1 of the national Locked Out report described in the policy section above.</p>
+        <p>The underlying data: 878 interpreter requests were logged October 2024 to June 2025, most heavily concentrated in Wandsworth.</p>
+
+        <h4 class="sub-label">How to use this relationship</h4>
+        <ul class="action-list">
+          <li>Raise DA Languages contract performance directly with the ICB — fulfilment rate, cancellation notice, confirmation to patients</li>
+          <li>Cite the 878-request dataset in any funding case</li>
+          <li>Use as the patient voice amplifier for any South West London Deaf health work</li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- HEALTHWATCH CROYDON -->
+    <div class="org">
+      <h3>
+        <button type="button" class="org-toggle" aria-expanded="false" aria-controls="panel-hwcroydon" id="toggle-hwcroydon">
+          <span class="arrow" aria-hidden="true">▶</span>
+          <span class="org-title-block">
+            <span class="org-name">Healthwatch Croydon</span>
+            <span class="org-strategy-line">South West London ICB, Croydon borough. <span class="strat-badge strat-q2">Keep Satisfied</span></span>
+          </span>
+        </button>
+      </h3>
+      <div class="org-panel" id="panel-hwcroydon" role="region" aria-labelledby="toggle-hwcroydon" hidden>
+        <p>Croydon sits within the South West London ICB, not South East London. Croydon's specialist Sensory Impairment Service, run in partnership with the Royal Association for Deaf People, and the Croydon Hearing Resource Centre together form the most developed borough-level deaf health support infrastructure anywhere in South West London.</p>
+        <h4 class="sub-label">How to use this relationship</h4>
+        <ul class="action-list">
+          <li>South West London ICB Croydon patient voice</li>
+          <li>Link to the RAD and Croydon Hearing Resource Centre partnership</li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- NHS FUNDING (also shown in full in section 7 below) -->
+  </section>
+
+  <!-- ══════════════ KEEP INFORMED ══════════════ -->
+  <section id="sec-informed" aria-labelledby="h-informed">
+    <h2 id="h-informed">5. Organisations: Keep Informed</h2>
+    <p class="section-intro">Frontline presence, high interest, generally lower formal power. Important sources of lived-experience insight and grassroots trust.</p>
+
+    <div class="org">
+      <h3>
+        <button type="button" class="org-toggle" aria-expanded="false" aria-controls="panel-mertoncil" id="toggle-mertoncil">
+          <span class="arrow" aria-hidden="true">▶</span>
+          <span class="org-title-block">
+            <span class="org-name">Merton Centre for Independent Living</span>
+            <span class="org-strategy-line">South West London ICB, Merton. <span class="strat-badge strat-q3">Keep Informed</span></span>
+          </span>
+        </button>
+      </h3>
+      <div class="org-panel" id="panel-mertoncil" role="region" aria-labelledby="toggle-mertoncil" hidden>
+        <p>A Deaf-led Disabled People's Organisation, run and controlled by Deaf and disabled people themselves. Covers health access, benefits, housing, and independent living support across Merton. As a peer-led organisation, it has direct daily contact with Deaf residents navigating NHS and social care systems, making it a useful lived-experience source for understanding real barriers.</p>
+        <ul class="action-list">
+          <li>Closest local Deaf-led organisation to Sutton</li>
+          <li>Source of lived-experience data on Accessible Information Standard compliance</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="org">
+      <h3>
+        <button type="button" class="org-toggle" aria-expanded="false" aria-controls="panel-deaffirst" id="toggle-deaffirst">
+          <span class="arrow" aria-hidden="true">▶</span>
+          <span class="org-title-block">
+            <span class="org-name">Deaf First, based at Oak Lodge School</span>
+            <span class="org-strategy-line">South West London ICB, Wandsworth. <span class="strat-badge strat-q3">Keep Informed</span></span>
+          </span>
+        </button>
+      </h3>
+      <div class="org-panel" id="panel-deaffirst" role="region" aria-labelledby="toggle-deaffirst" hidden>
+        <p>Provides British Sign Language first advice and advocacy for Deaf adults and families across South West London, helping people navigate NHS and social care systems in their first language.</p>
+        <ul class="action-list">
+          <li>British Sign Language first health and social care navigation</li>
+          <li>Wandsworth-based community gateway</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="org">
+      <h3>
+        <button type="button" class="org-toggle" aria-expanded="false" aria-controls="panel-radcroydon" id="toggle-radcroydon">
+          <span class="arrow" aria-hidden="true">▶</span>
+          <span class="org-title-block">
+            <span class="org-name">RAD, Croydon Caseworker Service</span>
+            <span class="org-strategy-line">South West London ICB, Croydon. <span class="strat-badge strat-q3">Keep Informed</span></span>
+          </span>
+        </button>
+      </h3>
+      <div class="org-panel" id="panel-radcroydon" role="region" aria-labelledby="toggle-radcroydon" hidden>
+        <p>A dedicated caseworker embedded within Croydon Council's Sensory Impairment Service, supporting profoundly deaf residents following social care assessments. This role sits at the direct intersection of NHS primary care, social care, and the Deaf community, giving it real insight into what health needs are going unmet locally.</p>
+        <ul class="action-list">
+          <li>Croydon deaf social care gateway</li>
+          <li>Insight into where the Accessible Information Standard is failing in practice locally</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="org">
+      <h3>
+        <button type="button" class="org-toggle" aria-expanded="false" aria-controls="panel-chrc" id="toggle-chrc">
+          <span class="arrow" aria-hidden="true">▶</span>
+          <span class="org-title-block">
+            <span class="org-name">Croydon Hearing Resource Centre</span>
+            <span class="org-strategy-line">South West London ICB, Croydon. <span class="strat-badge strat-q3">Keep Informed</span></span>
+          </span>
+        </button>
+      </h3>
+      <div class="org-panel" id="panel-chrc" role="region" aria-labelledby="toggle-chrc" hidden>
+        <p>Run by Croydon Council's Sensory Impairment Service in partnership with the Royal Association for Deaf People. Provides hearing aid support, specialist equipment assessment, and home alert devices. This is the most concrete existing example anywhere in South West London of a council, NHS and charity partnership actually delivering on Accessible Information Standard obligations at community level.</p>
+        <ul class="action-list">
+          <li>Working model of community-level Accessible Information Standard delivery</li>
+          <li>Home alert devices pathway — directly relevant to any assistive technology project</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="org">
+      <h3>
+        <button type="button" class="org-toggle" aria-expanded="false" aria-controls="panel-deafplus" id="toggle-deafplus">
+          <span class="arrow" aria-hidden="true">▶</span>
+          <span class="org-title-block">
+            <span class="org-name">deafPLUS</span>
+            <span class="org-strategy-line">South West London and National. <span class="strat-badge strat-q3">Keep Informed</span></span>
+          </span>
+        </button>
+      </h3>
+      <div class="org-panel" id="panel-deafplus" role="region" aria-labelledby="toggle-deafplus" hidden>
+        <p class="meta-line"><span>Established 1971 as Breakthrough</span><span>Confirmed active January 2025</span></p>
+        <p>One of the oldest Deaf support organisations in the UK. Offices in Bromley, Ealing, Whitechapel, Birmingham, Bath, Hampshire and Surrey. When Bromley Chain, an older local charity, was dissolved in March 2024, its work and assets transferred to deafPLUS, making deafPLUS the primary Deaf support organisation in the Bromley area.</p>
+        <p>The Bromley office runs a British Sign Language practice group, a Hard of Hearing social group meeting twice a month, a tinnitus support group, and — most relevant here — a Hearing Equipment Demonstration Service, where people can try and compare assistive hearing devices in person. This is direct, community-level delivery of exactly the kind of support the Accessible Information Standard is meant to guarantee.</p>
+        <ul class="action-list">
+          <li>Equipment demonstration service as a direct Accessible Information Standard delivery model</li>
+          <li>Surrey office covers the southern South West London corridor</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="org">
+      <h3>
+        <button type="button" class="org-toggle" aria-expanded="false" aria-controls="panel-brightdb" id="toggle-brightdb">
+          <span class="arrow" aria-hidden="true">▶</span>
+          <span class="org-title-block">
+            <span class="org-name">BRIGHT, also known as Bright DeafBlind</span>
+            <span class="org-strategy-line">London-wide, community-led. <span class="strat-badge strat-q3">Keep Informed — confirm activity before relying on this as a service</span></span>
+          </span>
+        </button>
+      </h3>
+      <div class="org-panel" id="panel-brightdb" role="region" aria-labelledby="toggle-brightdb" hidden>
+        <p>BRIGHT is a user-led, London-wide group providing DeafBlind-friendly social activities and workshops for profoundly Deaf, visually impaired British Sign Language users. Confirmed contact: brightdeafblind@gmail.com, and the website brightdeafblind.com. Volunteers are fluent in British Sign Language and deafblind communication methods.</p>
+        <p><strong>What this is not:</strong> BRIGHT is a community and peer group, not an NHS-commissioned clinical service. It is the most locally relevant deafblind organisation for the South West London area geographically, but should not be described as a care pathway in any commissioning document.</p>
+        <p>Its public directory listing is dated 2022, but other activity evidence continues through 2024 and 2025, so email <strong>brightdeafblind@gmail.com</strong> to confirm current activity before referencing this group as a live contact point in any community plan.</p>
+      </div>
+    </div>
+
+    <div class="org">
+      <h3>
+        <button type="button" class="org-toggle" aria-expanded="false" aria-controls="panel-deafblinduk" id="toggle-deafblinduk">
+          <span class="arrow" aria-hidden="true">▶</span>
+          <span class="org-title-block">
+            <span class="org-name">Deafblind UK</span>
+            <span class="org-strategy-line">National specialist. <span class="strat-badge strat-q3">Keep Informed</span></span>
+          </span>
+        </button>
+      </h3>
+      <div class="org-panel" id="panel-deafblinduk" role="region" aria-labelledby="toggle-deafblinduk" hidden>
+        <p class="meta-line"><span>Based in Peterborough</span><span>deafblind.org.uk</span><span>2024 to 2025 Impact Report published August 2025</span></p>
+        <p>The UK's only specialist national charity solely dedicated to supporting deafblind adults. Provides community connector support workers, specialist information, and advocacy.</p>
+
+        <h4 class="sub-label">2024 to 2025 impact figures</h4>
+        <ul class="stat-list">
+          <li>Supported 4,346 people with combined sight and hearing loss</li>
+          <li>Supported 188 unpaid carers</li>
+          <li>Trained or supported 1,905 professionals</li>
+          <li>Ran a helpline that handled 9,312 calls</li>
+          <li>Delivered 299 awareness talks</li>
+        </ul>
+        <p>Took on Sense's Usher syndrome specialist casework in July 2024. Working with Anglia Ruskin University on research into deafblindness in mainstream schools, with early data suggesting as many as 1 in 140 children in mainstream schools may have some degree of deafblindness.</p>
+
+        <h4 class="sub-label">Care Act duties — a correction</h4>
+        <p>The 2014 Department of Health and Social Care guidance remains the current national policy document on this topic. Do not cite a "2024 Deafblind Code" — no such replacement document has been published. Local authorities must name a director-level senior officer responsible for deafblind services, similar to the named senior lead required for the Accessible Information Standard.</p>
+
+        <h4 class="sub-label">Relevance to South West London</h4>
+        <p>Peterborough-based and primarily national rather than local. For local reach in South West London, BRIGHT and Sense's local services are more relevant, once BRIGHT's current activity is confirmed. Deafblind UK's population research and impact figures remain essential evidence for any local commissioning case.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ══════════════ MONITOR ══════════════ -->
+  <section id="sec-monitor" aria-labelledby="h-monitor">
+    <h2 id="h-monitor">6. Organisations: Monitor</h2>
+    <p class="section-intro">Lower direct interest in healthcare access specifically, or a broader remit. Worth periodic checking rather than active management.</p>
+
+    <div class="org">
+      <h3>
+        <button type="button" class="org-toggle" aria-expanded="false" aria-controls="panel-bda" id="toggle-bda">
+          <span class="arrow" aria-hidden="true">▶</span>
+          <span class="org-title-block">
+            <span class="org-name">British Deaf Association</span>
+            <span class="org-strategy-line">National. <span class="strat-badge strat-q4">Monitor</span></span>
+          </span>
+        </button>
+      </h3>
+      <div class="org-panel" id="panel-bda" role="region" aria-labelledby="toggle-bda" hidden>
+        <p>Founded 1890. A British Sign Language led campaigning organisation. Primary focus is language rights and cultural recognition rather than NHS accessibility specifically. Relevant if work involves British Sign Language Charter approval from public bodies including NHS trusts, or framing healthcare access as a language rights issue.</p>
+      </div>
+    </div>
+
+    <div class="org">
+      <h3>
+        <button type="button" class="org-toggle" aria-expanded="false" aria-controls="panel-deafblindnat" id="toggle-deafblindnat">
+          <span class="arrow" aria-hidden="true">▶</span>
+          <span class="org-title-block">
+            <span class="org-name">DeafBlind UK — national policy note</span>
+            <span class="org-strategy-line">National. <span class="strat-badge strat-q4">Monitor for dual-sensory scope only</span></span>
+          </span>
+        </button>
+      </h3>
+      <div class="org-panel" id="panel-deafblindnat" role="region" aria-labelledby="toggle-deafblindnat" hidden>
+        <p>See the full Deafblind UK entry in the Keep Informed section above for services and figures. Engage actively only where dual-sensory impairment is a specific part of the work; otherwise monitor for national guidance updates only.</p>
+      </div>
+    </div>
+
+    <div class="org">
+      <h3>
+        <button type="button" class="org-toggle" aria-expanded="false" aria-controls="panel-oaklodge" id="toggle-oaklodge">
+          <span class="arrow" aria-hidden="true">▶</span>
+          <span class="org-title-block">
+            <span class="org-name">Oak Lodge School</span>
+            <span class="org-strategy-line">South West London ICB, Wandsworth. <span class="strat-badge strat-q4">Monitor</span></span>
+          </span>
+        </button>
+      </h3>
+      <div class="org-panel" id="panel-oaklodge" role="region" aria-labelledby="toggle-oaklodge" hidden>
+        <p>A special school for Deaf students aged 10 to 19 in Wandsworth, rated Good by Ofsted in 2025. Also runs an Adult Deaf Lifelong Learning programme, drawing students from 25 London boroughs, making it one of the broadest community hubs for Deaf adults in South West London — though it is an education body, not a health service.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ══════════════ FUNDING ══════════════ -->
+  <section id="sec-funding" aria-labelledby="h-funding">
+    <h2 id="h-funding">7. Funding crisis and NHS commissioning routes</h2>
+    <p class="section-intro">Deaf-led organisations across the UK are under serious financial pressure. This section sets out the evidence for that, and the specific, real routes available for the NHS to fund Deaf and DeafBlind organisations directly.</p>
+
+    <h3 class="sub-label">The scale of the problem</h3>
+    <p>Employer National Insurance contributions rose to 15 per cent, and the threshold at which they start being paid fell to £5,000, from 6 April 2025. The National Council for Voluntary Organisations estimates this cost the charity sector £1.4 billion in the 2025 to 2026 financial year. A survey by the Charity Finance Group in November 2025 found that 77 per cent of charity leaders reported their finances were worse than the year before; 35 per cent had made redundancies; and 51 per cent had left staff vacancies unfilled. A survey of disability service providers estimated an average extra cost of £266 million across its membership, against typical profit margins of under 2 per cent — meaning at least one Deaf service provider reported it would have to hand back an NHS contract as financially unviable.</p>
+
+    <h3 class="sub-label">A real example: Deaf Action, Edinburgh</h3>
+    <p>Deaf Action's Deaf Social Worker service was cut in September 2024. Its specialist equipment service, including home alerting systems, was cut in March 2025. Its Community Care Assistant Service was cut in November 2025. Redundancies were confirmed in April 2026, affecting one deaf social worker, two equipment service roles, and one community care assistant role. The charity's income for the year to 31 March 2025 was £3.6 million against spending of £3.9 million.</p>
+    <blockquote>Chief Executive Philip Gerrard, who holds an MBE, said: "Those services have been dismantled, one after another, and the result is that deaf people are now being pushed into generic systems that are not designed for BSL users."</blockquote>
+    <p>No UK Government or NHS England national response has followed this — it was treated purely as a local council-level budget decision. This matters: there is currently no national safeguard protecting specialist Deaf services from being cut at local level, even where the human cost is well documented.</p>
+
+    <h3 class="sub-label">Real routes to direct NHS funding</h3>
+
+    <h4 class="sub-label">1. The Provider Selection Regime</h4>
+    <p>This is the specific set of rules, distinct from wider public procurement law, that governs how ICBs and the NHS buy healthcare services. It allows a direct award, or an award to "the most suitable provider," without a full competitive tender, where fairness and value for money criteria are met — and inequality reduction and social value are explicitly scored criteria. This is not a theoretical route. SignHealth was awarded a contract worth around £61,500 to provide independent mental health advocacy for Deaf people in Bury in 2025. Cumberland Council tendered a Deaf and dual-sensory advice and assessment service in September 2025, specifically reserved for small and voluntary sector organisations. Note also that these wins are not guaranteed to last: Norfolk Deaf Association, previously an established local audiology provider, lost its contract in a 2025 re-procurement.</p>
+
+    <h4 class="sub-label">2. Section 256 and 257 of the NHS Act 2006</h4>
+    <p>These sections of the law allow the NHS to make payments directly to a voluntary organisation for services that improve or protect people's health, rather than only funding a local council. This remains a lawful and available route, most often used to pool budgets between the NHS and councils. NHS England also publishes a ready-to-use model grant agreement specifically for making grants from an ICB to a voluntary organisation, meaning the legal paperwork does not need to be created from scratch.</p>
+
+    <h4 class="sub-label">3. The Cabinet Office voluntary sector spending target</h4>
+    <p>Government policy from February 2025 requires central government departments to set a two-year target for direct spending with voluntary and community organisations, starting from 1 April 2026. This applies directly to central government, not automatically to local ICBs — but it is the strongest available political precedent to use when asking South West London ICB to set an equivalent local target.</p>
+
+    <div class="notice warn">
+      <h2>The key finding for South West London</h2>
+      <p>No published example of South West London ICB directly commissioning a Deaf charity or Deaf-led organisation for Accessible Information Standard delivery was found. The British Sign Language interpreting service for GP practices is commissioned from DA Languages, a commercial language agency — not from any Deaf-led organisation. None of the Deaf-led organisations described in this document — deafPLUS, the Royal Association for Deaf People, Merton Centre for Independent Living, or Deaf First — currently hold an NHS contract in South West London on the public record. The patient frustrations documented by Healthwatch South West London's survey may be a direct consequence of this commissioning choice.</p>
+    </div>
+
+    <h3 class="sub-label">What does not currently exist</h3>
+    <p>There is no dedicated national NHS or Government grant scheme specifically for Deaf health projects. The nearest available money is a small £15,000 fund announced in June 2026 to assess the availability of specialist deafblind interpreters — a workforce planning exercise, not a service delivery fund, and far too small to be relied upon. A funding strategy should be built around the real routes described above: Provider Selection Regime contracts, Section 256 and 257 payments, and the NHS model grant agreement — not around a national Deaf-specific grant that does not currently exist.</p>
+  </section>
+
+</main>
+
+<footer>
+  <p>This is the Accessible Edition of the Deaf and DeafBlind Healthcare Access Stakeholder Matrix, verified 31 August 2026. It contains the same organisations and information as the visual version of this document, restructured for accessible reading.</p>
+  <p>A companion Gap Tracker document lists every item in this briefing where no reliable current source could be found, with a recommended next step for each.</p>
+</footer>
+
+<script>
+(function() {
+  'use strict';
+
+  var STORAGE_KEY = 'deaf-matrix-display-mode';
+  var body = document.body;
+  var btnStandard = document.getElementById('btn-standard');
+  var btnLarge = document.getElementById('btn-large');
+  var btnSr = document.getElementById('btn-sr');
+  var btnExpandAll = document.getElementById('btn-expand-all');
+
+  function setMode(mode) {
+    body.classList.remove('large-print', 'sr-mode');
+    btnStandard.setAttribute('aria-pressed', 'false');
+    btnLarge.setAttribute('aria-pressed', 'false');
+    btnSr.setAttribute('aria-pressed', 'false');
+
+    if (mode === 'large') {
+      body.classList.add('large-print');
+      btnLarge.setAttribute('aria-pressed', 'true');
+    } else if (mode === 'sr') {
+      body.classList.add('sr-mode');
+      btnSr.setAttribute('aria-pressed', 'true');
+    } else {
+      btnStandard.setAttribute('aria-pressed', 'true');
+      mode = 'standard';
+    }
+    try { localStorage.setItem(STORAGE_KEY, mode); } catch (e) {}
+  }
+
+  btnStandard.addEventListener('click', function() { setMode('standard'); });
+  btnLarge.addEventListener('click', function() { setMode('large'); });
+  btnSr.addEventListener('click', function() { setMode('sr'); });
+
+  var saved = null;
+  try { saved = localStorage.getItem(STORAGE_KEY); } catch (e) {}
+  setMode(saved || 'standard');
+
+  // Accordion behaviour
+  var toggles = document.querySelectorAll('.org-toggle');
+  toggles.forEach(function(btn) {
+    btn.addEventListener('click', function() {
+      var expanded = btn.getAttribute('aria-expanded') === 'true';
+      var panel = document.getElementById(btn.getAttribute('aria-controls'));
+      btn.setAttribute('aria-expanded', String(!expanded));
+      if (expanded) {
+        panel.setAttribute('hidden', '');
+      } else {
+        panel.removeAttribute('hidden');
+      }
+    });
+  });
+
+  var allExpanded = false;
+  btnExpandAll.addEventListener('click', function() {
+    allExpanded = !allExpanded;
+    toggles.forEach(function(btn) {
+      var panel = document.getElementById(btn.getAttribute('aria-controls'));
+      btn.setAttribute('aria-expanded', String(allExpanded));
+      if (allExpanded) { panel.removeAttribute('hidden'); }
+      else { panel.setAttribute('hidden', ''); }
+    });
+    btnExpandAll.textContent = allExpanded ? 'Collapse All Sections' : 'Expand All Sections';
+  });
+})();
+</script>
+
+</body>
+</html>

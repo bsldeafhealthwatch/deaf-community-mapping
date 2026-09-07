@@ -1,0 +1,341 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Deaf Network Health — Stakeholder Mind Map</title>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600&family=Source+Sans+3:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #f6f4ef;
+    --surface: #ffffff;
+    --border: #ddd7ca;
+    --ink: #211f1a;
+    --ink-soft: #6b6656;
+    --line: #cfc9ba;
+
+    --core: #211f1a;
+    --national: #4a4842;
+    --swl: #185fa5;
+    --db: #4527a0;
+    --warn: #b8762e;
+    --new: #2a6b62;
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    background: var(--bg);
+    color: var(--ink);
+    font-family: 'Source Sans 3', sans-serif;
+  }
+  .topbar {
+    position: sticky; top: 0; z-index: 20;
+    background: var(--bg);
+    border-bottom: 1px solid var(--border);
+    padding: 14px 20px;
+    display: flex; align-items: center; justify-content: space-between; gap: 12px;
+    flex-wrap: wrap;
+  }
+  h1 {
+    font-family: 'Fraunces', serif; font-weight: 600; font-size: 1.25rem; margin: 0;
+  }
+  .sub { font-size: 0.75rem; color: var(--ink-soft); margin-top: 2px; }
+  .legend { display: flex; gap: 12px; flex-wrap: wrap; font-size: 0.72rem; color: var(--ink-soft); }
+  .legend-item { display: flex; align-items: center; gap: 5px; }
+  .ldot { width: 9px; height: 9px; border-radius: 50%; flex-shrink: 0; }
+
+  .canvas-wrap {
+    width: 100%;
+    overflow: auto;
+    padding: 20px;
+  }
+  svg { display: block; margin: 0 auto; }
+
+  .branch-line { stroke: var(--line); stroke-width: 1.4; fill: none; }
+  .sub-line { stroke: var(--line); stroke-width: 1; fill: none; opacity: 0.7; }
+
+  .node-circle { cursor: pointer; transition: r 0.15s ease; }
+  .node-group:hover .node-circle { filter: brightness(1.08); }
+  .node-group.selected .node-circle { stroke-width: 3; }
+
+  .node-label {
+    font-family: 'Source Sans 3', sans-serif;
+    font-size: 11px;
+    fill: var(--ink);
+    pointer-events: none;
+  }
+  .node-label-sm { font-size: 9.5px; fill: var(--ink-soft); pointer-events: none; }
+  .tier-label {
+    font-family: 'Fraunces', serif; font-weight: 600; font-size: 13px; fill: var(--ink);
+  }
+  .core-label { font-family: 'Fraunces', serif; font-weight: 600; font-size: 14px; fill: #ffffff; }
+
+  .detail-panel {
+    position: sticky; bottom: 0; z-index: 20;
+    background: var(--surface);
+    border-top: 1px solid var(--border);
+    padding: 16px 22px 20px;
+    max-height: 40vh;
+    overflow-y: auto;
+  }
+  .detail-empty { color: var(--ink-soft); font-size: 0.8rem; text-align: center; padding: 8px 0; }
+  .detail-header { display: flex; align-items: flex-start; justify-content: space-between; gap: 12px; }
+  .detail-name { font-family: 'Fraunces', serif; font-weight: 600; font-size: 1.1rem; }
+  .detail-close { background: none; border: 1px solid var(--border); border-radius: 20px; padding: 3px 12px; font-size: 0.7rem; cursor: pointer; color: var(--ink-soft); }
+  .detail-tags { display: flex; flex-wrap: wrap; gap: 6px; margin: 8px 0 10px; }
+  .tag { font-size: 0.68rem; padding: 2px 9px; border-radius: 20px; border: 1px solid var(--border); color: var(--ink-soft); }
+  .tag.warn { background: #f7ecd9; border-color: #e8c98a; color: var(--warn); }
+  .tag.new { background: #e5f0ed; border-color: #9fcabf; color: var(--new); }
+  .detail-body { font-size: 0.85rem; line-height: 1.65; color: #4a4842; max-width: 68ch; }
+  .detail-body strong { color: var(--ink); }
+
+  @media (max-width: 640px) {
+    .legend { display: none; }
+  }
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <div>
+    <h1>Deaf Network Health — stakeholder mind map</h1>
+    <div class="sub">29 organisations · SWL ICB footprint · click any node for detail</div>
+  </div>
+  <div class="legend">
+    <div class="legend-item"><div class="ldot" style="background:var(--national)"></div>National</div>
+    <div class="legend-item"><div class="ldot" style="background:var(--swl)"></div>SWL ICB</div>
+    <div class="legend-item"><div class="ldot" style="background:var(--db)"></div>DeafBlind</div>
+    <div class="legend-item"><div class="ldot" style="background:var(--warn)"></div>Flagged / unverified</div>
+    <div class="legend-item"><div class="ldot" style="background:var(--new)"></div>New (Sep 2026 pass)</div>
+  </div>
+</div>
+
+<div class="canvas-wrap">
+  <svg id="mapSvg" width="1500" height="1500" viewBox="0 0 1500 1500"></svg>
+</div>
+
+<div class="detail-panel" id="detailPanel">
+  <div class="detail-empty" id="detailEmpty">Click any organisation to see a quick summary</div>
+  <div id="detailContent" style="display:none">
+    <div class="detail-header">
+      <div class="detail-name" id="detailName"></div>
+      <button class="detail-close" onclick="clearSelection()">Close</button>
+    </div>
+    <div class="detail-tags" id="detailTags"></div>
+    <div class="detail-body" id="detailBody"></div>
+  </div>
+</div>
+
+<script>
+const CENTER = { x: 750, y: 750 };
+
+const TIERS = [
+  {
+    id: 'manage',
+    label: 'Manage closely',
+    color: 'var(--national)',
+    angle: -90,
+    orgs: [
+      { id: 'rnid', name: 'RNID', color: 'national', tag: 'National', note: 'Largest UK hearing-loss charity. Co-authored Still Ignored (Apr 2025). Led the BSL Act 2022 campaign. FOI (Jan 2026): 92% of NHS staff untrained on AIS.' },
+      { id: 'signhealth', name: 'SignHealth', color: 'national', tag: 'National', note: 'Deaf health specialist, co-authored Still Ignored. SignHealth Longley Road (South London Deaf care home) rated Outstanding by CQC, Jan 2026.' },
+      { id: 'bsl-board', name: 'BSL Advisory Board', color: 'national', tag: 'National · policy', note: 'Authored Locked Out (27 Nov 2025) — 12 priorities + 14 DeafBlind actions. Live NRCPD figures: 19 Deafblind interpreters nationally, only 1 in London; funded target 68.' },
+      { id: 'swlstg', name: 'SWLSTG National Deaf Services', color: 'swl', tag: 'SWL · NHS', note: 'Springfield Hospital, Tooting. National Deaf Adult Community Team + National Deaf CAMHS, self-referrals accepted. Not confirmed as a current BSL Alliance member.' },
+      { id: 'sense', name: 'Sense', color: 'db', tag: 'National · DeafBlind', note: 'National DeafBlind/complex-disability charity. 450,000+ UK deafblind population is a modelled estimate, not a register.' },
+    ],
+  },
+  {
+    id: 'satisfied',
+    label: 'Keep satisfied',
+    color: 'var(--warn)',
+    angle: -18,
+    orgs: [
+      { id: 'ndcs', name: 'NDCS', color: 'national', tag: 'National', note: 'National Deaf Children\u2019s Society. EHCP/SEND and children\u2019s health pathways.' },
+      { id: 'bsmhd', name: 'BSMHD', color: 'national', tag: 'National', note: 'British Society for Mental Health & Deaf People. Clinical authority, Springfield network.' },
+      { id: 'rad', name: 'RAD (national)', color: 'swl', tag: 'National + SWL', note: 'Royal Association for Deaf People. Croydon, Lambeth and Wandsworth presence. Charity 1081949.' },
+      { id: 'hwswl', name: 'Healthwatch SWL', color: 'swl', tag: 'SWL', note: 'Drove the DAL BSL GP rollout (Oct 2024). Statutory Healthwatch duty proposed for abolition nationally — 2026/27 funding confirmed, beyond that uncertain.' },
+      { id: 'hwcroydon', name: 'Healthwatch Croydon', color: 'swl', tag: 'SWL', note: 'SWL ICB Croydon voice. Briefed its HWB on the Healthwatch abolition proposal, 28 Jan 2026.' },
+      { id: 'nhs-funding', name: 'NHS commissioning routes', color: 'swl', tag: 'SWL · NHS', note: 'PSR, s.256/257, VCSE spend targets. SWL/SEL ICB now share a CEO (Andrew Bland) and Chair (Sir Richard Douglas) from Feb 2026. No named SWL AIS executive lead published.', flag: 'warn' },
+      { id: 'da-languages', name: 'DA Languages (DAL)', color: 'warn', tag: 'SWL · incumbent', note: 'Commercial agency (not VCSE), Companies House 06207784, Active. Holds SWL GP BSL contract since 1 Oct 2024, replacing Language Line. Sign Solutions is its BSL subcontractor.', flag: 'warn' },
+    ],
+  },
+  {
+    id: 'informed',
+    label: 'Keep informed',
+    color: 'var(--swl)',
+    angle: 55,
+    orgs: [
+      { id: 'mertoncil', name: 'Merton CIL', color: 'swl', tag: 'SWL · DDPO', note: 'Pan-disability DDPO, 431 members, charity 1152825. Health, housing, independent living, hate crime.' },
+      { id: 'deaffirst', name: 'Deaf First (Oak Lodge)', color: 'swl', tag: 'SWL', note: 'BSL-first advice & advocacy, Wandsworth. Thin recent public footprint — no closure evidence.' },
+      { id: 'richmond-ruils', name: 'Richmond AID & RUILS', color: 'swl', tag: 'SWL · DDPO', note: 'User-led pan-disability DDPOs. RUILS covers all six SWL boroughs.' },
+      { id: 'remark', name: 'Remark! Community', color: 'swl', tag: 'National · DDPO', note: 'Deaf-led, 14 London Deaf clubs. Croydon Lunch Club opened 5 Feb 2026, Thursdays, St Mary\u2019s Parish Centre.', flag: 'new' },
+      { id: 'sentinel-sites', name: 'Sentinel sites', color: 'warn', tag: 'SWL · concentrated need', note: 'Harding House + Huguenot Place (Achieve Together Deaf care homes) + Oak Lodge School. Drive most of Wandsworth\u2019s 466/878 GP BSL requests.' },
+      { id: 'vcse-alliance', name: 'VCSE / Care Alliance', color: 'swl', tag: 'SWL · gatekeeper', note: 'ICP governance seat. Wandsworth Care Alliance also holds the Healthwatch Wandsworth contract, which ends 31 Mar 2026.', flag: 'warn' },
+      { id: 'rad-croydon', name: 'RAD — Croydon caseworker', color: 'warn', tag: 'SWL', note: 'Previously described as embedded in Croydon Council Sensory Impairment Service — not re-confirmed on current council pages. Verify before relying on.', flag: 'warn' },
+      { id: 'croydon-hearing', name: 'Croydon Hearing Resource Centre', color: 'swl', tag: 'SWL', note: 'Charity 1081376. YE Mar 2025: £129k income incl. £65k government contract. Partnered with Croydon Council sensory service.' },
+      { id: 'deafplus', name: 'deafPLUS', color: 'warn', tag: 'SWL + National', note: 'Merged into Action Deafness 16 Apr 2026 — brand continues as a service line. Bromley Council contract ends 30 Sep 2026, re-tender live.', flag: 'warn' },
+      { id: 'bright-db', name: 'BRIGHT (DeafBlind)', color: 'db', tag: 'SWL · DeafBlind', note: 'London-wide, user-led. No Charity Commission number or accounts found — treat as grassroots, not commissioned.' },
+      { id: 'deafblind-uk-swl', name: 'Deafblind UK', color: 'db', tag: 'National · DeafBlind', note: 'Charity 802976. 2024–25: 4,346 people supported, 9,312 helpline calls. Took on Sense\u2019s Usher casework, Jul 2024.' },
+    ],
+  },
+  {
+    id: 'monitor',
+    label: 'Monitor',
+    color: 'var(--ink-soft)',
+    angle: 145,
+    orgs: [
+      { id: 'bda', name: 'British Deaf Association', color: 'national', tag: 'National', note: 'Founded 1890. BSL language rights and Charter. Not healthcare-primary. Confirmed current BSL Alliance member.' },
+      { id: 'deafblind', name: 'DeafBlind UK', color: 'db', tag: 'National · DeafBlind', note: 'Same national charity (802976) as the entry under Keep Informed — not a separate SWL chapter.' },
+      { id: 'oaklodge', name: 'Oak Lodge School', color: 'swl', tag: 'SWL', note: 'Ages 10–19 + adult learning, Wandsworth. Ofsted (Apr 2025): effective action to maintain previous standards. Draws from 25 boroughs.' },
+      { id: 'action-deafness', name: 'Action Deafness', color: 'new', tag: 'National · new', note: 'New national consolidator. Absorbed deafPLUS (Apr 2026), WCDP (Oct 2025); GDA announced. CEO Craig Crowley, CBE 2026. No direct SWL delivery yet.', flag: 'new' },
+      { id: 'cure-usher', name: 'Cure Usher', color: 'db', tag: 'National · DeafBlind', note: 'Correct name — not "Usher Coalition UK". Funds Moosajee research, UCL IoO/Moorfields. Distinct from the US Usher Syndrome Coalition\u2019s UK ambassador network.', flag: 'new' },
+      { id: 'dewa', name: 'DEWA', color: 'national', tag: 'National', note: 'Deaf Ethnic Women\u2019s Association, charity 1062831. Listed across all 6 SWL boroughs — no confirmed local service found.', flag: 'new' },
+    ],
+  },
+];
+
+const colorMap = {
+  national: { fill: '#4a4842', text: '#ffffff' },
+  swl: { fill: '#185fa5', text: '#ffffff' },
+  db: { fill: '#4527a0', text: '#ffffff' },
+  warn: { fill: '#b8762e', text: '#ffffff' },
+  new: { fill: '#2a6b62', text: '#ffffff' },
+};
+
+const svg = document.getElementById('mapSvg');
+const NS = 'http://www.w3.org/2000/svg';
+let selectedId = null;
+
+function el(tag, attrs) {
+  const e = document.createElementNS(NS, tag);
+  for (const k in attrs) e.setAttribute(k, attrs[k]);
+  return e;
+}
+
+function polar(cx, cy, radius, angleDeg) {
+  const rad = (angleDeg * Math.PI) / 180;
+  return { x: cx + radius * Math.cos(rad), y: cy + radius * Math.sin(rad) };
+}
+
+function buildMap() {
+  // Center node
+  const coreR = 62;
+  svg.appendChild(el('circle', { cx: CENTER.x, cy: CENTER.y, r: coreR, fill: 'var(--core)' }));
+  const coreText1 = el('text', { x: CENTER.x, y: CENTER.y - 6, 'text-anchor': 'middle', class: 'core-label' });
+  coreText1.textContent = 'Deaf Network';
+  svg.appendChild(coreText1);
+  const coreText2 = el('text', { x: CENTER.x, y: CENTER.y + 14, 'text-anchor': 'middle', class: 'core-label' });
+  coreText2.textContent = 'Health Group';
+  svg.appendChild(coreText2);
+
+  const tierRadius = 210;
+  const orgRadiusStart = 340;
+  const orgRadiusStep = 78;
+
+  TIERS.forEach(tier => {
+    const tierPos = polar(CENTER.x, CENTER.y, tierRadius, tier.angle);
+
+    // branch line from core to tier
+    const branch = el('path', {
+      d: `M ${CENTER.x} ${CENTER.y} Q ${(CENTER.x + tierPos.x) / 2} ${(CENTER.y + tierPos.y) / 2 - 20} ${tierPos.x} ${tierPos.y}`,
+      class: 'branch-line',
+    });
+    svg.appendChild(branch);
+
+    // tier label
+    const tierLabel = el('text', {
+      x: tierPos.x, y: tierPos.y - 14, 'text-anchor': 'middle', class: 'tier-label',
+    });
+    tierLabel.textContent = tier.label;
+    svg.appendChild(tierLabel);
+    const tierCount = el('text', {
+      x: tierPos.x, y: tierPos.y + 2, 'text-anchor': 'middle', class: 'node-label-sm',
+    });
+    tierCount.textContent = tier.orgs.length + ' organisations';
+    svg.appendChild(tierCount);
+
+    // spread orgs around this tier's angle
+    const spreadDeg = Math.min(70, tier.orgs.length * 13);
+    const startAngle = tier.angle - spreadDeg / 2;
+    const step = tier.orgs.length > 1 ? spreadDeg / (tier.orgs.length - 1) : 0;
+
+    tier.orgs.forEach((org, i) => {
+      const orgAngle = tier.orgs.length > 1 ? startAngle + step * i : tier.angle;
+      const radius = orgRadiusStart + (i % 2) * orgRadiusStep * 0.4;
+      const pos = polar(CENTER.x, CENTER.y, radius, orgAngle);
+
+      const subLine = el('path', {
+        d: `M ${tierPos.x} ${tierPos.y} Q ${(tierPos.x + pos.x) / 2} ${(tierPos.y + pos.y) / 2} ${pos.x} ${pos.y}`,
+        class: 'sub-line',
+      });
+      svg.appendChild(subLine);
+
+      const group = el('g', { class: 'node-group', id: 'node-' + org.id, style: 'cursor:pointer' });
+      group.addEventListener('click', () => selectOrg(org));
+
+      const nodeR = org.flag ? 15 : 12;
+      const colors = colorMap[org.color] || colorMap.national;
+      const circle = el('circle', {
+        cx: pos.x, cy: pos.y, r: nodeR,
+        class: 'node-circle',
+        fill: colors.fill,
+        stroke: org.flag === 'new' ? '#2a6b62' : (org.flag === 'warn' ? '#b8762e' : 'none'),
+        'stroke-width': org.flag ? 2 : 0,
+      });
+      group.appendChild(circle);
+
+      const labelOffsetX = pos.x > CENTER.x ? nodeR + 6 : -(nodeR + 6);
+      const anchor = pos.x > CENTER.x ? 'start' : 'end';
+      const label = el('text', {
+        x: pos.x + labelOffsetX, y: pos.y + 4, 'text-anchor': anchor, class: 'node-label',
+      });
+      label.textContent = org.name;
+      group.appendChild(label);
+
+      svg.appendChild(group);
+    });
+  });
+}
+
+function selectOrg(org) {
+  document.querySelectorAll('.node-group').forEach(g => g.classList.remove('selected'));
+  const g = document.getElementById('node-' + org.id);
+  if (g) g.classList.add('selected');
+  selectedId = org.id;
+
+  document.getElementById('detailEmpty').style.display = 'none';
+  document.getElementById('detailContent').style.display = 'block';
+  document.getElementById('detailName').textContent = org.name;
+
+  const tagsEl = document.getElementById('detailTags');
+  tagsEl.innerHTML = '';
+  const t1 = document.createElement('span');
+  t1.className = 'tag';
+  t1.textContent = org.tag;
+  tagsEl.appendChild(t1);
+  if (org.flag === 'warn') {
+    const t2 = document.createElement('span');
+    t2.className = 'tag warn';
+    t2.textContent = 'Flagged / verify before relying on';
+    tagsEl.appendChild(t2);
+  }
+  if (org.flag === 'new') {
+    const t2 = document.createElement('span');
+    t2.className = 'tag new';
+    t2.textContent = 'New — Sep 2026 verification pass';
+    tagsEl.appendChild(t2);
+  }
+
+  document.getElementById('detailBody').textContent = org.note;
+}
+
+function clearSelection() {
+  document.querySelectorAll('.node-group').forEach(g => g.classList.remove('selected'));
+  selectedId = null;
+  document.getElementById('detailEmpty').style.display = 'block';
+  document.getElementById('detailContent').style.display = 'none';
+}
+
+buildMap();
+</script>
+</body>
+</html>

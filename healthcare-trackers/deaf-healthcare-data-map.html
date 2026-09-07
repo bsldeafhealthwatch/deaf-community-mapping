@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Verified Local Data Map — Deaf &amp; DeafBlind Healthcare Access</title>
+<style>
+  :root {
+    --bg: #f5f2ec; --surface: #ffffff; --border: #d8d3c8;
+    --text: #1a1814; --muted: #6b6459;
+    --swl: #1565c0; --swl-bg: #e6f1fb;
+    --high: #b3261e; --high-bg: #fbe9e7;
+    --mid: #8a5a00; --mid-bg: #fdf2df;
+    --low: #1a472a; --low-bg: #e9f3ec;
+    --focus: #0b5fff;
+  }
+  * { box-sizing: border-box; }
+  body {
+    background: var(--bg); color: var(--text);
+    font-family: -apple-system, Segoe UI, Arial, sans-serif;
+    max-width: 1040px; margin: 0 auto; padding: 30px 20px 80px; line-height: 1.55;
+  }
+  a:focus, button:focus, [tabindex]:focus { outline: 3px solid var(--focus); outline-offset: 2px; }
+  header { margin-bottom: 18px; }
+  h1 { font-size: 1.6rem; margin: 0 0 6px; }
+  header p { color: var(--muted); font-size: 0.82rem; margin: 2px 0; text-transform: uppercase; letter-spacing: 0.05em; }
+
+  .layout { display: grid; grid-template-columns: 1fr; gap: 24px; margin-top: 22px; }
+  @media (min-width: 880px) { .layout { grid-template-columns: 340px 1fr; } }
+
+  .panel { background: var(--surface); border: 1px solid var(--border); border-radius: 8px; padding: 18px; }
+  .panel h2 { font-size: 1.05rem; margin: 0 0 10px; }
+  .panel p.note { font-size: 0.78rem; color: var(--muted); margin: 6px 0 0; }
+
+  svg text { font-family: -apple-system, Segoe UI, Arial, sans-serif; }
+
+  .legend { display: flex; flex-wrap: wrap; gap: 10px; margin: 14px 0 6px; }
+  .legend-item { display: flex; align-items: center; gap: 6px; font-size: 0.75rem; color: var(--muted); }
+  .legend-dot { width: 10px; height: 10px; border-radius: 50%; flex-shrink: 0; }
+
+  table.borough-table { width: 100%; border-collapse: collapse; font-size: 0.85rem; margin-top: 6px; }
+  table.borough-table th {
+    text-align: left; font-size: 0.68rem; text-transform: uppercase; letter-spacing: 0.04em;
+    color: var(--muted); padding: 8px 8px; border-bottom: 2px solid var(--border);
+  }
+  table.borough-table td { padding: 8px; border-bottom: 1px solid var(--border); }
+  table.borough-table tr:last-child td { border-bottom: none; }
+  table.borough-table td.num { text-align: right; font-variant-numeric: tabular-nums; }
+  .borough-name { font-weight: 600; }
+  .borough-row { cursor: pointer; }
+  .borough-row:hover, .borough-row.active { background: var(--swl-bg); }
+  .borough-row:focus-visible { outline: 3px solid var(--focus); outline-offset: -2px; }
+
+  .bar-track { background: #ece7db; border-radius: 3px; height: 8px; overflow: hidden; width: 100%; max-width: 90px; }
+  .bar-fill { height: 100%; border-radius: 3px; background: var(--swl); }
+
+  .detail-box {
+    margin-top: 16px; padding: 14px 16px; border-radius: 6px;
+    background: var(--swl-bg); border: 1px solid var(--border); font-size: 0.85rem;
+  }
+  .detail-box h3 { margin: 0 0 6px; font-size: 0.95rem; }
+  .detail-box .stat-line { margin: 4px 0; }
+  .detail-box .stat-line strong { font-variant-numeric: tabular-nums; }
+
+  .source-note {
+    margin-top: 20px; font-size: 0.76rem; color: var(--muted);
+    border-top: 1px solid var(--border); padding-top: 12px;
+  }
+
+  .caveat {
+    background: var(--mid-bg); border: 1px solid var(--border); border-left: 4px solid var(--mid);
+    border-radius: 4px; padding: 12px 14px; font-size: 0.82rem; margin: 16px 0;
+  }
+  .caveat strong { color: var(--mid); }
+</style>
+</head>
+<body>
+
+<header>
+  <h1>Verified local data map</h1>
+  <p>Deaf &amp; DeafBlind healthcare access — South West London ICB</p>
+  <p>Verified 31 August 2026</p>
+</header>
+
+<div class="caveat">
+  <strong>What this map shows, honestly:</strong> the UK panel gives national context only — it is a schematic, not a precision boundary map. The real, verified data in this document is at borough level for the six South West London ICB boroughs, shown in the table and detail panel on the right. Where no borough-level or council-level figure exists (most population and register data), that gap is stated rather than estimated on the map.
+</div>
+
+<div class="layout">
+
+  <div class="panel">
+    <h2>Where South West London sits</h2>
+    <svg viewBox="0 0 340 420" width="100%" role="img" aria-label="Schematic map of the United Kingdom with South West London highlighted, showing the six boroughs in the SWL Integrated Care Board footprint">
+      <title>UK schematic with South West London highlighted</title>
+      <desc>A simplified outline map of Great Britain and Ireland, marking London in the south east of England, with the South West London area indicated. This is a schematic for orientation only, not a precision boundary map.</desc>
+
+      <path d="M120 30 Q140 25 155 40 Q165 55 160 75 Q170 90 165 110 Q175 125 170 150 Q180 170 172 195 Q178 215 168 235 Q172 255 158 270 Q162 290 145 305 Q148 320 132 330 Q120 345 105 335 Q95 345 85 330 Q75 335 78 315 Q65 310 72 292 Q60 285 68 265 Q55 255 65 235 Q52 220 62 200 Q50 180 60 160 Q48 140 58 120 Q50 100 62 82 Q55 65 68 50 Q70 32 90 35 Q100 22 120 30 Z"
+        fill="#e2ded2" stroke="#a8a290" stroke-width="1"/>
+
+      <path d="M70 90 Q55 95 50 115 Q40 125 45 145 Q35 155 42 175 Q32 190 42 205 Q48 225 60 215 Q65 200 58 185 Q68 170 60 150 Q70 135 62 115 Q72 100 70 90 Z"
+        fill="#e2ded2" stroke="#a8a290" stroke-width="1" opacity="0.7"/>
+
+      <text x="60" y="55" font-size="11" fill="#6b6459">Scotland</text>
+      <text x="35" y="150" font-size="11" fill="#6b6459">N. Ireland</text>
+      <text x="75" y="230" font-size="11" fill="#6b6459">Wales</text>
+      <text x="130" y="150" font-size="11" fill="#6b6459">England</text>
+
+      <circle cx="148" cy="270" r="6" fill="#1565c0" stroke="#ffffff" stroke-width="2"/>
+      <circle cx="148" cy="270" r="12" fill="none" stroke="#1565c0" stroke-width="1.5" opacity="0.5">
+        <animate attributeName="r" values="10;16;10" dur="2.5s" repeatCount="indefinite"/>
+        <animate attributeName="opacity" values="0.6;0.1;0.6" dur="2.5s" repeatCount="indefinite"/>
+      </circle>
+      <text x="158" y="266" font-size="12" font-weight="600" fill="#0b3d91">London</text>
+      <text x="158" y="280" font-size="10" fill="#6b6459">SWL ICB footprint</text>
+
+      <line x1="148" y1="270" x2="240" y2="330" stroke="#a8a290" stroke-width="1" stroke-dasharray="2 2"/>
+    </svg>
+
+    <div class="legend">
+      <div class="legend-item"><span class="legend-dot" style="background:var(--swl)"></span>South West London ICB</div>
+    </div>
+    <p class="note">Schematic outline for orientation only. Not to scale, not a precision boundary source.</p>
+  </div>
+
+  <div class="panel">
+    <h2>The six SWL ICB boroughs — verified data</h2>
+    <p style="font-size:0.82rem;color:var(--muted);margin:0 0 6px">Click any borough for its full detail. Population figures: ONS / LG Inform, mid-2024–25. BSL interpreter requests: Healthwatch SWL / ICB data, October 2024 to June 2025 (requests, not unique patients).</p>
+
+    <table class="borough-table" id="borough-table">
+      <thead>
+        <tr>
+          <th scope="col">Borough</th>
+          <th scope="col" class="num">Population</th>
+          <th scope="col" class="num">BSL requests</th>
+          <th scope="col">Share of total</th>
+        </tr>
+      </thead>
+      <tbody id="borough-tbody"></tbody>
+    </table>
+
+    <div class="detail-box" id="detail-box">
+      <h3 id="detail-name">Select a borough above</h3>
+      <div id="detail-content"><p class="stat-line">Click any row in the table to see its full verified profile.</p></div>
+    </div>
+  </div>
+
+</div>
+
+<div class="panel" style="margin-top:20px">
+  <h2>What is not on this map — and why</h2>
+  <p style="font-size:0.85rem">No borough-by-borough figure exists for the deafblind population in South West London. The 8,000 to 11,000 range quoted elsewhere in this project is a modelled planning estimate, produced by applying Sense's national prevalence rate to each borough's population — it is not a measured or registered figure, and no NHS or council dataset specific to deafblind people in South West London was found to exist publicly as of August 2026. Plotting a false-precision figure per borough would misrepresent the evidence. See the Gap Tracker document for the full list of local data that still needs to be obtained by direct contact with each council.</p>
+</div>
+
+<div class="source-note">
+  <p>Sources: ONS and LG Inform population estimates, mid-2024 to mid-2025. Healthwatch South West London / SWL ICB BSL interpreter request data, October 2024 to June 2025, reported via Healthwatch Croydon. NHS Hearing Loss Data Tool, London borough ranking, reported April 2026. Verified against the SuperGrok intelligence briefing, 31 August 2026.</p>
+</div>
+
+<script>
+(function() {
+  'use strict';
+
+  var boroughs = [
+    { name: 'Wandsworth', population: 340000, bsl: 466, note: 'Highest BSL request volume in SWL by a wide margin. Explained by two Deaf care homes run by Achieving Together (Harding House, Huguenot Place) and by Oak Lodge School, a specialist Deaf school, both located in this borough.', prevalence: null, extra: 'Home to Deaf First, based at Oak Lodge School, and the Oak Lodge Adult Deaf Lifelong Learning programme, drawing students from 25 London boroughs.' },
+    { name: 'Croydon', population: 410000, bsl: 185, note: 'The largest borough by population in the SWL footprint. Has the most developed borough-level deaf health infrastructure in SWL: a RAD caseworker embedded in the council\u2019s Sensory Impairment Service, plus the Croydon Hearing Resource Centre.', prevalence: null, extra: 'Note: Croydon sits within the SWL ICB, not the SEL ICB, despite being in outer south London.' },
+    { name: 'Sutton', population: 214000, bsl: 72, note: 'Has the highest hearing loss prevalence of any borough in the SWL footprint: 15.4 per cent of its population, the highest ranking London borough figure reported in an April 2026 analysis of the NHS Hearing Loss Data Tool.', prevalence: '15.4%', extra: 'Despite the highest prevalence rate, Sutton\u2019s BSL request volume is relatively low \u2014 worth investigating whether this reflects under-identification rather than lower need.' },
+    { name: 'Merton', population: 219000, bsl: 68, note: 'Home to Merton Centre for Independent Living, a Deaf-led Disabled People\u2019s Organisation and the closest local Deaf-led organisation to Sutton.', prevalence: null, extra: null },
+    { name: 'Kingston upon Thames', population: 173000, bsl: 61, note: 'The smallest borough in the SWL footprint by population. SWLSTG also operates from Tolworth Hospital in Kingston, alongside its main Springfield site in Wandsworth.', prevalence: null, extra: null },
+    { name: 'Richmond upon Thames', population: 197000, bsl: 26, note: 'The lowest BSL interpreter request volume in the SWL footprint. No specific reason for this has been identified \u2014 worth direct follow-up on whether this reflects genuinely lower need or an access or awareness gap.', prevalence: null, extra: null }
+  ];
+
+  var totalBsl = boroughs.reduce(function(sum, b) { return sum + b.bsl; }, 0);
+  var maxBsl = Math.max.apply(null, boroughs.map(function(b) { return b.bsl; }));
+
+  var tbody = document.getElementById('borough-tbody');
+  var detailName = document.getElementById('detail-name');
+  var detailContent = document.getElementById('detail-content');
+
+  function fmt(n) { return n.toLocaleString('en-GB'); }
+
+  function showDetail(b) {
+    detailName.textContent = b.name;
+    var pct = ((b.bsl / totalBsl) * 100).toFixed(1);
+    var html = '';
+    html += '<p class="stat-line"><strong>Population:</strong> approximately ' + fmt(b.population) + '</p>';
+    html += '<p class="stat-line"><strong>BSL interpreter requests, Oct 2024\u2013Jun 2025:</strong> ' + b.bsl + ' (' + pct + '% of the SWL total of ' + totalBsl + ')</p>';
+    if (b.prevalence) {
+      html += '<p class="stat-line"><strong>Hearing loss prevalence:</strong> ' + b.prevalence + ' of population</p>';
+    }
+    html += '<p class="stat-line">' + b.note + '</p>';
+    if (b.extra) { html += '<p class="stat-line">' + b.extra + '</p>'; }
+    detailContent.innerHTML = html;
+  }
+
+  boroughs.forEach(function(b, i) {
+    var tr = document.createElement('tr');
+    tr.className = 'borough-row';
+    tr.setAttribute('tabindex', '0');
+    tr.setAttribute('role', 'button');
+    tr.setAttribute('aria-label', 'Show detail for ' + b.name);
+
+    var tdName = document.createElement('td');
+    tdName.className = 'borough-name';
+    tdName.textContent = b.name;
+    tr.appendChild(tdName);
+
+    var tdPop = document.createElement('td');
+    tdPop.className = 'num';
+    tdPop.textContent = fmt(b.population);
+    tr.appendChild(tdPop);
+
+    var tdBsl = document.createElement('td');
+    tdBsl.className = 'num';
+    tdBsl.textContent = b.bsl;
+    tr.appendChild(tdBsl);
+
+    var tdBar = document.createElement('td');
+    var track = document.createElement('div');
+    track.className = 'bar-track';
+    var fill = document.createElement('div');
+    fill.className = 'bar-fill';
+    fill.style.width = Math.round((b.bsl / maxBsl) * 100) + '%';
+    track.appendChild(fill);
+    tdBar.appendChild(track);
+    tr.appendChild(tdBar);
+
+    tr.addEventListener('click', function() {
+      document.querySelectorAll('.borough-row').forEach(function(r) { r.classList.remove('active'); });
+      tr.classList.add('active');
+      showDetail(b);
+    });
+    tr.addEventListener('keydown', function(e) {
+      if (e.key === 'Enter' || e.key === ' ') {
+        e.preventDefault();
+        tr.click();
+      }
+    });
+
+    tbody.appendChild(tr);
+
+    if (i === 0) {
+      tr.classList.add('active');
+      showDetail(b);
+    }
+  });
+})();
+</script>
+
+</body>
+</html>

@@ -1,0 +1,635 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Deaf Charities — South London Stakeholder Matrix v4</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,500;0,700;1,500&family=IBM+Plex+Mono:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #f5f2ec;
+    --surface: #ffffff;
+    --border: #d8d3c8;
+    --text: #1a1814;
+    --muted: #8a8278;
+    --q1-color: #1a472a;
+    --q2-color: #7b3f00;
+    --q3-color: #0a3d62;
+    --q4-color: #4a0e2f;
+    --badge-swl: #1565c0;
+    --badge-sel: #6a1b9a;
+    --badge-national: #37474f;
+    --badge-nhs: #003087;
+    --badge-local: #e8a020;
+    --q1-bg: rgba(26,71,42,0.06);
+    --q2-bg: rgba(123,63,0,0.055);
+    --q3-bg: rgba(10,61,98,0.06);
+    --q4-bg: rgba(74,14,47,0.055);
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'IBM Plex Mono', monospace;
+    min-height: 100vh;
+    padding: 40px 20px 60px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  header {
+    text-align: center;
+    margin-bottom: 28px;
+    animation: fadeDown 0.7s ease both;
+  }
+  header h1 {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(1.5rem, 3vw, 2.3rem);
+    font-weight: 700;
+    line-height: 1.15;
+  }
+  header h1 em { font-style: italic; font-weight: 500; color: var(--q1-color); }
+  header p { margin-top: 8px; font-size: 0.65rem; color: var(--muted); letter-spacing: 0.18em; text-transform: uppercase; }
+
+  /* ICB tabs */
+  .tab-row {
+    display: flex;
+    gap: 6px;
+    margin-bottom: 20px;
+    animation: fadeUp 0.7s 0.1s ease both;
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+  .tab-btn {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 0.65rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    padding: 7px 18px;
+    border-radius: 20px;
+    border: 1px solid var(--border);
+    background: var(--surface);
+    color: var(--muted);
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+  .tab-btn:hover { background: var(--bg); }
+  .tab-btn.active-swl { background: var(--badge-swl); color: #fff; border-color: var(--badge-swl); }
+  .tab-btn.active-sel { background: var(--badge-sel); color: #fff; border-color: var(--badge-sel); }
+  .tab-btn.active-nat { background: var(--badge-national); color: #fff; border-color: var(--badge-national); }
+
+  /* Legend */
+  .legend {
+    display: flex; gap: 5px; flex-wrap: wrap; justify-content: center;
+    margin-bottom: 22px;
+    animation: fadeUp 0.7s 0.15s ease both;
+  }
+  .legend-item {
+    display: flex; align-items: center; gap: 6px;
+    font-size: 0.58rem; color: var(--muted); text-transform: uppercase; letter-spacing: 0.1em;
+    padding: 3px 10px; background: var(--surface); border: 1px solid var(--border); border-radius: 20px;
+  }
+  .ldot { width: 7px; height: 7px; border-radius: 50%; flex-shrink: 0; }
+  .badge { display:inline-block; font-size:0.47rem; padding:1px 5px; border-radius:3px; color:white; font-weight:500; letter-spacing:0.06em; text-transform:uppercase; }
+
+  /* Tab panels */
+  .tab-panel { display: none; width: 100%; max-width: 940px; }
+  .tab-panel.visible { display: block; animation: fadeUp 0.4s ease both; }
+
+  /* Matrix */
+  .outer { width: 100%; }
+  .axis-row { display: flex; align-items: stretch; gap: 0; }
+  .y-labels { display:flex; flex-direction:column; justify-content:space-between; align-items:flex-end; padding:0 10px 0 0; min-width:46px; }
+  .y-label { font-size:0.56rem; text-transform:uppercase; letter-spacing:0.14em; color:var(--muted); }
+  .y-title { writing-mode:vertical-rl; transform:rotate(180deg); font-size:0.56rem; text-transform:uppercase; letter-spacing:0.18em; color:var(--muted); flex:1; display:flex; align-items:center; justify-content:center; }
+
+  .grid {
+    flex: 1;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 3px;
+    border: 1px solid var(--border);
+    border-radius: 5px;
+    overflow: hidden;
+    background: var(--border);
+  }
+
+  .quadrant {
+    padding: 15px 14px 36px;
+    display: flex; flex-direction: column; gap: 5px;
+    position: relative; min-height: 180px;
+  }
+  .q1 { background: var(--q1-bg); }
+  .q2 { background: var(--q2-bg); }
+  .q3 { background: var(--q3-bg); }
+  .q4 { background: var(--q4-bg); }
+
+  .q-head { display:flex; align-items:center; justify-content:space-between; margin-bottom:5px; padding-bottom:6px; border-bottom:1px solid var(--border); }
+  .q-lbl { font-size:0.54rem; text-transform:uppercase; letter-spacing:0.13em; font-weight:500; }
+  .q1 .q-lbl { color:var(--q1-color); }
+  .q2 .q-lbl { color:var(--q2-color); }
+  .q3 .q-lbl { color:var(--q3-color); }
+  .q4 .q-lbl { color:var(--q4-color); }
+  .q-strategy { font-family:'Playfair Display',serif; font-style:italic; font-size:0.68rem; position:absolute; bottom:10px; right:12px; opacity:0.4; }
+
+  /* Cards */
+  .card { display:flex; align-items:flex-start; gap:8px; cursor:pointer; padding:6px 8px; border-radius:3px; border:1px solid transparent; transition:all 0.16s; }
+  .card:hover { border-color:var(--border); background:rgba(0,0,0,0.035); transform:translateX(2px); }
+  .card.active { border-color:rgba(0,0,0,0.2); background:rgba(0,0,0,0.06); }
+  .cdot { width:7px; height:7px; border-radius:50%; flex-shrink:0; margin-top:5px; }
+  .q1 .cdot { background:var(--q1-color); }
+  .q2 .cdot { background:var(--q2-color); }
+  .q3 .cdot { background:var(--q3-color); }
+  .q4 .cdot { background:var(--q4-color); }
+  .c-info { flex:1; min-width:0; }
+  .c-name-row { display:flex; align-items:center; flex-wrap:wrap; gap:4px; }
+  .c-name { font-size:0.69rem; font-weight:500; color:var(--text); line-height:1.3; }
+  .c-tag { font-size:0.55rem; color:var(--muted); margin-top:2px; line-height:1.4; }
+
+  /* X axis */
+  .x-row { display:flex; justify-content:space-between; padding:6px 0 0 46px; font-size:0.55rem; color:var(--muted); letter-spacing:0.14em; text-transform:uppercase; }
+  .x-center { text-align:center; font-size:0.57rem; color:var(--muted); letter-spacing:0.18em; text-transform:uppercase; margin-top:4px; padding-left:46px; }
+
+  /* Panel */
+  .panel {
+    width: 100%; max-width: 940px;
+    margin-top: 18px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 5px;
+    padding: 22px 26px;
+    min-height: 100px;
+  }
+  .p-empty { color:var(--muted); font-size:0.7rem; text-align:center; padding:14px; letter-spacing:0.08em; }
+  .p-content { display:none; }
+  .p-content.visible { display:block; animation: fadeUp 0.3s ease both; }
+  .p-header { display:flex; align-items:center; gap:11px; margin-bottom:11px; flex-wrap:wrap; }
+  .p-dot { width:11px; height:11px; border-radius:50%; flex-shrink:0; }
+  .p-name { font-family:'Playfair Display',serif; font-size:1.2rem; flex:1; }
+  .p-strat { font-size:0.57rem; text-transform:uppercase; letter-spacing:0.14em; padding:3px 10px; border-radius:20px; flex-shrink:0; }
+  .p-desc { font-size:0.73rem; color:#4a4842; line-height:1.75; margin-bottom:13px; }
+  .p-actions { display:flex; flex-wrap:wrap; gap:6px; }
+  .pill { font-size:0.6rem; padding:3px 11px; border-radius:20px; border:1px solid var(--border); color:var(--muted); }
+
+  .section-header {
+    font-size: 0.6rem;
+    text-transform: uppercase;
+    letter-spacing: 0.18em;
+    color: var(--muted);
+    padding: 6px 0 10px;
+    margin-top: 6px;
+    border-bottom: 1px dashed var(--border);
+    margin-bottom: 10px;
+  }
+
+  @keyframes fadeDown { from{opacity:0;transform:translateY(-12px)} to{opacity:1;transform:translateY(0)} }
+  @keyframes fadeUp { from{opacity:0;transform:translateY(12px)} to{opacity:1;transform:translateY(0)} }
+</style>
+</head>
+<body>
+
+<header>
+  <h1>Deaf Charities<br><em>South London Stakeholder Matrix v4</em></h1>
+  <p>National · SW London ICB · SE London ICB — Reality-checked February 2026</p>
+  <p>National · SWL ICB · SEL ICB · Power × Interest</p>
+</header>
+
+<!-- Tab buttons -->
+<div class="tab-row">
+  <button class="tab-btn active-nat" onclick="switchTab('national', this)">🌐 National</button>
+  <button class="tab-btn" onclick="switchTab('swl', this)">🔵 SW London ICB<br><span style="font-size:0.55rem;opacity:0.75">Croydon · Kingston · Merton · Richmond · Sutton · Wandsworth</span></button>
+  <button class="tab-btn" onclick="switchTab('sel', this)">🟣 SE London ICB<br><span style="font-size:0.55rem;opacity:0.75">Bexley · Bromley · Greenwich · Lambeth · Lewisham · Southwark</span></button>
+</div>
+
+<!-- Legend -->
+<div class="legend">
+  <div class="legend-item"><div class="ldot" style="background:var(--q1-color)"></div>Manage Closely</div>
+  <div class="legend-item"><div class="ldot" style="background:var(--q2-color)"></div>Keep Satisfied</div>
+  <div class="legend-item"><div class="ldot" style="background:var(--q3-color)"></div>Keep Informed</div>
+  <div class="legend-item"><div class="ldot" style="background:var(--q4-color)"></div>Monitor</div>
+  <div class="legend-item"><span class="badge" style="background:var(--badge-swl)">SWL</span>&nbsp;SW London ICB</div>
+  <div class="legend-item"><span class="badge" style="background:var(--badge-sel)">SEL</span>&nbsp;SE London ICB</div>
+  <div class="legend-item"><span class="badge" style="background:var(--badge-nhs)">NHS</span>&nbsp;NHS body</div>
+</div>
+
+<!-- =================== NATIONAL TAB =================== -->
+<div class="tab-panel visible" id="tab-national">
+  <div class="outer">
+    <div class="axis-row">
+      <div class="y-labels">
+        <span class="y-label">HIGH</span>
+        <span class="y-title">Power / Influence</span>
+        <span class="y-label">LOW</span>
+      </div>
+      <div class="grid">
+        <div class="quadrant q1">
+          <div class="q-head"><div class="q-lbl">▲ High Power · High Interest</div></div>
+          <div class="card" onclick="showPanel('rnid')" id="c-rnid"><div class="cdot"></div><div class="c-info"><div class="c-name-row"><span class="c-name">RNID</span></div><div class="c-tag">National policy voice · co-authored Still Ignored NHS report</div></div></div>
+          <div class="card" onclick="showPanel('signhealth')" id="c-signhealth"><div class="cdot"></div><div class="c-info"><div class="c-name-row"><span class="c-name">SignHealth</span></div><div class="c-tag">Deaf health specialist · mental health, domestic abuse, AIS</div></div></div>
+          <div class="q-strategy">Manage Closely</div>
+        </div>
+        <div class="quadrant q2">
+          <div class="q-head"><div class="q-lbl">▲ High Power · Low Interest</div></div>
+          <div class="card" onclick="showPanel('ndcs')" id="c-ndcs"><div class="cdot"></div><div class="c-info"><div class="c-name-row"><span class="c-name">National Deaf Children's Society</span></div><div class="c-tag">Children & families · institutional reach</div></div></div>
+          <div class="card" onclick="showPanel('bsmhd')" id="c-bsmhd"><div class="cdot"></div><div class="c-info"><div class="c-name-row"><span class="c-name">BSMHD</span></div><div class="c-tag">Deaf mental health specialist · clinical influence</div></div></div>
+          <div class="card" onclick="showPanel('rad')" id="c-rad"><div class="cdot"></div><div class="c-info"><div class="c-name-row"><span class="c-name">Royal Association for Deaf People (RAD)</span></div><div class="c-tag">Founded 1841 · Royal Patron HMRK Charles III · advocacy, interpreting, wellbeing</div></div></div>
+          <div class="q-strategy">Keep Satisfied</div>
+        </div>
+        <div class="quadrant q3">
+          <div class="q-head"><div class="q-lbl">▼ Low Power · High Interest</div></div>
+          <div class="card" onclick="showPanel('deafplus')" id="c-deafplus"><div class="cdot"></div><div class="c-info"><div class="c-name-row"><span class="c-name">deafPLUS</span><span class="badge" style="background:var(--badge-swl)">SWL</span><span class="badge" style="background:var(--badge-sel)">SEL</span></div><div class="c-tag">Formerly Breakthrough · Bromley office confirmed Jan 2025 · equipment demos · BSL groups · Bromley Chain successor</div></div></div>
+          <div class="card" onclick="showPanel('bid')" id="c-bid"><div class="cdot"></div><div class="c-info"><div class="c-name-row"><span class="c-name">BID Services</span></div><div class="c-tag">Deaf Cultural Centre · Birmingham</div></div></div>
+          <div class="card" onclick="showPanel('action')" id="c-action"><div class="cdot"></div><div class="c-info"><div class="c-name-row"><span class="c-name">Action for Deafness</span></div><div class="c-tag">NHS audiology · Sussex · closest to Sutton</div></div></div>
+          <div class="q-strategy">Keep Informed</div>
+        </div>
+        <div class="quadrant q4">
+          <div class="q-head"><div class="q-lbl">▼ Low Power · Low Interest</div></div>
+          <div class="card" onclick="showPanel('bda')" id="c-bda"><div class="cdot"></div><div class="c-info"><div class="c-name-row"><span class="c-name">British Deaf Association</span></div><div class="c-tag">BSL rights · cultural advocacy · all London boroughs</div></div></div>
+          <div class="card" onclick="showPanel('deafblind')" id="c-deafblind"><div class="cdot"></div><div class="c-info"><div class="c-name-row"><span class="c-name">DeafBlind UK</span></div><div class="c-tag">Dual sensory loss · specialist niche · Peterborough</div></div></div>
+          <div class="q-strategy">Monitor</div>
+        </div>
+      </div>
+    </div>
+    <div class="x-row"><span>LOW</span><span>HIGH</span></div>
+    <div class="x-center">Interest / Engagement in Healthcare Access</div>
+  </div>
+</div>
+
+<!-- =================== SWL ICB TAB =================== -->
+<div class="tab-panel" id="tab-swl">
+  <div class="outer">
+    <div class="axis-row">
+      <div class="y-labels">
+        <span class="y-label">HIGH</span>
+        <span class="y-title">Power / Influence</span>
+        <span class="y-label">LOW</span>
+      </div>
+      <div class="grid">
+        <div class="quadrant q1">
+          <div class="q-head"><div class="q-lbl">▲ High Power · High Interest</div></div>
+          <div class="card" onclick="showPanel('swlstg')" id="c-swlstg"><div class="cdot"></div><div class="c-info"><div class="c-name-row"><span class="c-name">SWLSTG National Deaf Services</span><span class="badge" style="background:var(--badge-swl)">SWL</span><span class="badge" style="background:var(--badge-nhs)">NHS</span></div><div class="c-tag">Springfield Hospital, Tooting · national deaf mental health · BSL clinical team</div></div></div>
+          <div class="q-strategy">Manage Closely</div>
+        </div>
+        <div class="quadrant q2">
+          <div class="q-head"><div class="q-lbl">▲ High Power · Low Interest</div></div>
+          <div class="card" onclick="showPanel('hwswl')" id="c-hwswl"><div class="cdot"></div><div class="c-info"><div class="c-name-row"><span class="c-name">Healthwatch SWL</span><span class="badge" style="background:var(--badge-swl)">SWL</span></div><div class="c-tag">BSL GP access reform · ICB patient voice across 6 SWL boroughs</div></div></div>
+          <div class="card" onclick="showPanel('hwcroydon')" id="c-hwcroydon"><div class="cdot"></div><div class="c-info"><div class="c-name-row"><span class="c-name">Healthwatch Croydon</span><span class="badge" style="background:var(--badge-swl)">SWL</span></div><div class="c-tag">SWL ICB borough voice · hearing health pathway partner</div></div></div>
+          <div class="card" onclick="showPanel('croydon-hearing')" id="c-croydon-hearing"><div class="cdot"></div><div class="c-info"><div class="c-name-row"><span class="c-name">Croydon Hearing Resource Centre</span><span class="badge" style="background:var(--badge-swl)">SWL</span></div><div class="c-tag">Specialist equipment assessment · NHS & RAD caseworker partnership</div></div></div>
+          <div class="q-strategy">Keep Satisfied</div>
+        </div>
+        <div class="quadrant q3">
+          <div class="q-head"><div class="q-lbl">▼ Low Power · High Interest</div></div>
+          <div class="card" onclick="showPanel('mertoncil')" id="c-mertoncil"><div class="cdot"></div><div class="c-info"><div class="c-name-row"><span class="c-name">Merton CIL</span><span class="badge" style="background:var(--badge-swl)">SWL</span></div><div class="c-tag">Deaf-led DDPO · health, housing, independent living · Merton</div></div></div>
+          <div class="card" onclick="showPanel('deaffirst')" id="c-deaffirst"><div class="cdot"></div><div class="c-info"><div class="c-name-row"><span class="c-name">Deaf First (Oak Lodge)</span><span class="badge" style="background:var(--badge-swl)">SWL</span></div><div class="c-tag">BSL-first advice & advocacy · Wandsworth</div></div></div>
+          <div class="card" onclick="showPanel('rad-croydon')" id="c-rad-croydon"><div class="cdot"></div><div class="c-info"><div class="c-name-row"><span class="c-name">RAD — Croydon Caseworker Service</span><span class="badge" style="background:var(--badge-swl)">SWL</span></div><div class="c-tag">Embedded with Croydon Council · deaf social care assessments</div></div></div>
+          <div class="q-strategy">Keep Informed</div>
+        </div>
+        <div class="quadrant q4">
+          <div class="q-head"><div class="q-lbl">▼ Low Power · Low Interest</div></div>
+          <div class="card" onclick="showPanel('surbiton-deaf')" id="c-surbiton-deaf"><div class="cdot" style="background:#2e7d32"></div><div class="c-info"><div class="c-name-row"><span class="c-name">Surbiton Deaf Social Club ★</span><span class="badge" style="background:var(--badge-swl)">SWL</span><span class="badge" style="background:#2e7d32">NEW</span></div><div class="c-tag">The Harrow Pub, Cheam SM3 · every 3rd Thursday · inside Sutton borough · confirmed 2025</div></div></div>
+          <div class="card" onclick="showPanel('colliers')" id="c-colliers"><div class="cdot" style="background:#f57c00"></div><div class="c-info"><div class="c-name-row"><span class="c-name">Colliers Wood Deaf Club</span><span class="badge" style="background:var(--badge-swl)">SWL</span><span class="badge" style="background:#f57c00">?</span></div><div class="c-tag">Guardian Centre SW19 · venue open · club status unverified · last evidence 2022</div></div></div>
+          <div class="card" onclick="showPanel('oaklodge')" id="c-oaklodge"><div class="cdot"></div><div class="c-info"><div class="c-name-row"><span class="c-name">Oak Lodge School</span><span class="badge" style="background:var(--badge-swl)">SWL</span></div><div class="c-tag">Deaf education + adult lifelong learning · Ofsted Good 2025 · Wandsworth</div></div></div>
+          <div class="card" onclick="showPanel('croydon-club')" id="c-croydon-club"><div class="cdot" style="background:#f57c00"></div><div class="c-info"><div class="c-name-row"><span class="c-name">Croydon Deaf Club</span><span class="badge" style="background:var(--badge-swl)">SWL</span><span class="badge" style="background:#f57c00">?</span></div><div class="c-tag">Chatsworth Road CR0 · no contact details published · unverified Feb 2026</div></div></div>
+          <div class="q-strategy">Monitor</div>
+        </div>
+      </div>
+    </div>
+    <div class="x-row"><span>LOW</span><span>HIGH</span></div>
+    <div class="x-center">Interest / Engagement in Healthcare Access</div>
+  </div>
+</div>
+
+<!-- =================== SEL ICB TAB =================== -->
+<div class="tab-panel" id="tab-sel">
+  <div class="outer">
+    <div class="axis-row">
+      <div class="y-labels">
+        <span class="y-label">HIGH</span>
+        <span class="y-title">Power / Influence</span>
+        <span class="y-label">LOW</span>
+      </div>
+      <div class="grid">
+        <div class="quadrant q1">
+          <div class="q-head"><div class="q-lbl">▲ High Power · High Interest</div></div>
+          <div class="card" onclick="showPanel('slam')" id="c-slam"><div class="cdot"></div><div class="c-info"><div class="c-name-row"><span class="c-name">South London & Maudsley NHS Trust (SLaM)</span><span class="badge" style="background:var(--badge-sel)">SEL</span><span class="badge" style="background:var(--badge-nhs)">NHS</span></div><div class="c-tag">Mental health · Deaf services · across SEL boroughs</div></div></div>
+          <div class="card" onclick="showPanel('rad-lambeth')" id="c-rad-lambeth"><div class="cdot"></div><div class="c-info"><div class="c-name-row"><span class="c-name">RAD — Lambeth Service</span><span class="badge" style="background:var(--badge-sel)">SEL</span></div><div class="c-tag">Weekly advice surgery · BSL · partnered with Age UK Lambeth</div></div></div>
+          <div class="q-strategy">Manage Closely</div>
+        </div>
+        <div class="quadrant q2">
+          <div class="q-head"><div class="q-lbl">▲ High Power · Low Interest</div></div>
+          <div class="card" onclick="showPanel('hwlambeth')" id="c-hwlambeth"><div class="cdot"></div><div class="c-info"><div class="c-name-row"><span class="c-name">Healthwatch Lambeth</span><span class="badge" style="background:var(--badge-sel)">SEL</span></div><div class="c-tag">AIS engagement · ICB neighbourhood teams · deaf healthcare feedback</div></div></div>
+          <div class="card" onclick="showPanel('hwbromley')" id="c-hwbromley"><div class="cdot"></div><div class="c-info"><div class="c-name-row"><span class="c-name">Healthwatch Bromley</span><span class="badge" style="background:var(--badge-sel)">SEL</span></div><div class="c-tag">SEL ICB patient voice · Bromley borough</div></div></div>
+          <div class="card" onclick="showPanel('hwgreenwich')" id="c-hwgreenwich"><div class="cdot"></div><div class="c-info"><div class="c-name-row"><span class="c-name">Healthwatch Greenwich</span><span class="badge" style="background:var(--badge-sel)">SEL</span></div><div class="c-tag">Highlighted NHS AIS Braille failures · SEL deaf feedback</div></div></div>
+          <div class="card" onclick="showPanel('hwlewisham')" id="c-hwlewisham"><div class="cdot"></div><div class="c-info"><div class="c-name-row"><span class="c-name">Healthwatch Lewisham</span><span class="badge" style="background:var(--badge-sel)">SEL</span></div><div class="c-tag">SEL ICB patient voice · Lewisham borough</div></div></div>
+          <div class="card" onclick="showPanel('hwsouthwark')" id="c-hwsouthwark"><div class="cdot"></div><div class="c-info"><div class="c-name-row"><span class="c-name">Healthwatch Southwark</span><span class="badge" style="background:var(--badge-sel)">SEL</span></div><div class="c-tag">SEL ICB patient voice · Southwark borough</div></div></div>
+          <div class="card" onclick="showPanel('hwbexley')" id="c-hwbexley"><div class="cdot"></div><div class="c-info"><div class="c-name-row"><span class="c-name">Healthwatch Bexley</span><span class="badge" style="background:var(--badge-sel)">SEL</span></div><div class="c-tag">SEL ICB patient voice · Bexley borough</div></div></div>
+          <div class="q-strategy">Keep Satisfied</div>
+        </div>
+        <div class="quadrant q3">
+          <div class="q-head"><div class="q-lbl">▼ Low Power · High Interest</div></div>
+          <div class="card" onclick="showPanel('dasl')" id="c-dasl"><div class="cdot"></div><div class="c-info"><div class="c-name-row"><span class="c-name">DASL — Disability Advice Service Lambeth</span><span class="badge" style="background:var(--badge-sel)">SEL</span></div><div class="c-tag">Pan-impairment DDPO · Lambeth · independent living & health</div></div></div>
+          <div class="card" onclick="showPanel('buddies')" id="c-buddies"><div class="cdot"></div><div class="c-info"><div class="c-name-row"><span class="c-name">Buddies All CIC</span><span class="badge" style="background:var(--badge-sel)">SEL</span></div><div class="c-tag">Deaf & disabled buddying service · Bromley, Greenwich, Lambeth, Lewisham, Southwark</div></div></div>
+          <div class="card" onclick="showPanel('deafplus-sel')" id="c-deafplus-sel"><div class="cdot" style="background:#2e7d32"></div><div class="c-info"><div class="c-name-row"><span class="c-name">deafPLUS Bromley ★</span><span class="badge" style="background:var(--badge-sel)">SEL</span><span class="badge" style="background:#2e7d32">NEW</span></div><div class="c-tag">Bromley Chain successor · Hard of Hearing social + BSL group + equipment demos · Mon–Fri office · confirmed Jan 2025</div></div></div>
+          <div class="q-strategy">Keep Informed</div>
+        </div>
+        <div class="quadrant q4">
+          <div class="q-head"><div class="q-lbl">▼ Low Power · Low Interest</div></div>
+          <div class="card" onclick="showPanel('clapham-deaf')" id="c-clapham-deaf"><div class="cdot"></div><div class="c-info"><div class="c-name-row"><span class="c-name">Clapham Deaf Club</span><span class="badge" style="background:var(--badge-sel)">SEL</span></div><div class="c-tag">BSL social club · meets Wednesdays · Clapham North · email confirmed 2025</div></div></div>
+          <div class="card" onclick="showPanel('dewa')" id="c-dewa"><div class="cdot"></div><div class="c-info"><div class="c-name-row"><span class="c-name">DEWA</span><span class="badge" style="background:var(--badge-sel)">SEL</span></div><div class="c-tag">BME Deaf women · Charity Commission reporting up to date · all South London boroughs</div></div></div>
+          <div class="card" onclick="showPanel('bromley-chain')" id="c-bromley-chain"><div class="cdot" style="background:#c62828;opacity:0.5"></div><div class="c-info"><div class="c-name-row"><span class="c-name" style="text-decoration:line-through;opacity:0.5">Bromley Chain</span><span class="badge" style="background:#c62828">DISSOLVED</span></div><div class="c-tag">Dissolved Mar 2024 → succeeded by deafPLUS Bromley</div></div></div>
+          <div class="q-strategy">Monitor</div>
+        </div>
+      </div>
+    </div>
+    <div class="x-row"><span>LOW</span><span>HIGH</span></div>
+    <div class="x-center">Interest / Engagement in Healthcare Access</div>
+  </div>
+</div>
+
+<!-- DETAIL PANEL -->
+<div class="panel" id="detail-panel" style="max-width:940px">
+  <div class="p-empty" id="panel-empty">← Select a tab and click any organisation to see engagement strategy</div>
+
+  <!-- NATIONAL orgs -->
+  <div class="p-content" id="pc-rnid">
+    <div class="p-header"><div class="p-dot" style="background:var(--q1-color)"></div><div class="p-name">RNID</div><span class="p-strat" style="background:rgba(26,71,42,0.1);color:var(--q1-color);border:1px solid rgba(26,71,42,0.25)">Manage Closely</span></div>
+    <div class="p-desc">The UK's largest Deaf charity supporting 18 million people. Co-authored <em>Still Ignored</em> with SignHealth — the definitive report on NHS accessible healthcare failures. Led the BSL Act 2022 campaign. High national policy reach and NHS commissioning influence. Cited by Healthwatch Sutton as a key resource for SWL GP accessibility improvements.</div>
+    <div class="p-actions"><span class="pill">NHS access campaigns</span><span class="pill">Policy endorsement</span><span class="pill">BSL Act compliance</span><span class="pill">Co-develop pilots</span></div>
+  </div>
+
+  <div class="p-content" id="pc-signhealth">
+    <div class="p-header"><div class="p-dot" style="background:var(--q1-color)"></div><div class="p-name">SignHealth</div><span class="p-strat" style="background:rgba(26,71,42,0.1);color:var(--q1-color);border:1px solid rgba(26,71,42,0.25)">Manage Closely</span></div>
+    <div class="p-desc">The dedicated Deaf health charity — the most directly aligned nationally. Co-authored <em>Still Ignored</em> with RNID; commissioned by National Deaf CAMHS. Worked with Healthwatch SWL on the Accessible Information Standard review across all SWL ICB GP practices. Primary route into NHS healthcare commissioning for Deaf accessibility tools. Also cited by Healthwatch Sutton for GP Deaf awareness training resources.</div>
+    <div class="p-actions"><span class="pill">Primary national partner</span><span class="pill">AIS compliance</span><span class="pill">NHS commissioning routes</span><span class="pill">User research access</span></div>
+  </div>
+
+  <div class="p-content" id="pc-ndcs">
+    <div class="p-header"><div class="p-dot" style="background:var(--q2-color)"></div><div class="p-name">National Deaf Children's Society</div><span class="p-strat" style="background:rgba(123,63,0,0.1);color:var(--q2-color);border:1px solid rgba(123,63,0,0.25)">Keep Satisfied</span></div>
+    <div class="p-desc">High institutional reach but focused on children and young people. Relevant for home safety alerts, EHCP processes, and school environments across SWL and SEL boroughs. A useful route into local authority SEND systems.</div>
+    <div class="p-actions"><span class="pill">EHCP & SEND pathways</span><span class="pill">Family-facing solutions</span><span class="pill">School environment alerts</span></div>
+  </div>
+
+  <div class="p-content" id="pc-bsmhd">
+    <div class="p-header"><div class="p-dot" style="background:var(--q2-color)"></div><div class="p-name">British Society for Mental Health & Deaf People</div><span class="p-strat" style="background:rgba(123,63,0,0.1);color:var(--q2-color);border:1px solid rgba(123,63,0,0.25)">Keep Satisfied</span></div>
+    <div class="p-desc">The only UK charity solely focused on Deaf mental health. Strong clinical NHS relationships including with SWLSTG National Deaf Services at Springfield. A powerful endorser and clinical network connector. Staff from the Springfield Deaf team present at BSMHD conferences.</div>
+    <div class="p-actions"><span class="pill">Clinical endorsement</span><span class="pill">SWLSTG connection</span><span class="pill">Conference & network</span></div>
+  </div>
+
+  <div class="p-content" id="pc-rad">
+    <div class="p-header"><div class="p-dot" style="background:var(--q2-color)"></div><div class="p-name">Royal Association for Deaf People (RAD)</div><span class="p-strat" style="background:rgba(123,63,0,0.1);color:var(--q2-color);border:1px solid rgba(123,63,0,0.25)">Keep Satisfied</span></div>
+    <div class="p-desc">Founded 1841 — one of the oldest Deaf charities in the UK. Royal Patron: HM King Charles III (since 2025). Delivers advocacy, wellbeing, employment, interpreting, and legal services nationally. Embedded in Croydon Council's deaf social care service and runs a weekly Lambeth advice surgery in partnership with Age UK Lambeth. Cited by Healthwatch Sutton as a provider of Deaf awareness training for GP practices. Significant local South London presence makes this a higher-priority partner than typical national scope would suggest.</div>
+    <div class="p-actions"><span class="pill">Croydon social care partner</span><span class="pill">Lambeth weekly advice</span><span class="pill">GP Deaf awareness training</span><span class="pill">Interpreting services</span><span class="pill">Royal Patron credibility</span></div>
+  </div>
+
+  <div class="p-content" id="pc-deafplus">
+    <div class="p-header"><div class="p-dot" style="background:var(--q3-color)"></div><div class="p-name">deafPLUS</div><span class="p-strat" style="background:rgba(10,61,98,0.1);color:var(--q3-color);border:1px solid rgba(10,61,98,0.25)">Keep Informed — upgrade to Manage Closely for doorbell project</span></div>
+    <div class="p-desc">Established 1971 as Breakthrough (Deaf-Hearing Integration) — one of the UK's oldest Deaf support organisations. Now operating as <strong>deafPLUS</strong> with offices in Bromley, Ealing, Whitechapel, Birmingham, Bath, Hampshire and Surrey. Confirmed active February 2026.
+    <br><br>
+    <strong>Bromley office (confirmed Jan 2025):</strong> The most strategically important office for this project. After Bromley Chain's formal dissolution (March 2024), its assets transferred to deafPLUS — making deafPLUS the direct successor of all Bromley Chain community activity. The Bromley office runs: a <em>Hard of Hearing social group</em> (2nd and 4th Monday, with cake and guest speakers); a <em>BSL practice group</em> (all levels, hearing welcome); a <em>tinnitus support group</em>; and crucially — a <em>Hearing Equipment Demonstration Service</em> where people can try and assess assistive devices. Text/SMS: 07732 449349. Office open Mon–Fri 9:30am–4pm by appointment.
+    <br><br>
+    <strong>National reach:</strong> Offices in Bromley, Ealing and Whitechapel across London, plus Birmingham, Bath, Hampshire and Surrey. The Surrey office covers the Sutton–West Sussex corridor. Supported by deaf ambassador Rose Ayling-Ellis (EastEnders) and Gok Wan. Services include IAG, advocacy, employment and training, lipreading rehabilitation, DeafBlind support, and equipment assessment.
+    <br><br>
+    For healthcare work: deafPLUS has long-standing NHS partnerships for equipment assessment and IAG. For the doorbell alert project: their equipment demonstration service model in Bromley is the closest existing analogue in South London to what the project intends to do at scale.</div>
+    <div class="p-actions"><span class="pill">Bromley equipment demos</span><span class="pill">Bromley Chain successor</span><span class="pill">BSL &amp; HoH social groups</span><span class="pill">Surrey office — Sutton corridor</span><span class="pill">IAG &amp; advocacy</span><span class="pill">National reach</span></div>
+  </div>
+
+  <div class="p-content" id="pc-bid">
+    <div class="p-header"><div class="p-dot" style="background:var(--q3-color)"></div><div class="p-name">BID Services</div><span class="p-strat" style="background:rgba(10,61,98,0.1);color:var(--q3-color);border:1px solid rgba(10,61,98,0.25)">Keep Informed</span></div>
+    <div class="p-desc">Birmingham-based Deaf Cultural Centre. Rated 4.4★. Strong local BSL community and learning provision. Useful for Midlands pilots and venue-based testing of assistive technology.</div>
+    <div class="p-actions"><span class="pill">Midlands pilot site</span><span class="pill">BSL community access</span></div>
+  </div>
+
+  <div class="p-content" id="pc-action">
+    <div class="p-header"><div class="p-dot" style="background:var(--q3-color)"></div><div class="p-name">Action for Deafness</div><span class="p-strat" style="background:rgba(10,61,98,0.1);color:var(--q3-color);border:1px solid rgba(10,61,98,0.25)">Keep Informed</span></div>
+    <div class="p-desc">Delivers NHS audiology services in Sussex. Rated 4.8★. Geographically the closest NHS audiology delivery partner to Sutton and West Sussex. Ideal early-adopter pilot site for doorbell alert systems.</div>
+    <div class="p-actions"><span class="pill">West Sussex pilot</span><span class="pill">NHS audiology access</span><span class="pill">User testing</span></div>
+  </div>
+
+  <div class="p-content" id="pc-bda">
+    <div class="p-header"><div class="p-dot" style="background:var(--q4-color)"></div><div class="p-name">British Deaf Association</div><span class="p-strat" style="background:rgba(74,14,47,0.1);color:var(--q4-color);border:1px solid rgba(74,14,47,0.25)">Monitor</span></div>
+    <div class="p-desc">BSL-led national advocacy covering all South London boroughs. Primary focus is language rights and BSL Charter compliance rather than healthcare delivery. Relevant if your work touches BSL-accessible design or requires BSL Charter sign-off from public bodies.</div>
+    <div class="p-actions"><span class="pill">BSL Charter compliance</span><span class="pill">Cultural review</span><span class="pill">Policy monitoring</span></div>
+  </div>
+
+  <div class="p-content" id="pc-deafblind">
+    <div class="p-header"><div class="p-dot" style="background:var(--q4-color)"></div><div class="p-name">DeafBlind UK</div><span class="p-strat" style="background:rgba(74,14,47,0.1);color:var(--q4-color);border:1px solid rgba(74,14,47,0.25)">Monitor</span></div>
+    <div class="p-desc">Specialist niche supporting combined sight and hearing loss. Peterborough-based. Relevant only if dual-sensory design is a specific requirement of your doorbell alert or accessibility tool work.</div>
+    <div class="p-actions"><span class="pill">Dual-sensory design</span><span class="pill">Monitor for overlap</span></div>
+  </div>
+
+  <!-- SWL ICB orgs -->
+  <div class="p-content" id="pc-swlstg">
+    <div class="p-header"><div class="p-dot" style="background:var(--q1-color)"></div><div class="p-name">SWLSTG National Deaf Services</div><span class="p-strat" style="background:rgba(26,71,42,0.1);color:var(--q1-color);border:1px solid rgba(26,71,42,0.25)">Manage Closely</span></div>
+    <div class="p-desc">South West London & St George's Mental Health NHS Trust delivers the <strong>National Deaf Mental Health Service</strong> from Springfield University Hospital in Tooting — the closest NHS deaf specialist body to Sutton. BSL-fluent clinical staff on site. The Deaf Adult Community Team (Newton Building, Springfield) accepts GP, voluntary sector, and self-referrals. Provides inpatient and community services for Deaf adults, children and families nationally. This is your most powerful local NHS gateway.</div>
+    <div class="p-actions"><span class="pill">Self-referrals accepted</span><span class="pill">BSL clinical team</span><span class="pill">NHS deaf mental health gateway</span><span class="pill">Tooting — 15 min from Sutton</span></div>
+  </div>
+
+  <div class="p-content" id="pc-hwswl">
+    <div class="p-header"><div class="p-dot" style="background:var(--q2-color)"></div><div class="p-name">Healthwatch South West London</div><span class="p-strat" style="background:rgba(123,63,0,0.1);color:var(--q2-color);border:1px solid rgba(123,63,0,0.25)">Keep Satisfied</span></div>
+    <div class="p-desc">Healthwatch organisations across Sutton, Merton, Wandsworth, Richmond, Kingston and Croydon conducted the Accessible Information Standard review for the SWL ICB, directly leading to the DA Languages BSL interpreter service rolling out to all GP practices in October 2024. They hold the patient voice bridge between the Deaf community and the ICB. A high-leverage partner for influencing ICB commissioning.</div>
+    <div class="p-actions"><span class="pill">ICB commissioning influence</span><span class="pill">AIS monitoring</span><span class="pill">GP BSL access</span><span class="pill">Patient voice amplifier</span></div>
+  </div>
+
+  <div class="p-content" id="pc-hwcroydon">
+    <div class="p-header"><div class="p-dot" style="background:var(--q2-color)"></div><div class="p-name">Healthwatch Croydon</div><span class="p-strat" style="background:rgba(123,63,0,0.1);color:var(--q2-color);border:1px solid rgba(123,63,0,0.25)">Keep Satisfied</span></div>
+    <div class="p-desc">Part of the SWL ICB Healthwatch network. Croydon is included in the SWL ICB footprint (not SEL), and Croydon GP practices were included in the 2024 BSL interpreter rollout. Croydon Council runs a specialist deaf sensory impairment service in partnership with RAD — making Healthwatch Croydon a key voice for that intersection. Also relevant to the SWL ICB Hearing Health Pathway pilot (Sutton, Merton, Wandsworth pharmacies), which is expanding.</div>
+    <div class="p-actions"><span class="pill">SWL ICB Croydon voice</span><span class="pill">RAD partnership link</span><span class="pill">Hearing Health Pathway</span><span class="pill">GP BSL access reform</span></div>
+  </div>
+
+  <div class="p-content" id="pc-croydon-hearing">
+    <div class="p-header"><div class="p-dot" style="background:var(--q2-color)"></div><div class="p-name">Croydon Hearing Resource Centre</div><span class="p-strat" style="background:rgba(123,63,0,0.1);color:var(--q2-color);border:1px solid rgba(123,63,0,0.25)">Keep Satisfied</span></div>
+    <div class="p-desc">A specialist assessment and equipment service for deaf and hard of hearing people in Croydon, operated by Croydon Council's sensory impairment team in partnership with RAD. Provides specialist equipment assessments, hearing aid support, and home alert devices — directly overlapping with the doorbell alert system project. Croydon Council notes they provide equipment to alert deaf residents to sounds in their home environment to support safety and independence.</div>
+    <div class="p-actions"><span class="pill">Home alert equipment — direct overlap</span><span class="pill">Croydon Council partnership</span><span class="pill">RAD caseworker embedded</span><span class="pill">Equipment loan & assessment</span></div>
+  </div>
+
+  <div class="p-content" id="pc-mertoncil">
+    <div class="p-header"><div class="p-dot" style="background:var(--q3-color)"></div><div class="p-name">Merton Centre for Independent Living</div><span class="p-strat" style="background:rgba(10,61,98,0.1);color:var(--q3-color);border:1px solid rgba(10,61,98,0.25)">Keep Informed</span></div>
+    <div class="p-desc">Deaf-led DDPO run and controlled by Deaf and Disabled people. Covers health, benefits, housing, independent living, and disability hate crime in Merton. The most directly relevant grassroots local body for community user testing of doorbell alert systems in the Sutton / Merton area.</div>
+    <div class="p-actions"><span class="pill">Closest local DDPO to Sutton</span><span class="pill">Home independence tools</span><span class="pill">Community user testing</span></div>
+  </div>
+
+  <div class="p-content" id="pc-deaffirst">
+    <div class="p-header"><div class="p-dot" style="background:var(--q3-color)"></div><div class="p-name">Deaf First (Oak Lodge School)</div><span class="p-strat" style="background:rgba(10,61,98,0.1);color:var(--q3-color);border:1px solid rgba(10,61,98,0.25)">Keep Informed</span></div>
+    <div class="p-desc">A BSL-first advice and advocacy service based at Oak Lodge School in Wandsworth. Serves Deaf adults and families across South West London. Practical local access point for connecting with Deaf residents needing home accessibility solutions.</div>
+    <div class="p-actions"><span class="pill">BSL-first advocacy</span><span class="pill">Wandsworth local</span><span class="pill">Sensory support gateway</span></div>
+  </div>
+
+  <div class="p-content" id="pc-rad-croydon">
+    <div class="p-header"><div class="p-dot" style="background:var(--q3-color)"></div><div class="p-name">RAD — Croydon Caseworker Service</div><span class="p-strat" style="background:rgba(10,61,98,0.1);color:var(--q3-color);border:1px solid rgba(10,61,98,0.25)">Keep Informed</span></div>
+    <div class="p-desc">RAD is formally embedded within Croydon Council's deaf social care service, providing caseworker support for profoundly deaf Croydon residents following social care assessments. This is a frontline service operating at the intersection of deaf community needs and social / health care systems — directly relevant for understanding what home accessibility tools Deaf residents actually need.</div>
+    <div class="p-actions"><span class="pill">Croydon deaf social care</span><span class="pill">Home needs assessment</span><span class="pill">Community trust gateway</span></div>
+  </div>
+
+  <div class="p-content" id="pc-colliers">
+    <div class="p-header"><div class="p-dot" style="background:#f57c00"></div><div class="p-name">Colliers Wood Deaf Club</div><span class="p-strat" style="background:rgba(245,124,0,0.1);color:#f57c00;border:1px solid rgba(245,124,0,0.3)">⚠ Unverified — Verify Before Contact</span></div>
+    <div class="p-desc">Listed at The Guardian Centre, Clarendon Road, SW19 (Merton). The venue is confirmed open and used by other community groups (Merton u3a). However, no evidence the Deaf club specifically still meets there has been found. Last known source: Gallaudet 2022 directory. No contact details have ever been publicly listed. Status unknown — the club may have folded post-COVID.
+    <br><br>
+    <strong>Before planning any engagement:</strong> Call The Guardian Centre directly or contact Merton Council's voluntary sector team to confirm whether the club is still active. Do not plan outreach around this club until status is confirmed. Note that <strong>Surbiton Deaf Social Club</strong> (Cheam SM3, every 3rd Thursday) is now confirmed active and is geographically closer to home — treat that as the primary SWL local grassroots contact.</div>
+    <div class="p-actions"><span class="pill">Venue confirmed open</span><span class="pill">Club status unknown</span><span class="pill">Call Guardian Centre to verify</span><span class="pill">Surbiton club is confirmed alternative</span></div>
+  </div>
+
+  <div class="p-content" id="pc-oaklodge">
+    <div class="p-header"><div class="p-dot" style="background:var(--q4-color)"></div><div class="p-name">Oak Lodge School</div><span class="p-strat" style="background:rgba(74,14,47,0.1);color:var(--q4-color);border:1px solid rgba(74,14,47,0.25)">Monitor</span></div>
+    <div class="p-desc">Maintained special school for D/deaf students aged 10–19 in Wandsworth (Good, Ofsted 2025). Hosts Deaf First and a Lifelong Learning programme for Deaf adults. Draws students from 25 boroughs — a significant local hub. Not a health delivery body but useful for longer-term community building.</div>
+    <div class="p-actions"><span class="pill">Deaf adult lifelong learning</span><span class="pill">Community hub</span><span class="pill">Schools awareness</span></div>
+  </div>
+
+  <div class="p-content" id="pc-croydon-club">
+    <div class="p-header"><div class="p-dot" style="background:#f57c00"></div><div class="p-name">Croydon Deaf Club</div><span class="p-strat" style="background:rgba(245,124,0,0.1);color:#f57c00;border:1px solid rgba(245,124,0,0.3)">⚠ Unverified — Verify Before Contact</span></div>
+    <div class="p-desc">Listed at Chatsworth House, Unison Social Club, Chatsworth Road CR0. No contact details have ever been published for this club. Last known source: Gallaudet 2022 directory. Status is completely unknown. For Croydon Deaf community reach, the better-confirmed route is through <strong>Healthwatch Croydon</strong>, <strong>RAD Croydon caseworker service</strong> (embedded with Croydon Council), or <strong>Croydon Hearing Resource Centre</strong> — all of which are confirmed active and have formal community relationships.</div>
+    <div class="p-actions"><span class="pill">Status unknown</span><span class="pill">No contact details ever published</span><span class="pill">Use RAD Croydon instead</span><span class="pill">Use Croydon Hearing Resource Centre</span></div>
+  </div>
+
+  <!-- SEL ICB orgs -->
+  <div class="p-content" id="pc-slam">
+    <div class="p-header"><div class="p-dot" style="background:var(--q1-color)"></div><div class="p-name">South London & Maudsley NHS Trust (SLaM)</div><span class="p-strat" style="background:rgba(26,71,42,0.1);color:var(--q1-color);border:1px solid rgba(26,71,42,0.25)">Manage Closely</span></div>
+    <div class="p-desc">One of the UK's leading mental health trusts, covering Bromley, Croydon, Lambeth, and Southwark. SLaM is a formal partner of SWLSTG through the South London Mental Health and Community Partnership (SLP). Provides mental health services for Deaf people across SEL boroughs and works with the National Deaf Mental Health Service at Springfield. Relevant as a commissioning and referral pathway partner for any Deaf mental health or accessibility tool work in south-east London.</div>
+    <div class="p-actions"><span class="pill">SEL mental health gateway</span><span class="pill">SWLSTG SLP partner</span><span class="pill">Commissioning influence</span><span class="pill">Deaf referral pathway</span></div>
+  </div>
+
+  <div class="p-content" id="pc-rad-lambeth">
+    <div class="p-header"><div class="p-dot" style="background:var(--q1-color)"></div><div class="p-name">RAD — Lambeth Service</div><span class="p-strat" style="background:rgba(26,71,42,0.1);color:var(--q1-color);border:1px solid rgba(26,71,42,0.25)">Manage Closely</span></div>
+    <div class="p-desc">RAD runs a dedicated weekly advice surgery in Lambeth (Wednesdays, 10am–4pm, by appointment), in formal partnership with Age UK Lambeth. The service provides BSL-accessible advice covering health, benefits, and welfare. Lambeth Council also commissions RAD for deaf resident support. This is one of the most active and embedded RAD local services in South London — a direct model for what community Deaf healthcare support looks like at borough level.</div>
+    <div class="p-actions"><span class="pill">Weekly BSL advice surgery</span><span class="pill">Age UK Lambeth partner</span><span class="pill">Lambeth Council commissioned</span><span class="pill">Health & welfare support</span></div>
+  </div>
+
+  <div class="p-content" id="pc-hwlambeth">
+    <div class="p-header"><div class="p-dot" style="background:var(--q2-color)"></div><div class="p-name">Healthwatch Lambeth</div><span class="p-strat" style="background:rgba(123,63,0,0.1);color:var(--q2-color);border:1px solid rgba(123,63,0,0.25)">Keep Satisfied</span></div>
+    <div class="p-desc">Active in SEL ICB neighbourhood teams and co-hosted integrated care workshops. Has engaged on AIS and Deaf healthcare access. Works within the South East London ICS and is an important voice for Lambeth's large and diverse Deaf community. The RAD–Lambeth service and Clapham BSL social group both operate within this Healthwatch area.</div>
+    <div class="p-actions"><span class="pill">SEL ICB neighbourhood voice</span><span class="pill">AIS engagement</span><span class="pill">Lambeth Deaf community link</span></div>
+  </div>
+
+  <div class="p-content" id="pc-hwbromley">
+    <div class="p-header"><div class="p-dot" style="background:var(--q2-color)"></div><div class="p-name">Healthwatch Bromley</div><span class="p-strat" style="background:rgba(123,63,0,0.1);color:var(--q2-color);border:1px solid rgba(123,63,0,0.25)">Keep Satisfied</span></div>
+    <div class="p-desc">Part of the South East London Healthwatch Reference Group, feeding into the SEL ICB. Bromley is a large outer London borough with its own Deaf community. Healthwatch Bromley is the patient voice channel for NHS and care services in the borough. Monitor for any Bromley-specific Deaf healthcare engagement work.</div>
+    <div class="p-actions"><span class="pill">SEL ICB Bromley voice</span><span class="pill">Patient feedback channel</span></div>
+  </div>
+
+  <div class="p-content" id="pc-hwgreenwich">
+    <div class="p-header"><div class="p-dot" style="background:var(--q2-color)"></div><div class="p-name">Healthwatch Greenwich</div><span class="p-strat" style="background:rgba(123,63,0,0.1);color:var(--q2-color);border:1px solid rgba(123,63,0,0.25)">Keep Satisfied</span></div>
+    <div class="p-desc">Coordinates the South East London Healthwatch Reference Group. Has specifically flagged NHS AIS failures around Braille provision for sensory impaired patients — demonstrating active engagement with accessibility for Deaf and disabled patients. Hosts the SEL Healthwatch collaboration infrastructure.</div>
+    <div class="p-actions"><span class="pill">SEL Healthwatch coordinator</span><span class="pill">AIS failures raised</span><span class="pill">Accessibility advocacy</span></div>
+  </div>
+
+  <div class="p-content" id="pc-hwlewisham">
+    <div class="p-header"><div class="p-dot" style="background:var(--q2-color)"></div><div class="p-name">Healthwatch Lewisham</div><span class="p-strat" style="background:rgba(123,63,0,0.1);color:var(--q2-color);border:1px solid rgba(123,63,0,0.25)">Keep Satisfied</span></div>
+    <div class="p-desc">Part of the SEL Healthwatch network. Lewisham and Greenwich NHS Trust covers Lewisham and is a key SEL ICB provider. Healthwatch Lewisham is the patient voice for NHS services across the borough. Keep informed of any Deaf-specific work emerging through the SEL ICB system.</div>
+    <div class="p-actions"><span class="pill">SEL ICB Lewisham voice</span><span class="pill">Patient feedback channel</span></div>
+  </div>
+
+  <div class="p-content" id="pc-hwsouthwark">
+    <div class="p-header"><div class="p-dot" style="background:var(--q2-color)"></div><div class="p-name">Healthwatch Southwark</div><span class="p-strat" style="background:rgba(123,63,0,0.1);color:var(--q2-color);border:1px solid rgba(123,63,0,0.25)">Keep Satisfied</span></div>
+    <div class="p-desc">Part of the SEL Healthwatch network. Guy's and St Thomas' NHS Trust serves Southwark as a major SEL provider. Healthwatch Southwark is the patient voice bridge for NHS services in the borough. DASL (Disability Advice Service Lambeth) also covers Southwark and is a relevant Deaf and disabled people's organisation in this area.</div>
+    <div class="p-actions"><span class="pill">SEL ICB Southwark voice</span><span class="pill">DASL overlap</span></div>
+  </div>
+
+  <div class="p-content" id="pc-hwbexley">
+    <div class="p-header"><div class="p-dot" style="background:var(--q2-color)"></div><div class="p-name">Healthwatch Bexley</div><span class="p-strat" style="background:rgba(123,63,0,0.1);color:var(--q2-color);border:1px solid rgba(123,63,0,0.25)">Keep Satisfied</span></div>
+    <div class="p-desc">Part of the SEL Healthwatch network. Bexley is an outer London borough served by Oxleas NHS Foundation Trust. Healthwatch Bexley is the patient voice for NHS services in the borough. Lower immediate relevance for Deaf healthcare work compared to Lambeth or Greenwich, but part of the complete SEL ICB picture.</div>
+    <div class="p-actions"><span class="pill">SEL ICB Bexley voice</span><span class="pill">Monitor</span></div>
+  </div>
+
+  <div class="p-content" id="pc-dasl">
+    <div class="p-header"><div class="p-dot" style="background:var(--q3-color)"></div><div class="p-name">DASL — Disability Advice Service Lambeth</div><span class="p-strat" style="background:rgba(10,61,98,0.1);color:var(--q3-color);border:1px solid rgba(10,61,98,0.25)">Keep Informed</span></div>
+    <div class="p-desc">Lambeth's leading pan-impairment Disabled People's Organisation, also covering Southwark. Provides independent advice, advocacy, and support for disabled people including Deaf residents. Works within the same ecosystem as RAD Lambeth. A useful community gateway for Deaf residents in inner South London seeking independent living support and health advocacy.</div>
+    <div class="p-actions"><span class="pill">Lambeth DDPO</span><span class="pill">Independent living advice</span><span class="pill">Southwark coverage</span></div>
+  </div>
+
+  <div class="p-content" id="pc-buddies">
+    <div class="p-header"><div class="p-dot" style="background:var(--q3-color)"></div><div class="p-name">Buddies All CIC</div><span class="p-strat" style="background:rgba(10,61,98,0.1);color:var(--q3-color);border:1px solid rgba(10,61,98,0.25)">Keep Informed</span></div>
+    <div class="p-desc">A buddying service for deaf and disabled adults and those with mental health conditions, operating across Bromley, Croydon, Greenwich, Lambeth, Lewisham and Southwark. Provides online, telephone and face-to-face community access support. Bridges across both SWL and SEL ICB footprints. A useful community companion service that could complement technology-based solutions like doorbell alerts with human social support.</div>
+    <div class="p-actions"><span class="pill">Cross-ICB reach</span><span class="pill">Deaf & disabled buddying</span><span class="pill">Community access support</span></div>
+  </div>
+
+  <div class="p-content" id="pc-clapham-deaf">
+    <div class="p-header"><div class="p-dot" style="background:var(--q4-color)"></div><div class="p-name">Clapham Deaf Club</div><span class="p-strat" style="background:rgba(74,14,47,0.1);color:var(--q4-color);border:1px solid rgba(74,14,47,0.25)">Monitor</span></div>
+    <div class="p-desc">A self-organised social group for Deaf BSL users in Lambeth, meeting every Wednesday evening (7–11pm) at Clapham North. Also a self-organised daytime BSL user group meeting on the last Thursday of each month at Clapham Library. No formal power but an authentic grassroots community hub — relevant for trust-building with the inner South London Deaf community and understanding local needs firsthand.</div>
+    <div class="p-actions"><span class="pill">Lambeth Deaf community</span><span class="pill">BSL social group</span><span class="pill">Community trust building</span></div>
+  </div>
+
+  <div class="p-content" id="pc-dewa">
+    <div class="p-header"><div class="p-dot" style="background:var(--q4-color)"></div><div class="p-name">DEWA</div><span class="p-strat" style="background:rgba(74,14,47,0.1);color:var(--q4-color);border:1px solid rgba(74,14,47,0.25)">Monitor</span></div>
+    <div class="p-desc">A national organisation run and controlled by Deaf women from Black and Ethnic Minority groups. Operates across all South London boroughs. Empowers BME Deaf women to have choice and control across all aspects of their lives. Particularly relevant for ensuring any accessibility tool or health initiative reaches the full diversity of the Deaf community, including communities who face compounded barriers.</div>
+    <div class="p-actions"><span class="pill">BME Deaf women</span><span class="pill">Intersectional reach</span><span class="pill">All South London boroughs</span></div>
+  </div>
+
+  <div class="p-content" id="pc-surbiton-deaf">
+    <div class="p-header"><div class="p-dot" style="background:#2e7d32"></div><div class="p-name">Surbiton Deaf Social Club ★</div><span class="p-strat" style="background:rgba(46,125,50,0.1);color:#2e7d32;border:1px solid rgba(46,125,50,0.3)">New Find — Prioritise · Sutton Borough</span></div>
+    <div class="p-desc">Verified on Connected Kingston's community directory (updated 2025). Meets every <strong>3rd Thursday</strong> at The Harrow Pub, High Street, Cheam, SM3 8RL — physically inside Sutton borough. Join and find schedule via their Facebook page. This is the closest confirmed active Deaf social club to home (Door 21, Sutton). No formal power or institutional reach, but maximum grassroots trust value — the kind of word-of-mouth that travels through a whole borough's Deaf community after one good conversation over a pint.
+    <br><br>
+    Despite the name "Surbiton", the meeting venue in Cheam SM3 is firmly in the London Borough of Sutton. This makes it strategically the single most important community touchpoint for the doorbell alert project's home territory.</div>
+    <div class="p-actions"><span class="pill">Closest club to home</span><span class="pill">Sutton SM3 venue</span><span class="pill">Monthly · 3rd Thursday</span><span class="pill">The Harrow Pub, Cheam</span><span class="pill">Attend as a neighbour</span></div>
+  </div>
+
+  <div class="p-content" id="pc-deafplus-sel">
+    <div class="p-header"><div class="p-dot" style="background:#2e7d32"></div><div class="p-name">deafPLUS — Bromley ★</div><span class="p-strat" style="background:rgba(46,125,50,0.1);color:#2e7d32;border:1px solid rgba(46,125,50,0.3)">New Addition — Keep Informed · SEL Bromley</span></div>
+    <div class="p-desc">Confirmed active as of January 2025. The direct successor to Bromley Chain (dissolved March 2024) — deafPLUS received the Bromley Chain's assets and now provides the strongest formal Deaf support presence in the Bromley borough. Formerly known as Breakthrough (Deaf-Hearing Integration), established 1971.
+    <br><br>
+    <strong>Bromley services confirmed:</strong> Hard of Hearing social group (2nd and 4th Monday, with cake and guest speakers); BSL practice group (all levels, hearing welcome); tinnitus support group; and a <em>Hearing Equipment Demonstration Service</em> — where people try and compare assistive devices in person. Office open Monday–Friday 9:30am–4pm by appointment. Contact: 07732 449349 (text/SMS only).
+    <br><br>
+    The equipment demonstration service model is the closest thing currently operating in South London to what the doorbell alert project aims to do. The Bromley social groups also provide direct access to the demographic most likely to benefit from home alert systems.</div>
+    <div class="p-actions"><span class="pill">Equipment demos — Bromley</span><span class="pill">HoH social group Mondays</span><span class="pill">BSL practice group</span><span class="pill">Bromley Chain successor</span><span class="pill">Text 07732 449349</span></div>
+  </div>
+
+  <div class="p-content" id="pc-bromley-chain">
+    <div class="p-header"><div class="p-dot" style="background:#c62828;opacity:0.6"></div><div class="p-name">Bromley Chain — DISSOLVED</div><span class="p-strat" style="background:rgba(198,40,40,0.08);color:#c62828;border:1px solid rgba(198,40,40,0.25)">Dissolved March 2024 → See deafPLUS Bromley</span></div>
+    <div class="p-desc">Bromley Chain (charity number 281051) was formally dissolved by the Charity Commission on 19 March 2024. It ran the Bromley Deaf Social Club, Bromley Deaf Children's Society, Deaf Access advisory service, and administered the Phyllis Kither Bequest small grants fund. On dissolution, its assets transferred to Breakthrough (Deaf-Hearing Integration) — charity 1073468 — which operates as <strong>deafPLUS</strong>.
+    <br><br>
+    This is not a loss — deafPLUS Bromley has expanded what Bromley Chain offered, adding a professional office with weekday IAG support and a formal equipment demonstration service. The Phyllis Kither Bequest grants fund may also continue under deafPLUS — worth asking when making contact, as it could potentially fund a doorbell alert pilot in Bromley.</div>
+    <div class="p-actions"><span class="pill">Remove from active planning</span><span class="pill">Contact deafPLUS Bromley instead</span><span class="pill">Phyllis Kither grants — enquire with deafPLUS</span></div>
+  </div>
+
+</div><!-- end panel -->
+
+<script>
+let activePanel = null;
+let activeTab = 'national';
+
+function switchTab(tab, btn) {
+  document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('visible'));
+  document.getElementById('tab-' + tab).classList.add('visible');
+  document.querySelectorAll('.tab-btn').forEach(b => {
+    b.classList.remove('active-swl','active-sel','active-nat');
+  });
+  if(tab==='swl') btn.classList.add('active-swl');
+  else if(tab==='sel') btn.classList.add('active-sel');
+  else btn.classList.add('active-nat');
+  activeTab = tab;
+  clearPanel();
+}
+
+const allIds = ['rnid','signhealth','ndcs','bsmhd','rad','deafplus','bid','action','bda','deafblind',
+  'swlstg','hwswl','hwcroydon','croydon-hearing','mertoncil','deaffirst','rad-croydon',
+  'surbiton-deaf','colliers','oaklodge','croydon-club',
+  'slam','rad-lambeth','hwlambeth','hwbromley','hwgreenwich','hwlewisham','hwsouthwark','hwbexley',
+  'dasl','buddies','deafplus-sel','clapham-deaf','dewa','bromley-chain'];
+
+function clearPanel() {
+  allIds.forEach(id => {
+    const pc = document.getElementById('pc-'+id); if(pc) pc.classList.remove('visible');
+    const c = document.getElementById('c-'+id); if(c) c.classList.remove('active');
+  });
+  document.getElementById('panel-empty').style.display = 'block';
+  activePanel = null;
+}
+
+function showPanel(id) {
+  allIds.forEach(i => {
+    const pc = document.getElementById('pc-'+i); if(pc) pc.classList.remove('visible');
+    const c = document.getElementById('c-'+i); if(c) c.classList.remove('active');
+  });
+  if(activePanel === id) { clearPanel(); return; }
+  activePanel = id;
+  document.getElementById('panel-empty').style.display = 'none';
+  const pc = document.getElementById('pc-'+id);
+  if(pc) pc.classList.add('visible');
+  const card = document.getElementById('c-'+id);
+  if(card) card.classList.add('active');
+  document.getElementById('detail-panel').scrollIntoView({ behavior:'smooth', block:'nearest' });
+}
+</script>
+</body>
+</html>

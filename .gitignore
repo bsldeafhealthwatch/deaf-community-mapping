@@ -1,0 +1,9 @@
+# macOS
+.DS_Store
+
+# Backup snapshots created while editing (kept locally, not in the shared repo)
+*.bak-*
+
+# Editor/OS cruft
+*~
+.Trash/

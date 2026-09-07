@@ -1,0 +1,169 @@
+{
+  "id": "video-relay-telecoms",
+  "cluster": "law",
+  "title": "Video Relay Service & Telecoms Equity (Home/Office/Travel)",
+  "desc": "Why Deaf BSL users cannot dial any number the way hearing people can — the per-organisation VRS contract model, third-party refusal, and the home/office/travel access gap.",
+  "status": "filled",
+  "figures": [
+    {
+      "label": "Ofcom rejected a universal (\"unrestricted\") VRS mandate on cost grounds",
+      "value": "Estimated annual cost £41.6–£113.4 million; proposed a \"restricted basis\" VRS instead",
+      "source": "Ofcom, Review of Relay Services consultation, para 1.17–1.18",
+      "sourceUrl": "https://www.ofcom.org.uk/siteassets/resources/documents/consultations/uncategorised/8169-review-relay-services/summary/relay_services.pdf?v=321400",
+      "lastVerified": "2026-09-06",
+      "status": "verified"
+    },
+    {
+      "label": "Only text relay carries a statutory universal-service obligation — video relay has no equivalent",
+      "value": "Universal Service Condition 4 (BT) and General Condition 15 (all providers) cover text relay (Relay UK) only",
+      "source": "Ofcom General Conditions of Entitlement; Ofcom text relay guide",
+      "sourceUrl": "https://www.ofcom.org.uk/phones-and-broadband/accessibility/general-conditions-of-entitlement",
+      "lastVerified": "2026-09-06",
+      "status": "verified"
+    },
+    {
+      "label": "Ofcom fined BT for late text-relay delivery, showing GC15 has real teeth for text — nothing equivalent covers video",
+      "value": "£800,000 fine, Case CW/01129, breach period Apr–Sep 2014",
+      "source": "Ofcom enforcement decision",
+      "sourceUrl": "https://www.ofcom.org.uk/phones-and-broadband/accessibility/cw_01129",
+      "lastVerified": "2026-09-06",
+      "status": "verified"
+    },
+    {
+      "label": "999 BSL is mandated for emergency calls only — no obligation extends to general/non-emergency calls",
+      "value": "Confirmed directly in Ofcom’s own Emergency Video Relay statement",
+      "source": "Ofcom, Emergency Video Relay statement, 22 Jun 2021; live from 17 Jun 2022",
+      "sourceUrl": "https://www.ofcom.org.uk/siteassets/resources/documents/consultations/category-2-6-weeks/213725-emergency-video-relay/associated-documents/statement-emergency-video-relay.pdf?v=326561",
+      "lastVerified": "2026-09-06",
+      "status": "verified"
+    },
+    {
+      "label": "999 BSL call volume — figures not yet reconciled",
+      "value": "~18,000 calls (Jul 2024–Jun 2025 service year, annual report) vs ~24,000 calls (\"in 2024\", press reporting of the same underlying Ofcom study)",
+      "source": "Sorenson/SLI Annual Report, Jul 2025; Liam O’Dell reporting, 30 May 2025",
+      "sourceUrl": "https://sorenson.co.uk/wp-content/uploads/2025/07/SLi-Emergency-VRS-999-BSL-Annual-Report-july-2025-v1.0.2.pdf",
+      "lastVerified": "2026-09-06",
+      "status": "contested"
+    },
+    {
+      "label": "999 BSL is entirely data/connectivity-dependent, unlike a standard 999 voice call",
+      "value": "Requires \"a good internet connection to either WiFi or a 3G/4G/5G connection\" — the technical precondition for the home/office/travel access gap",
+      "source": "999 BSL FAQ",
+      "sourceUrl": "https://999bsl.co.uk/faqs/",
+      "lastVerified": "2026-09-06",
+      "status": "verified"
+    },
+    {
+      "label": "Nuisance calls degrade emergency VRS capacity",
+      "value": "One caller made 150+ calls in a short window; 400+ nuisance calls in a single month (Mar 2024), tying up interpreters and delaying genuine emergencies",
+      "source": "Sorenson/SLI Annual Report; Liam O’Dell reporting",
+      "sourceUrl": "https://sorenson.co.uk/wp-content/uploads/2025/07/SLi-Emergency-VRS-999-BSL-Annual-Report-july-2025-v1.0.2.pdf",
+      "lastVerified": "2026-09-06",
+      "status": "verified"
+    },
+    {
+      "label": "DVLA VRS contract — the cleanest single procurement-grade proof of the per-organisation funding model",
+      "value": "£30,000 for 12 months (24 Apr 2024–23 Apr 2025), awarded to D A Languages Ltd, continuing the \"Interpreters Live!\" platform",
+      "source": "Contracts Finder notice, published 13 May 2024",
+      "sourceUrl": "https://www.contractsfinder.service.gov.uk/notice/dcb6f606-e689-439c-8e70-cf6499ca054f",
+      "lastVerified": "2026-09-06",
+      "status": "verified"
+    },
+    {
+      "label": "Motability’s VRS is scoped to Motability enquiries only — not general-purpose relay",
+      "value": "Application status, lease matters, and complaints only, via Sign Solutions’ InterpretersLive!",
+      "source": "Motability’s own site",
+      "sourceUrl": "https://www.motability.co.uk/get-support/bsl-video-relay-service",
+      "lastVerified": "2026-09-06",
+      "status": "verified"
+    },
+    {
+      "label": "DWP VRS covers all its own service lines but is DWP-internal only, not a route to any UK number",
+      "value": "12,536 total VRS calls in the 12 months to Nov 2020 (PIP 25%, Access to Work 22%, Universal Credit 16%, ESA 14%)",
+      "source": "Disability Rights UK; BDA; EHRC legal-agreement page",
+      "sourceUrl": "https://www.disabilityrightsuk.org/news/2020/november/video-relay-service-now-available-across-all-dwp-service-lines",
+      "lastVerified": "2026-09-06",
+      "status": "verified"
+    },
+    {
+      "label": "No ring-fenced national VRS budget exists — BSL VRS is folded into a general interpreting-services framework",
+      "value": "Crown Commercial Service RM6302 (7 May 2025–6 May 2028, 31 suppliers, 5 lots) places VRS in Lot 4 \"Visual Interpreting Services\" alongside face-to-face interpreting; no VRS-specific spend published",
+      "source": "GCA/CCS agreement page",
+      "sourceUrl": "https://www.gca.gov.uk/agreements/RM6302",
+      "lastVerified": "2026-09-06",
+      "status": "verified"
+    },
+    {
+      "label": "SignHealth’s BSL Health Access proved a genuinely universal VRS model was operationally possible — then NHS funding was withdrawn",
+      "value": "Launched Mar 2020 with £800,000 of SignHealth’s own reserves; 25,000+ conversations handled (61% GP, 18% hospital); closed at midnight 31 Mar 2021 when NHS England funding ended",
+      "source": "SignHealth press release; Civil Society; The Limping Chicken",
+      "sourceUrl": "https://signhealth.org.uk/press-release/no-money-bsl-health-access-is-closing/",
+      "lastVerified": "2026-09-06",
+      "status": "verified"
+    },
+    {
+      "label": "Scotland runs a 24/7 national VRS — the clearest UK-internal proof a broader model is achievable",
+      "value": "Contact Scotland BSL, running since 2015, handling 3,000–4,000 calls/month; England has NHS 111 + 999 BSL only, Wales has 999 BSL only",
+      "source": "BSL Advisory Board, Locked Out",
+      "sourceUrl": "https://www.gov.uk/government/publications/bsl-user-experience-of-health-and-social-care-in-uk",
+      "lastVerified": "2026-09-06",
+      "status": "verified"
+    },
+    {
+      "label": "The BSL Advisory Board’s central recommendation is a national 24/7 VRS for England and Wales — a government-published concession the current model is inadequate",
+      "value": "Not yet accepted or rejected by government as of this research pass",
+      "source": "GOV.UK, Locked Out, 27 Nov 2025",
+      "sourceUrl": "https://www.gov.uk/government/publications/bsl-user-experience-of-health-and-social-care-in-uk",
+      "lastVerified": "2026-09-06",
+      "status": "verified"
+    },
+    {
+      "label": "BDA articulated this exact thesis 15 years ago — nothing fundamentally has changed",
+      "value": "Early Day Motion 1438 (9 Feb 2011, 104 signatures) called for \"an open, competitive market for video relay services\" giving telecoms access \"equivalent to the way hearing people use the telephone every day\"",
+      "source": "UK Parliament EDM tracker",
+      "sourceUrl": "https://edm.parliament.uk/early-day-motion/42467/access-to-telecommunications-for-deaf-people",
+      "lastVerified": "2026-09-06",
+      "status": "verified"
+    },
+    {
+      "label": "No confirmed UK case of a bank, DVLA, HMRC, or insurer refusing a VRS/interpreter-relayed call on identity-verification or fraud grounds",
+      "value": "The closest documented precedent is Irish (Kalinova v. Permanent TSB, ruled indirect disability discrimination, €8,500 awarded, 2022) and an EU-wide finding (Romania/Croatia) — neither is a UK case; do not generalise to \"UK banks do this\" without a UK-specific source",
+      "source": "Irish Times reporting the WRC decision, 5 Jul 2022; European Union of the Deaf EAA implementation report, ~Jun 2025",
+      "sourceUrl": "https://www.irishtimes.com/business/work/2022/07/05/deaf-customer-wins-case-over-banks-refusal-to-deal-with-sign-language-interpreter-by-phone/",
+      "lastVerified": "2026-09-06",
+      "status": "contested"
+    },
+    {
+      "label": "No UK-specific evidence found of workplace IT/firewall policies blocking VRS apps at work",
+      "value": "Only a US product (Sorenson \"at Work\") confirms this is a recognised friction category elsewhere — genuine gap in the UK evidence base, not a confirmed non-problem",
+      "source": "Project research pass, cross-referencing UK and US VRS-industry sources",
+      "sourceUrl": "",
+      "lastVerified": "2026-09-06",
+      "status": "contested"
+    },
+    {
+      "label": "No UK-specific evidence found of VRS or 999 BSL failing specifically due to travel or mobile roaming",
+      "value": "Only the underlying technical dependency (999 BSL requires WiFi or mobile data) is confirmed; no documented travel-specific failure incident was found",
+      "source": "Project research pass",
+      "sourceUrl": "",
+      "lastVerified": "2026-09-06",
+      "status": "contested"
+    },
+    {
+      "label": "No published, comprehensive directory exists of which UK organisations currently offer VRS access at all",
+      "value": "SignVideo’s \"SignDirectory\" and a separate signing-banks list are both partial and unaudited — the absence of a registry is itself evidence there is no universal entitlement, only piecemeal opt-in contracts",
+      "source": "Project research pass, cross-referencing SignVideo and provider directories",
+      "sourceUrl": "",
+      "lastVerified": "2026-09-06",
+      "status": "contested"
+    },
+    {
+      "label": "US comparator: VRS is funded as a universal, any-number relay service via a national fund, not per-organisation contracts",
+      "value": "FCC interstate TRS Fund net funding requirement: $1,479,568,862 for FY2025–26",
+      "source": "Rolka Loube (FCC TRS Fund administrator), order dated 7 Jul 2025",
+      "sourceUrl": "https://rolkaloube.com/programs/federal-itrs/news/fcc-releases-2025-26-trs-fund-contribution-factors-order",
+      "lastVerified": "2026-09-06",
+      "status": "verified"
+    }
+  ]
+}

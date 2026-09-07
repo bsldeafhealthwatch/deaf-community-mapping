@@ -1,0 +1,314 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Gap Tracker — Deaf &amp; DeafBlind Healthcare Access, South West London</title>
+<style>
+  :root {
+    --bg: #f5f2ec; --surface: #ffffff; --border: #d8d3c8;
+    --text: #1a1814; --muted: #6b6459;
+    --open: #b3261e; --open-bg: #fbe9e7;
+    --progress: #8a5a00; --progress-bg: #fdf2df;
+    --done: #1a472a; --done-bg: #e9f3ec;
+    --focus: #0b5fff;
+  }
+  * { box-sizing: border-box; }
+  body {
+    background: var(--bg); color: var(--text);
+    font-family: -apple-system, Segoe UI, Arial, sans-serif;
+    max-width: 980px; margin: 0 auto; padding: 32px 20px 80px; line-height: 1.55;
+  }
+  a:focus, button:focus, input:focus, select:focus { outline: 3px solid var(--focus); outline-offset: 2px; }
+  header { margin-bottom: 20px; }
+  h1 { font-size: 1.7rem; margin: 0 0 6px; }
+  header p { color: var(--muted); font-size: 0.85rem; margin: 2px 0; text-transform: uppercase; letter-spacing: 0.06em; }
+
+  .summary-bar {
+    display: flex; gap: 10px; flex-wrap: wrap; margin: 18px 0 24px;
+  }
+  .summary-chip {
+    flex: 1; min-width: 130px; padding: 12px 14px; border-radius: 6px; border: 1px solid var(--border);
+    background: var(--surface); text-align: center;
+  }
+  .summary-chip .num { font-size: 1.6rem; font-weight: 700; display: block; }
+  .summary-chip .lbl { font-size: 0.72rem; text-transform: uppercase; letter-spacing: 0.06em; color: var(--muted); }
+  .summary-chip.open .num { color: var(--open); }
+  .summary-chip.progress .num { color: var(--progress); }
+  .summary-chip.done .num { color: var(--done); }
+
+  .filter-bar {
+    display: flex; gap: 8px; flex-wrap: wrap; align-items: center;
+    margin-bottom: 20px; padding: 10px 12px; background: var(--surface);
+    border: 1px solid var(--border); border-radius: 6px;
+  }
+  .filter-bar label { font-size: 0.8rem; font-weight: 600; margin-right: 4px; }
+  .filter-btn {
+    font-size: 0.78rem; padding: 6px 12px; border-radius: 14px; border: 1px solid var(--border);
+    background: var(--bg); cursor: pointer; font-family: inherit;
+  }
+  .filter-btn[aria-pressed="true"] { background: var(--text); color: #fff; border-color: var(--text); }
+
+  table { width: 100%; border-collapse: collapse; background: var(--surface); border: 1px solid var(--border); border-radius: 6px; overflow: hidden; }
+  caption { text-align: left; font-size: 0.8rem; color: var(--muted); padding: 8px 4px; caption-side: top; }
+  thead th {
+    text-align: left; font-size: 0.72rem; text-transform: uppercase; letter-spacing: 0.05em;
+    padding: 10px 12px; background: #ece7db; border-bottom: 2px solid var(--border); color: var(--muted);
+  }
+  tbody tr { border-bottom: 1px solid var(--border); }
+  tbody tr:last-child { border-bottom: none; }
+  tbody tr.is-hidden { display: none; }
+  td { padding: 12px; font-size: 0.85rem; vertical-align: top; }
+  td.gap-cell { font-weight: 600; }
+  td.action-cell { color: #333; }
+  td.section-cell { color: var(--muted); font-size: 0.78rem; white-space: nowrap; }
+
+  .status-select {
+    font-family: inherit; font-size: 0.78rem; padding: 5px 8px; border-radius: 12px;
+    border: 1px solid var(--border); cursor: pointer;
+  }
+  .status-open { background: var(--open-bg); color: var(--open); border-color: var(--open); }
+  .status-progress { background: var(--progress-bg); color: var(--progress); border-color: var(--progress); }
+  .status-done { background: var(--done-bg); color: var(--done); border-color: var(--done); }
+
+  .who-tag {
+    display: inline-block; font-size: 0.7rem; padding: 2px 7px; border-radius: 3px;
+    background: #efeae0; color: var(--muted); margin-top: 4px;
+  }
+
+  footer { margin-top: 30px; font-size: 0.78rem; color: var(--muted); border-top: 1px solid var(--border); padding-top: 14px; }
+
+  .reset-row { margin-top: 14px; text-align: right; }
+  .reset-btn {
+    font-family: inherit; font-size: 0.78rem; padding: 6px 12px; border-radius: 4px;
+    border: 1px solid var(--border); background: var(--surface); cursor: pointer;
+  }
+
+  @media (max-width: 700px) {
+    table, thead, tbody, tr, td { display: block; width: 100%; }
+    thead { display: none; }
+    tbody tr { padding: 10px 12px; margin-bottom: 4px; }
+    td { padding: 4px 0; }
+    td.section-cell::before { content: "Section: "; font-weight: 600; }
+    td.gap-cell::before { content: "Gap: "; font-weight: 400; color: var(--muted); }
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <h1>Gap Tracker</h1>
+  <p>Deaf &amp; DeafBlind Healthcare Access — South West London ICB</p>
+  <p>Built from the SuperGrok intelligence briefing, 31 August 2026</p>
+</header>
+
+<p>This tracks every item from the intelligence briefing where <strong>no reliable current source was found</strong>, plus a small number of items flagged as needing direct verification rather than being missing entirely. Each row has a status you can change — your choices are saved automatically in this browser. Nothing is sent anywhere; this is a local checklist only.</p>
+
+<div class="summary-bar" id="summary-bar" aria-live="polite">
+  <div class="summary-chip open"><span class="num" id="count-open">0</span><span class="lbl">Open</span></div>
+  <div class="summary-chip progress"><span class="num" id="count-progress">0</span><span class="lbl">In progress</span></div>
+  <div class="summary-chip done"><span class="num" id="count-done">0</span><span class="lbl">Resolved</span></div>
+</div>
+
+<div class="filter-bar" role="group" aria-label="Filter by status">
+  <label id="filter-label">Show:</label>
+  <button type="button" class="filter-btn" data-filter="all" aria-pressed="true" aria-describedby="filter-label">All</button>
+  <button type="button" class="filter-btn" data-filter="open" aria-pressed="false" aria-describedby="filter-label">Open only</button>
+  <button type="button" class="filter-btn" data-filter="progress" aria-pressed="false" aria-describedby="filter-label">In progress only</button>
+  <button type="button" class="filter-btn" data-filter="done" aria-pressed="false" aria-describedby="filter-label">Resolved only</button>
+</div>
+
+<table id="gap-table">
+  <caption>26 open items. Change the status dropdown in the right-hand column as you resolve each one.</caption>
+  <thead>
+    <tr>
+      <th scope="col" style="width:14%">Section</th>
+      <th scope="col" style="width:34%">Gap</th>
+      <th scope="col" style="width:34%">Recommended next step</th>
+      <th scope="col" style="width:18%">Status</th>
+    </tr>
+  </thead>
+  <tbody id="gap-tbody">
+    <!-- Rows inserted by JavaScript from the data array below -->
+  </tbody>
+</table>
+
+<div class="reset-row">
+  <button type="button" class="reset-btn" id="reset-btn">Reset all statuses to Open</button>
+</div>
+
+<footer>
+  <p>Source: SuperGrok intelligence briefing, verified against SWL data, 31 August 2026. Cross-reference against the Accessible Edition and the visual stakeholder matrix for full context on each item.</p>
+  <p>Status choices are stored in this browser only (localStorage) and are not shared, synced, or sent anywhere.</p>
+</footer>
+
+<script>
+(function() {
+  'use strict';
+
+  var STORAGE_KEY = 'deaf-gap-tracker-v1';
+
+  var gaps = [
+    // POPULATION
+    { id: 'g1', section: 'Population', gap: 'No published local authority sensory / deafblind registers for any of the six SWL boroughs (Croydon, Kingston, Merton, Richmond, Sutton, Wandsworth)', action: 'FOI request or direct contact with each borough\u2019s Adult Social Care sensory impairment team', who: 'FOI / 6 councils' },
+    { id: 'g2', section: 'Population', gap: 'No SWL-specific deafblind population dataset \u2014 current 8,000\u201311,000 figure is a modelled estimate only, not measured', action: 'Ask SWL ICB and the 6 councils whether any local dual-sensory data collection exists; if not, flag as a data gap to close', who: 'SWL ICB' },
+    { id: 'g3', section: 'Population', gap: 'CHARGE syndrome \u2014 no updated UK incidence data beyond the standard 1-in-10,000-births estimate; no 2025\u201326 NHS-engagement update found for CHARGE Syndrome Association UK', action: 'Direct contact with CHARGE Syndrome Association UK and Sense family services', who: 'CHARGE Syndrome Assoc. UK' },
+    { id: 'g4', section: 'Population', gap: 'Usher syndrome prevalence \u2014 range of 5,200 to 11,000 depending on definition; no single agreed current figure', action: 'Contact Deafblind UK\u2019s Usher team and Cure Usher directly for their preferred current figure and methodology', who: 'Deafblind UK / Cure Usher' },
+    { id: 'g5', section: 'Population', gap: 'No official UK-wide ranked list of Deaf or DeafBlind population by city/council exists \u2014 only partial proxies (hearing loss prevalence, CRIDE regional child data)', action: 'Do not publish a city ranking without pulling primary extracts from the NHS Hearing Loss Data Tool directly', who: 'NHS Hearing Loss Data Tool' },
+
+    // POLICY
+    { id: 'g6', section: 'Policy', gap: 'AIS enforcement in practice \u2014 unclear how far AIS is being treated as a fully enforceable \u201cmust comply\u201d standard on the ground in 2026, versus \u201chave regard to\u201d', action: 'Monitor CQC assessment outcomes through 2026\u201327 as the March 2027 self-assessment deadline approaches', who: 'CQC / NHS England' },
+    { id: 'g7', section: 'Policy', gap: 'No named SWL ICB executive-level AIS lead identified', action: 'Ask SWL ICB directly to name its board-level AIS lead, as required by DAPB1605', who: 'SWL ICB' },
+    { id: 'g8', section: 'Policy', gap: 'No named AIS lead identified for any individual SWL trust or GP federation', action: 'Request named AIS leads from SWLSTG, St George\u2019s, Kingston, Croydon Health Services and the SWL GP federations', who: 'SWL trusts / GP federations' },
+    { id: 'g9', section: 'Policy', gap: 'Unclear whether BSL-as-preferred-language is currently a coded, shareable field in SWL shared care record systems (Single Patient Record precursor)', action: 'Ask NHSE digital / SWL Health Information Exchange / London Care Record team directly whether this field exists and is populated', who: 'NHSE Digital / SWL HIE' },
+    { id: 'g10', section: 'Policy', gap: 'No SWL ICB dual-sensory (deafblind) NHS assessment pathway found \u2014 unclear how newly-diagnosed deafblind patients are identified and referred locally', action: 'Direct contact with SWL ICB, and audiology/ophthalmology leads at St George\u2019s, Kingston and Croydon, plus the 6 council sensory teams', who: 'SWL ICB / 3 trusts / 6 councils' },
+    { id: 'g11', section: 'Policy', gap: 'No SWL-based Deafblind Manual (tactile BSL) interpreter identified \u2014 national shortage is severe (only 8 tactile interpreters on the NRCPD register)', action: 'Ask NRCPD and DA Languages directly whether any registered deafblind manual interpreters are bookable in SWL', who: 'NRCPD / DA Languages' },
+
+    // FUNDING & COMMISSIONING
+    { id: 'g12', section: 'Funding', gap: 'No confirmation that any Deaf-led organisation currently holds core membership of the national NHS VCSE Health and Wellbeing Alliance for 2025\u201326', action: 'Direct contact with the DHSC VCSE Health and Wellbeing Alliance secretariat, and with Inclusion London, BDA, and SignHealth to check current membership', who: 'DHSC VCSE Alliance secretariat' },
+    { id: 'g13', section: 'Funding', gap: 'Unclear whether SWL ICB has ever used Section 256/257 (NHS Act 2006) to pay a voluntary organisation directly, or how often', action: 'Ask SWL ICB finance team directly whether any s.256/s.257 or NHS model grant agreement payments currently reach Deaf or DeafBlind organisations', who: 'SWL ICB finance' },
+    { id: 'g14', section: 'Funding', gap: 'No published SWL ICB local VCSE direct-spend target aligned to the Cabinet Office PPN 001 policy (national deadline 1 April 2026)', action: 'Ask SWL ICB directly whether it intends to set a local VCSE spend target, and what share (if any) is earmarked for Deaf/DeafBlind-led organisations', who: 'SWL ICB' },
+    { id: 'g15', section: 'Funding', gap: 'No Deaf-led organisation (deafPLUS, RAD, Merton CIL, Deaf First) currently holds an NHS/ICB contract in SWL on the public record \u2014 DA Languages, a commercial agency, holds the BSL interpreting contract', action: 'Raise this commissioning gap directly at SWL Integrated Care Partnership level, via Healthwatch SWL as an ICP member', who: 'SWL ICP / Healthwatch SWL' },
+    { id: 'g16', section: 'Funding', gap: 'No single national \u201cDeaf sector funding crisis\u201d report equivalent to a formal inquiry exists \u2014 evidence is scattered across several separate sources', action: 'Consider commissioning or requesting a dedicated SWL Deaf VCSE financial-health snapshot rather than waiting for a national report to appear', who: 'Commission directly' },
+
+    // DEAFBLIND SERVICES
+    { id: 'g17', section: 'DeafBlind services', gap: 'No published council- or NHS-commissioned DeafBlind-specific service found for any of the six SWL boroughs \u2014 sensory needs sit inside generic adult social care teams', action: 'Direct contact with each of the 6 local authority sensory impairment teams', who: '6 councils' },
+    { id: 'g18', section: 'DeafBlind services', gap: 'BRIGHT (Bright DeafBlind) activity status needs confirming \u2014 directory listing dated 2022, though other evidence suggests activity through 2024\u201325', action: 'Email brightdeafblind@gmail.com directly to confirm current activity before relying on this group in any engagement plan', who: 'BRIGHT (email)' },
+    { id: 'g19', section: 'DeafBlind services', gap: '\u201cUsher Coalition UK\u201d as a named organisation does not appear to exist \u2014 advocacy exists under other names (Cure Usher, Deafblind UK Usher team, Usher Syndrome Coalition UK ambassadors)', action: 'Update any internal references away from the non-existent name toward the correct organisations', who: 'Internal correction' },
+    { id: 'g20', section: 'DeafBlind services', gap: 'No SWL ICB dual-sensory pathway dashboard or waiting-time data exists', action: 'See g10 above \u2014 same direct-contact list applies', who: 'SWL ICB / 3 trusts / 6 councils' },
+
+    // BREAKING NEWS / MONITORING
+    { id: 'g21', section: 'Ongoing monitoring', gap: 'SWLSTG National Deaf Services (Springfield) \u2014 no published 2025\u201326 waiting times or capacity data', action: 'Direct contact with SWLSTG National Deaf Services to request current waiting times', who: 'SWLSTG' },
+    { id: 'g22', section: 'Ongoing monitoring', gap: 'No SWL ICB Deaf or sensory-impairment-specific commissioning announcement found in 2025\u201326 annual reporting', action: 'Direct contact with SWL ICB \u2014 ask for the Chief Nurse, Director of Place, or VCSE alliance lead', who: 'SWL ICB' },
+    { id: 'g23', section: 'Ongoing monitoring', gap: 'No formal DHSC or NHS England point-by-point response to Still Ignored (April 2025) has been published', action: 'Monitor for a formal government response; raise the absence of one directly with RNID/SignHealth as a joint advocacy point', who: 'DHSC / NHS England' },
+    { id: 'g24', section: 'Ongoing monitoring', gap: 'No large new England cohort study on deaf health inequalities uniquely published after April 2025 was found beyond Still Ignored, Locked Out, and one NIHR project', action: 'Run a formal literature search via NIHR / OpenAthens for anything published mid-2025 to mid-2026', who: 'NIHR / OpenAthens search' },
+
+    // MATRIX ACTIONS
+    { id: 'g25', section: 'Matrix upkeep', gap: 'Six Directors of Adult Social Services (one per SWL borough) not yet individually named as the statutory Care Act deafblind leads in this matrix', action: 'Look up and name each DASS individually; add as a named contact row', who: 'Public council records' },
+    { id: 'g26', section: 'Matrix upkeep', gap: 'DA Languages contract manager / SWL ICB commissioning lead for the BSL GP service not yet named', action: 'Request the named contract manager from SWL ICB or Healthwatch SWL directly', who: 'SWL ICB' }
+  ];
+
+  var tbody = document.getElementById('gap-tbody');
+  var caption = document.querySelector('caption');
+
+  var saved = {};
+  try {
+    var raw = localStorage.getItem(STORAGE_KEY);
+    if (raw) saved = JSON.parse(raw);
+  } catch (e) {}
+
+  function save() {
+    try { localStorage.setItem(STORAGE_KEY, JSON.stringify(saved)); } catch (e) {}
+  }
+
+  function statusClass(status) {
+    if (status === 'progress') return 'status-progress';
+    if (status === 'done') return 'status-done';
+    return 'status-open';
+  }
+
+  function render() {
+    tbody.innerHTML = '';
+    gaps.forEach(function(g) {
+      var status = saved[g.id] || 'open';
+      var tr = document.createElement('tr');
+      tr.setAttribute('data-status', status);
+
+      var tdSection = document.createElement('td');
+      tdSection.className = 'section-cell';
+      tdSection.textContent = g.section;
+      tr.appendChild(tdSection);
+
+      var tdGap = document.createElement('td');
+      tdGap.className = 'gap-cell';
+      tdGap.textContent = g.gap;
+      tr.appendChild(tdGap);
+
+      var tdAction = document.createElement('td');
+      tdAction.className = 'action-cell';
+      tdAction.textContent = g.action;
+      var who = document.createElement('span');
+      who.className = 'who-tag';
+      who.textContent = 'Contact: ' + g.who;
+      tdAction.appendChild(document.createElement('br'));
+      tdAction.appendChild(who);
+      tr.appendChild(tdAction);
+
+      var tdStatus = document.createElement('td');
+      var label = document.createElement('label');
+      label.className = 'sr-only';
+      label.setAttribute('for', 'status-' + g.id);
+      label.textContent = 'Status for: ' + g.gap;
+      var select = document.createElement('select');
+      select.id = 'status-' + g.id;
+      select.className = 'status-select ' + statusClass(status);
+      ['open','progress','done'].forEach(function(val) {
+        var opt = document.createElement('option');
+        opt.value = val;
+        opt.textContent = val === 'open' ? 'Open' : (val === 'progress' ? 'In progress' : 'Resolved');
+        if (val === status) opt.selected = true;
+        select.appendChild(opt);
+      });
+      select.addEventListener('change', function() {
+        saved[g.id] = select.value;
+        save();
+        select.className = 'status-select ' + statusClass(select.value);
+        tr.setAttribute('data-status', select.value);
+        updateSummary();
+        applyFilter();
+      });
+      tdStatus.appendChild(label);
+      tdStatus.appendChild(select);
+      tr.appendChild(tdStatus);
+
+      tbody.appendChild(tr);
+    });
+    updateSummary();
+    applyFilter();
+  }
+
+  function updateSummary() {
+    var counts = { open: 0, progress: 0, done: 0 };
+    gaps.forEach(function(g) {
+      var s = saved[g.id] || 'open';
+      counts[s]++;
+    });
+    document.getElementById('count-open').textContent = counts.open;
+    document.getElementById('count-progress').textContent = counts.progress;
+    document.getElementById('count-done').textContent = counts.done;
+    caption.textContent = gaps.length + ' total items \u2014 ' + counts.open + ' open, ' + counts.progress + ' in progress, ' + counts.done + ' resolved.';
+  }
+
+  var currentFilter = 'all';
+  function applyFilter() {
+    var rows = tbody.querySelectorAll('tr');
+    rows.forEach(function(tr) {
+      var status = tr.getAttribute('data-status');
+      var show = currentFilter === 'all' || currentFilter === status;
+      tr.classList.toggle('is-hidden', !show);
+    });
+  }
+
+  document.querySelectorAll('.filter-btn').forEach(function(btn) {
+    btn.addEventListener('click', function() {
+      document.querySelectorAll('.filter-btn').forEach(function(b) { b.setAttribute('aria-pressed', 'false'); });
+      btn.setAttribute('aria-pressed', 'true');
+      currentFilter = btn.getAttribute('data-filter');
+      applyFilter();
+    });
+  });
+
+  document.getElementById('reset-btn').addEventListener('click', function() {
+    if (confirm('Reset all ' + gaps.length + ' items back to Open status?')) {
+      saved = {};
+      save();
+      render();
+    }
+  });
+
+  render();
+})();
+</script>
+
+</body>
+</html>

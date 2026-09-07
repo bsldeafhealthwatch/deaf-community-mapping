@@ -1,0 +1,872 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Deaf Healthcare Charities — Stakeholder Matrix</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,500;0,700;1,500&family=IBM+Plex+Mono:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #f4f1eb;
+    --surface: #ffffff;
+    --surface2: #ede9e0;
+    --border: #d4cfc3;
+    --text: #1a1814;
+    --muted: #8a8278;
+    --accent:  #1a472a;   /* deep green — manage closely */
+    --accent2: #7b3f00;   /* burnt umber — keep satisfied */
+    --accent3: #0a3d62;   /* navy — keep informed */
+    --accent4: #4a0e2f;   /* deep plum — monitor */
+    --local: #e8a020;     /* amber — local badge */
+    --q1: rgba(26,71,42,0.06);
+    --q2: rgba(123,63,0,0.05);
+    --q3: rgba(10,61,98,0.06);
+    --q4: rgba(74,14,47,0.05);
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'IBM Plex Mono', monospace;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 48px 24px;
+  }
+
+  header {
+    text-align: center;
+    margin-bottom: 40px;
+    animation: fadeDown 0.7s ease both;
+  }
+
+  header h1 {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(1.6rem, 3.5vw, 2.5rem);
+    font-weight: 700;
+    letter-spacing: -0.01em;
+    color: var(--text);
+    line-height: 1.15;
+  }
+
+  header h1 em {
+    font-style: italic;
+    font-weight: 500;
+    color: var(--accent);
+  }
+
+  header p {
+    margin-top: 10px;
+    font-size: 0.68rem;
+    color: var(--muted);
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+  }
+
+  /* Legend strip */
+  .legend {
+    display: flex;
+    gap: 6px;
+    flex-wrap: wrap;
+    justify-content: center;
+    margin-bottom: 28px;
+    animation: fadeUp 0.8s 0.15s ease both;
+  }
+
+  .legend-item {
+    display: flex;
+    align-items: center;
+    gap: 7px;
+    font-size: 0.62rem;
+    color: var(--muted);
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    padding: 4px 12px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 20px;
+  }
+
+  .legend-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    flex-shrink: 0;
+  }
+
+  .local-badge-legend {
+    display: inline-block;
+    font-size: 0.5rem;
+    padding: 1px 5px;
+    border-radius: 3px;
+    background: var(--local);
+    color: white;
+    font-weight: 500;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+  }
+
+  /* Outer layout */
+  .outer {
+    width: 100%;
+    max-width: 920px;
+    animation: fadeUp 0.8s 0.2s ease both;
+  }
+
+  .axis-label-y {
+    font-size: 0.6rem;
+    text-transform: uppercase;
+    letter-spacing: 0.18em;
+    color: var(--muted);
+    white-space: nowrap;
+  }
+
+  .axis-row {
+    display: flex;
+    align-items: stretch;
+    gap: 0;
+  }
+
+  .y-axis-labels {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: flex-end;
+    padding: 0 10px 0 0;
+    min-width: 52px;
+  }
+
+  /* Grid */
+  .grid {
+    flex: 1;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: auto auto;
+    gap: 4px;
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    overflow: hidden;
+    background: var(--border);
+  }
+
+  .quadrant {
+    background: var(--surface);
+    padding: 18px 16px 40px;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    position: relative;
+    min-height: 200px;
+  }
+
+  .q1 { background: var(--q1); }
+  .q2 { background: var(--q2); }
+  .q3 { background: var(--q3); }
+  .q4 { background: var(--q4); }
+
+  .q-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 6px;
+    padding-bottom: 8px;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .q-label {
+    font-size: 0.58rem;
+    text-transform: uppercase;
+    letter-spacing: 0.14em;
+    font-weight: 500;
+  }
+
+  .q1 .q-label { color: var(--accent); }
+  .q2 .q-label { color: var(--accent2); }
+  .q3 .q-label { color: var(--accent3); }
+  .q4 .q-label { color: var(--accent4); }
+
+  .q-strategy {
+    font-family: 'Playfair Display', serif;
+    font-style: italic;
+    font-size: 0.72rem;
+    position: absolute;
+    bottom: 12px;
+    right: 14px;
+    opacity: 0.45;
+  }
+
+  /* Charity cards */
+  .charity {
+    display: flex;
+    align-items: flex-start;
+    gap: 9px;
+    cursor: pointer;
+    padding: 7px 9px;
+    border-radius: 4px;
+    border: 1px solid transparent;
+    transition: all 0.18s ease;
+  }
+
+  .charity:hover {
+    border-color: var(--border);
+    background: rgba(0,0,0,0.04);
+    transform: translateX(3px);
+  }
+
+  .charity.active {
+    border-color: rgba(0,0,0,0.18);
+    background: rgba(0,0,0,0.06);
+  }
+
+  .dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    flex-shrink: 0;
+    margin-top: 5px;
+  }
+
+  .q1 .dot { background: var(--accent); }
+  .q2 .dot { background: var(--accent2); }
+  .q3 .dot { background: var(--accent3); }
+  .q4 .dot { background: var(--accent4); }
+
+  .charity-info { flex: 1; min-width: 0; }
+
+  .charity-name-row {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 5px;
+  }
+
+  .charity-name {
+    font-size: 0.72rem;
+    font-weight: 500;
+    color: var(--text);
+    line-height: 1.3;
+  }
+
+  .local-badge {
+    display: inline-block;
+    font-size: 0.48rem;
+    padding: 1px 5px;
+    border-radius: 3px;
+    background: var(--local);
+    color: white;
+    font-weight: 500;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    flex-shrink: 0;
+  }
+
+  .nhs-badge {
+    display: inline-block;
+    font-size: 0.48rem;
+    padding: 1px 5px;
+    border-radius: 3px;
+    background: #003087;
+    color: white;
+    font-weight: 500;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    flex-shrink: 0;
+  }
+
+  .charity-tag {
+    font-size: 0.58rem;
+    color: var(--muted);
+    margin-top: 2px;
+    line-height: 1.4;
+  }
+
+  /* x axis labels */
+  .x-axis-row {
+    display: flex;
+    justify-content: space-between;
+    padding: 8px 0 0 62px;
+    font-size: 0.58rem;
+    color: var(--muted);
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+  }
+
+  .x-axis-center {
+    text-align: center;
+    font-size: 0.6rem;
+    color: var(--muted);
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    margin-top: 6px;
+    padding-left: 52px;
+  }
+
+  /* Detail panel */
+  .panel {
+    width: 100%;
+    max-width: 920px;
+    margin-top: 20px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 24px 28px;
+    min-height: 110px;
+    animation: fadeUp 0.6s ease both;
+  }
+
+  .panel-empty {
+    color: var(--muted);
+    font-size: 0.72rem;
+    text-align: center;
+    padding: 16px;
+    letter-spacing: 0.08em;
+  }
+
+  .panel-content { display: none; }
+  .panel-content.visible { display: block; }
+
+  .panel-header {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 12px;
+    flex-wrap: wrap;
+  }
+
+  .panel-dot {
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    flex-shrink: 0;
+  }
+
+  .panel-name {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.25rem;
+    color: var(--text);
+    flex: 1;
+  }
+
+  .panel-strategy {
+    font-size: 0.6rem;
+    text-transform: uppercase;
+    letter-spacing: 0.15em;
+    padding: 3px 10px;
+    border-radius: 20px;
+    flex-shrink: 0;
+  }
+
+  .panel-desc {
+    font-size: 0.75rem;
+    color: #4a4842;
+    line-height: 1.75;
+    margin-bottom: 14px;
+  }
+
+  .panel-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 7px;
+  }
+
+  .action-pill {
+    font-size: 0.62rem;
+    padding: 4px 12px;
+    border-radius: 20px;
+    border: 1px solid var(--border);
+    color: var(--muted);
+    letter-spacing: 0.05em;
+  }
+
+  @keyframes fadeDown {
+    from { opacity: 0; transform: translateY(-14px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(14px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <h1>Deaf Healthcare Charities<br><em>Stakeholder Grid Matrix</em></h1>
+  <p>National · SWL ICB Local · Power × Interest</p>
+</header>
+
+<div class="legend">
+  <div class="legend-item"><div class="legend-dot" style="background:var(--accent)"></div>Manage Closely</div>
+  <div class="legend-item"><div class="legend-dot" style="background:var(--accent2)"></div>Keep Satisfied</div>
+  <div class="legend-item"><div class="legend-dot" style="background:var(--accent3)"></div>Keep Informed</div>
+  <div class="legend-item"><div class="legend-dot" style="background:var(--accent4)"></div>Monitor</div>
+  <div class="legend-item"><span class="local-badge-legend">SWL</span>&nbsp;South West London ICB local</div>
+  <div class="legend-item"><span style="font-size:0.6rem;padding:1px 6px;border-radius:3px;background:#003087;color:white;font-weight:500;letter-spacing:0.06em;text-transform:uppercase;">NHS</span>&nbsp;NHS body</div>
+</div>
+
+<div class="outer">
+
+  <div class="axis-row">
+    <!-- Y axis -->
+    <div class="y-axis-labels">
+      <span class="axis-label-y" style="writing-mode:horizontal-tb">HIGH</span>
+      <div style="writing-mode:vertical-rl;transform:rotate(180deg);font-size:0.6rem;color:var(--muted);letter-spacing:0.18em;text-transform:uppercase;flex:1;display:flex;align-items:center;justify-content:center;padding:8px 0">Power / Influence</div>
+      <span class="axis-label-y" style="writing-mode:horizontal-tb">LOW</span>
+    </div>
+
+    <!-- Grid -->
+    <div class="grid">
+
+      <!-- Q1: High Power, High Interest -->
+      <div class="quadrant q1">
+        <div class="q-header">
+          <div class="q-label">▲ High Power · High Interest</div>
+        </div>
+
+        <div class="charity" onclick="showPanel('rnid')" id="c-rnid">
+          <div class="dot"></div>
+          <div class="charity-info">
+            <div class="charity-name-row"><span class="charity-name">RNID</span></div>
+            <div class="charity-tag">National policy voice · NHS access campaigns</div>
+          </div>
+        </div>
+
+        <div class="charity" onclick="showPanel('signhealth')" id="c-signhealth">
+          <div class="dot"></div>
+          <div class="charity-info">
+            <div class="charity-name-row"><span class="charity-name">SignHealth</span></div>
+            <div class="charity-tag">Deaf health specialist · mental health & domestic abuse</div>
+          </div>
+        </div>
+
+        <div class="charity" onclick="showPanel('swlstg')" id="c-swlstg">
+          <div class="dot"></div>
+          <div class="charity-info">
+            <div class="charity-name-row">
+              <span class="charity-name">SWLSTG National Deaf Services</span>
+              <span class="local-badge">SWL</span>
+              <span class="nhs-badge">NHS</span>
+            </div>
+            <div class="charity-tag">Springfield Hospital, Tooting · national deaf mental health</div>
+          </div>
+        </div>
+
+        <div class="q-strategy">Manage Closely</div>
+      </div>
+
+      <!-- Q2: High Power, Low Interest -->
+      <div class="quadrant q2">
+        <div class="q-header">
+          <div class="q-label">▲ High Power · Low Interest</div>
+        </div>
+
+        <div class="charity" onclick="showPanel('ndcs')" id="c-ndcs">
+          <div class="dot"></div>
+          <div class="charity-info">
+            <div class="charity-name-row"><span class="charity-name">National Deaf Children's Society</span></div>
+            <div class="charity-tag">Child focus · large institutional reach</div>
+          </div>
+        </div>
+
+        <div class="charity" onclick="showPanel('bsmhd')" id="c-bsmhd">
+          <div class="dot"></div>
+          <div class="charity-info">
+            <div class="charity-name-row"><span class="charity-name">BSMHD</span></div>
+            <div class="charity-tag">Mental health specialist · clinical influence</div>
+          </div>
+        </div>
+
+        <div class="charity" onclick="showPanel('healthwatch')" id="c-healthwatch">
+          <div class="dot"></div>
+          <div class="charity-info">
+            <div class="charity-name-row">
+              <span class="charity-name">Healthwatch SWL</span>
+              <span class="local-badge">SWL</span>
+            </div>
+            <div class="charity-tag">BSL GP access report · ICB patient voice</div>
+          </div>
+        </div>
+
+        <div class="q-strategy">Keep Satisfied</div>
+      </div>
+
+      <!-- Q3: Low Power, High Interest -->
+      <div class="quadrant q3">
+        <div class="q-header">
+          <div class="q-label">▼ Low Power · High Interest</div>
+        </div>
+
+        <div class="charity" onclick="showPanel('action')" id="c-action">
+          <div class="dot"></div>
+          <div class="charity-info">
+            <div class="charity-name-row"><span class="charity-name">Action for Deafness</span></div>
+            <div class="charity-tag">NHS audiology Sussex · closest to Sutton/West Sussex</div>
+          </div>
+        </div>
+
+        <div class="charity" onclick="showPanel('mertoncil')" id="c-mertoncil">
+          <div class="dot"></div>
+          <div class="charity-info">
+            <div class="charity-name-row">
+              <span class="charity-name">Merton CIL</span>
+              <span class="local-badge">SWL</span>
+            </div>
+            <div class="charity-tag">Deaf-led · advice, benefits, health, housing · Merton</div>
+          </div>
+        </div>
+
+        <div class="charity" onclick="showPanel('deafplus')" id="c-deafplus">
+          <div class="dot"></div>
+          <div class="charity-info">
+            <div class="charity-name-row"><span class="charity-name">deafPLUS</span></div>
+            <div class="charity-tag">Frontline advice & support · London-based</div>
+          </div>
+        </div>
+
+        <div class="charity" onclick="showPanel('bid')" id="c-bid">
+          <div class="dot"></div>
+          <div class="charity-info">
+            <div class="charity-name-row"><span class="charity-name">BID Services</span></div>
+            <div class="charity-tag">Community delivery · Deaf Cultural Centre</div>
+          </div>
+        </div>
+
+        <div class="charity" onclick="showPanel('deaffirst')" id="c-deaffirst">
+          <div class="dot"></div>
+          <div class="charity-info">
+            <div class="charity-name-row">
+              <span class="charity-name">Deaf First (Oak Lodge)</span>
+              <span class="local-badge">SWL</span>
+            </div>
+            <div class="charity-tag">Advocacy & advice · Wandsworth · BSL-first</div>
+          </div>
+        </div>
+
+        <div class="q-strategy">Keep Informed</div>
+      </div>
+
+      <!-- Q4: Low Power, Low Interest -->
+      <div class="quadrant q4">
+        <div class="q-header">
+          <div class="q-label">▼ Low Power · Low Interest</div>
+        </div>
+
+        <div class="charity" onclick="showPanel('bda')" id="c-bda">
+          <div class="dot"></div>
+          <div class="charity-info">
+            <div class="charity-name-row"><span class="charity-name">British Deaf Association</span></div>
+            <div class="charity-tag">BSL advocacy · cultural focus · covers SWL boroughs</div>
+          </div>
+        </div>
+
+        <div class="charity" onclick="showPanel('deafblind')" id="c-deafblind">
+          <div class="dot"></div>
+          <div class="charity-info">
+            <div class="charity-name-row"><span class="charity-name">DeafBlind UK</span></div>
+            <div class="charity-tag">Dual sensory loss · specialist niche</div>
+          </div>
+        </div>
+
+        <div class="charity" onclick="showPanel('colliers')" id="c-colliers">
+          <div class="dot"></div>
+          <div class="charity-info">
+            <div class="charity-name-row">
+              <span class="charity-name">Colliers Wood Deaf Club</span>
+              <span class="local-badge">SWL</span>
+            </div>
+            <div class="charity-tag">Community social club · Merton · grassroots</div>
+          </div>
+        </div>
+
+        <div class="charity" onclick="showPanel('oaklodge')" id="c-oaklodge">
+          <div class="dot"></div>
+          <div class="charity-info">
+            <div class="charity-name-row">
+              <span class="charity-name">Oak Lodge School</span>
+              <span class="local-badge">SWL</span>
+            </div>
+            <div class="charity-tag">Deaf education + adult lifelong learning · Wandsworth</div>
+          </div>
+        </div>
+
+        <div class="q-strategy">Monitor</div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- X axis -->
+  <div class="x-axis-row">
+    <span>LOW</span>
+    <span>HIGH</span>
+  </div>
+  <div class="x-axis-center">Interest / Engagement in Healthcare Access</div>
+
+</div>
+
+<!-- Detail Panel -->
+<div class="panel" id="detail-panel" style="max-width:920px;">
+  <div class="panel-empty" id="panel-empty">← Click any organisation to see engagement strategy</div>
+
+  <!-- RNID -->
+  <div class="panel-content" id="pc-rnid">
+    <div class="panel-header">
+      <div class="panel-dot" style="background:var(--accent)"></div>
+      <div class="panel-name">RNID</div>
+      <span class="panel-strategy" style="background:rgba(26,71,42,0.1);color:var(--accent);border:1px solid rgba(26,71,42,0.25)">Manage Closely</span>
+    </div>
+    <div class="panel-desc">The UK's largest Deaf charity, supporting 18 million people. Co-authored the <em>Still Ignored</em> NHS access report with SignHealth. High national policy influence — a key partner for any accessibility innovation seeking NHS pathway adoption or institutional legitimacy. Led the BSL Act 2022 campaign with the BDA.</div>
+    <div class="panel-actions">
+      <span class="action-pill">Co-develop pilots</span>
+      <span class="action-pill">NHS access campaigns</span>
+      <span class="action-pill">Policy endorsement</span>
+      <span class="action-pill">BSL standards input</span>
+    </div>
+  </div>
+
+  <!-- SignHealth -->
+  <div class="panel-content" id="pc-signhealth">
+    <div class="panel-header">
+      <div class="panel-dot" style="background:var(--accent)"></div>
+      <div class="panel-name">SignHealth</div>
+      <span class="panel-strategy" style="background:rgba(26,71,42,0.1);color:var(--accent);border:1px solid rgba(26,71,42,0.25)">Manage Closely</span>
+    </div>
+    <div class="panel-desc">The dedicated Deaf health charity — the most directly aligned nationally for healthcare accessibility work. Jointly led the <em>Still Ignored</em> report; commissioned by National Deaf CAMHS. Their NHS-connected work makes them the primary route into healthcare commissioning. Also worked with Healthwatch SWL on the Accessible Information Standard review across the SW London ICB boroughs.</div>
+    <div class="panel-actions">
+      <span class="action-pill">Primary partnership target</span>
+      <span class="action-pill">NHS commissioning routes</span>
+      <span class="action-pill">User research access</span>
+      <span class="action-pill">AIS compliance</span>
+    </div>
+  </div>
+
+  <!-- SWLSTG -->
+  <div class="panel-content" id="pc-swlstg">
+    <div class="panel-header">
+      <div class="panel-dot" style="background:var(--accent)"></div>
+      <div class="panel-name">SWLSTG National Deaf Services</div>
+      <span class="panel-strategy" style="background:rgba(26,71,42,0.1);color:var(--accent);border:1px solid rgba(26,71,42,0.25)">Manage Closely</span>
+    </div>
+    <div class="panel-desc">South West London and St George's Mental Health NHS Trust delivers the <strong>National Deaf Mental Health Service</strong> from Springfield University Hospital in Tooting — directly inside the SWL ICB footprint. This is the NHS body providing specialist Deaf adult and CAMHS inpatient and community mental health services nationally, with BSL-fluent staff on site. The Deaf Adult Community Team operates Monday–Friday from Newton Building, Springfield. They accept GP, voluntary sector, and self-referrals — making this a critical local NHS gateway partner.</div>
+    <div class="panel-actions">
+      <span class="action-pill">NHS gateway into deaf mental health</span>
+      <span class="action-pill">Self-referral accepted</span>
+      <span class="action-pill">BSL-fluent clinical team on site</span>
+      <span class="action-pill">Tooting — your closest NHS deaf service</span>
+    </div>
+  </div>
+
+  <!-- NDCS -->
+  <div class="panel-content" id="pc-ndcs">
+    <div class="panel-header">
+      <div class="panel-dot" style="background:var(--accent2)"></div>
+      <div class="panel-name">National Deaf Children's Society</div>
+      <span class="panel-strategy" style="background:rgba(123,63,0,0.1);color:var(--accent2);border:1px solid rgba(123,63,0,0.25)">Keep Satisfied</span>
+    </div>
+    <div class="panel-desc">High institutional reach but primary focus is children and families. Relevant for home safety alerts and EHCP school environments. A useful route into local authority and SEND systems across the SWL boroughs.</div>
+    <div class="panel-actions">
+      <span class="action-pill">Family-facing solutions</span>
+      <span class="action-pill">EHCP & SEND pathways</span>
+      <span class="action-pill">School environment alerts</span>
+    </div>
+  </div>
+
+  <!-- BSMHD -->
+  <div class="panel-content" id="pc-bsmhd">
+    <div class="panel-header">
+      <div class="panel-dot" style="background:var(--accent2)"></div>
+      <div class="panel-name">British Society for Mental Health & Deaf People</div>
+      <span class="panel-strategy" style="background:rgba(123,63,0,0.1);color:var(--accent2);border:1px solid rgba(123,63,0,0.25)">Keep Satisfied</span>
+    </div>
+    <div class="panel-desc">The only UK charity solely focused on mental health for Deaf people. Clinical credibility and NHS relationships are strong. Has existing ties to SWLSTG National Deaf Services — the Springfield Deaf team has presented at BSMHD conferences. A valuable endorser and network connector rather than direct delivery partner.</div>
+    <div class="panel-actions">
+      <span class="action-pill">Clinical endorsement</span>
+      <span class="action-pill">SWLSTG connection</span>
+      <span class="action-pill">Conference & network access</span>
+    </div>
+  </div>
+
+  <!-- Healthwatch SWL -->
+  <div class="panel-content" id="pc-healthwatch">
+    <div class="panel-header">
+      <div class="panel-dot" style="background:var(--accent2)"></div>
+      <div class="panel-name">Healthwatch South West London</div>
+      <span class="panel-strategy" style="background:rgba(123,63,0,0.1);color:var(--accent2);border:1px solid rgba(123,63,0,0.25)">Keep Satisfied</span>
+    </div>
+    <div class="panel-desc">Healthwatch organisations across Sutton, Merton, Wandsworth, Richmond and Kingston conducted the Accessible Information Standard review for the SWL ICB, directly leading to the new DA Languages BSL interpreter service rolling out to all GP practices in October 2024. They hold the patient voice bridge between the Deaf community and the ICB. Healthwatch Sutton specifically references SignHealth and Royal Association for Deaf People as accessibility resources for GP practices. A high-leverage partner for influencing ICB commissioning decisions.</div>
+    <div class="panel-actions">
+      <span class="action-pill">ICB commissioning influence</span>
+      <span class="action-pill">AIS compliance monitoring</span>
+      <span class="action-pill">GP practice accessibility</span>
+      <span class="action-pill">Patient voice amplifier</span>
+    </div>
+  </div>
+
+  <!-- Action for Deafness -->
+  <div class="panel-content" id="pc-action">
+    <div class="panel-header">
+      <div class="panel-dot" style="background:var(--accent3)"></div>
+      <div class="panel-name">Action for Deafness</div>
+      <span class="panel-strategy" style="background:rgba(10,61,98,0.1);color:var(--accent3);border:1px solid rgba(10,61,98,0.25)">Keep Informed</span>
+    </div>
+    <div class="panel-desc">Delivers NHS audiology services directly in Sussex — geographically the closest relevant service provider to Sutton and West Sussex. Rated 4.8★. High operational interest in accessibility tools but limited national influence. Ideal early-adopter pilot partner for doorbell alert systems in the Sutton / West Sussex area.</div>
+    <div class="panel-actions">
+      <span class="action-pill">Pilot partner — West Sussex</span>
+      <span class="action-pill">User testing access</span>
+      <span class="action-pill">NHS audiology referrals</span>
+    </div>
+  </div>
+
+  <!-- Merton CIL -->
+  <div class="panel-content" id="pc-mertoncil">
+    <div class="panel-header">
+      <div class="panel-dot" style="background:var(--accent3)"></div>
+      <div class="panel-name">Merton Centre for Independent Living</div>
+      <span class="panel-strategy" style="background:rgba(10,61,98,0.1);color:var(--accent3);border:1px solid rgba(10,61,98,0.25)">Keep Informed</span>
+    </div>
+    <div class="panel-desc">A Deaf and Disabled People's Organisation (DDPO) run and controlled by Deaf and Disabled people themselves — directly within the SWL ICB footprint. Provides advice and advocacy in Merton covering health, benefits, housing, independent living, and disability hate crime. The most directly relevant local grassroots body for community user testing of doorbell alert systems and home accessibility tools in the Sutton / Merton area.</div>
+    <div class="panel-actions">
+      <span class="action-pill">Closest local DDPO to Sutton</span>
+      <span class="action-pill">Home independence tools</span>
+      <span class="action-pill">Community user testing</span>
+      <span class="action-pill">Health advocacy referrals</span>
+    </div>
+  </div>
+
+  <!-- deafPLUS -->
+  <div class="panel-content" id="pc-deafplus">
+    <div class="panel-header">
+      <div class="panel-dot" style="background:var(--accent3)"></div>
+      <div class="panel-name">deafPLUS</div>
+      <span class="panel-strategy" style="background:rgba(10,61,98,0.1);color:var(--accent3);border:1px solid rgba(10,61,98,0.25)">Keep Informed</span>
+    </div>
+    <div class="panel-desc">Frontline advice and support charity for Deaf and hard of hearing people, with London reach. Strong community relationships and direct daily contact with lived experience. A good channel for user insights and accessibility tool feedback.</div>
+    <div class="panel-actions">
+      <span class="action-pill">User insight sourcing</span>
+      <span class="action-pill">Community outreach</span>
+      <span class="action-pill">Tool accessibility feedback</span>
+    </div>
+  </div>
+
+  <!-- BID Services -->
+  <div class="panel-content" id="pc-bid">
+    <div class="panel-header">
+      <div class="panel-dot" style="background:var(--accent3)"></div>
+      <div class="panel-name">BID Services</div>
+      <span class="panel-strategy" style="background:rgba(10,61,98,0.1);color:var(--accent3);border:1px solid rgba(10,61,98,0.25)">Keep Informed</span>
+    </div>
+    <div class="panel-desc">Birmingham-based Deaf Cultural Centre delivering grassroots community services. Strong local engagement and BSL learning provision in the Midlands. Useful for regional piloting and as a venue-based testing environment for assistive tech.</div>
+    <div class="panel-actions">
+      <span class="action-pill">Midlands pilot site</span>
+      <span class="action-pill">BSL community access</span>
+    </div>
+  </div>
+
+  <!-- Deaf First -->
+  <div class="panel-content" id="pc-deaffirst">
+    <div class="panel-header">
+      <div class="panel-dot" style="background:var(--accent3)"></div>
+      <div class="panel-name">Deaf First (Oak Lodge School)</div>
+      <span class="panel-strategy" style="background:rgba(10,61,98,0.1);color:var(--accent3);border:1px solid rgba(10,61,98,0.25)">Keep Informed</span>
+    </div>
+    <div class="panel-desc">An advice and advocacy service based at Oak Lodge School in Wandsworth, operating within the SWL ICB footprint. BSL-first and focused on sensory support. Provides community-level support and information for Deaf adults and families in South West London — closely positioned to your Sutton base. A practical local access point for connecting with Deaf residents who need home accessibility solutions.</div>
+    <div class="panel-actions">
+      <span class="action-pill">Wandsworth — local reach</span>
+      <span class="action-pill">BSL-first service</span>
+      <span class="action-pill">Sensory support advice</span>
+      <span class="action-pill">Community gateway</span>
+    </div>
+  </div>
+
+  <!-- BDA -->
+  <div class="panel-content" id="pc-bda">
+    <div class="panel-header">
+      <div class="panel-dot" style="background:var(--accent4)"></div>
+      <div class="panel-name">British Deaf Association</div>
+      <span class="panel-strategy" style="background:rgba(74,14,47,0.1);color:var(--accent4);border:1px solid rgba(74,14,47,0.25)">Monitor</span>
+    </div>
+    <div class="panel-desc">BSL-led national advocacy organisation covering all SWL boroughs (Sutton, Merton, Wandsworth, Kingston, Richmond listed). Primary focus is language rights and cultural identity. Relevant if your work involves BSL-accessible design or BSL Charter compliance, but not a healthcare delivery partner.</div>
+    <div class="panel-actions">
+      <span class="action-pill">BSL Charter compliance</span>
+      <span class="action-pill">Cultural sensitivity review</span>
+      <span class="action-pill">Monitor for policy shifts</span>
+    </div>
+  </div>
+
+  <!-- DeafBlind UK -->
+  <div class="panel-content" id="pc-deafblind">
+    <div class="panel-header">
+      <div class="panel-dot" style="background:var(--accent4)"></div>
+      <div class="panel-name">DeafBlind UK</div>
+      <span class="panel-strategy" style="background:rgba(74,14,47,0.1);color:var(--accent4);border:1px solid rgba(74,14,47,0.25)">Monitor</span>
+    </div>
+    <div class="panel-desc">Supports people with combined sight and hearing loss. Peterborough-based. Specialist niche distinct from general Deaf healthcare. Limited overlap unless dual-sensory design is a specific requirement of your doorbell alert or accessibility work.</div>
+    <div class="panel-actions">
+      <span class="action-pill">Dual-sensory design input</span>
+      <span class="action-pill">Monitor for overlap</span>
+    </div>
+  </div>
+
+  <!-- Colliers Wood Deaf Club -->
+  <div class="panel-content" id="pc-colliers">
+    <div class="panel-header">
+      <div class="panel-dot" style="background:var(--accent4)"></div>
+      <div class="panel-name">Colliers Wood Deaf Club</div>
+      <span class="panel-strategy" style="background:rgba(74,14,47,0.1);color:var(--accent4);border:1px solid rgba(74,14,47,0.25)">Monitor</span>
+    </div>
+    <div class="panel-desc">A grassroots social club for Deaf people in Colliers Wood, Merton — one of your closest local community touchpoints. Based at The Guardian Centre on Clarendon Road, SW19. Low formal power and not a healthcare delivery body, but an authentic community anchor and word-of-mouth channel. Valuable for building trust with the local Deaf community and understanding real lived experience, especially for the doorbell alert project in Sutton.</div>
+    <div class="panel-actions">
+      <span class="action-pill">Community trust building</span>
+      <span class="action-pill">Word-of-mouth channel</span>
+      <span class="action-pill">Lived experience insights</span>
+      <span class="action-pill">Closest social Deaf community to Sutton</span>
+    </div>
+  </div>
+
+  <!-- Oak Lodge School -->
+  <div class="panel-content" id="pc-oaklodge">
+    <div class="panel-header">
+      <div class="panel-dot" style="background:var(--accent4)"></div>
+      <div class="panel-name">Oak Lodge School</div>
+      <span class="panel-strategy" style="background:rgba(74,14,47,0.1);color:var(--accent4);border:1px solid rgba(74,14,47,0.25)">Monitor</span>
+    </div>
+    <div class="panel-desc">A maintained special school for D/deaf students aged 10–19 in Wandsworth, rated Good by Ofsted (2025). Also hosts Deaf First advice/advocacy and a Lifelong Learning programme for deaf adults. Draws students from 25 boroughs. Not a health delivery body, but a significant local hub for the Deaf community with adult learner access. Useful for longer-term awareness and community building.</div>
+    <div class="panel-actions">
+      <span class="action-pill">Deaf adult lifelong learning</span>
+      <span class="action-pill">Community hub — Wandsworth</span>
+      <span class="action-pill">Schools awareness pathway</span>
+    </div>
+  </div>
+
+</div>
+
+<script>
+  const panels = ['rnid','signhealth','swlstg','ndcs','bsmhd','healthwatch','action','mertoncil','deafplus','bid','deaffirst','bda','deafblind','colliers','oaklodge'];
+  let active = null;
+
+  function showPanel(id) {
+    panels.forEach(p => {
+      document.getElementById('pc-'+p).classList.remove('visible');
+      const c = document.getElementById('c-'+p);
+      if(c) c.classList.remove('active');
+    });
+
+    if(active === id) {
+      active = null;
+      document.getElementById('panel-empty').style.display = 'block';
+      return;
+    }
+
+    active = id;
+    document.getElementById('panel-empty').style.display = 'none';
+    document.getElementById('pc-'+id).classList.add('visible');
+    const el = document.getElementById('c-'+id);
+    if(el) el.classList.add('active');
+    document.getElementById('detail-panel').scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+  }
+</script>
+</body>
+</html>

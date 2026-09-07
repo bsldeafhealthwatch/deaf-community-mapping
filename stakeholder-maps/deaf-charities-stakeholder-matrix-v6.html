@@ -1,0 +1,1663 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Deaf Community Stakeholder Matrix v6 • South London</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,500;0,700;1,500&family=IBM+Plex+Mono:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #f5f2ec;
+    --surface: #ffffff;
+    --border: #d8d3c8;
+    --text: #1a1814;
+    --muted: #8a8278;
+    --q1-color: #1a472a;
+    --q2-color: #7b3f00;
+    --q3-color: #0a3d62;
+    --q4-color: #4a0e2f;
+    --badge-swl: #1565c0;
+    --badge-sel: #6a1b9a;
+    --badge-national: #37474f;
+    --badge-nhs: #003087;
+    --badge-local: #e8a020;
+    --q1-bg: rgba(26,71,42,0.06);
+    --q2-bg: rgba(123,63,0,0.055);
+    --q3-bg: rgba(10,61,98,0.06);
+    --q4-bg: rgba(74,14,47,0.055);
+    --accent: #2e5a3c;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'IBM Plex Mono', monospace;
+    min-height: 100vh;
+    padding: 24px 16px 60px;
+    line-height: 1.5;
+  }
+
+  .container { max-width: 1080px; margin: 0 auto; }
+
+  header {
+    text-align: center;
+    margin-bottom: 20px;
+  }
+  header h1 {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(1.6rem, 3.2vw, 2.4rem);
+    font-weight: 700;
+    line-height: 1.1;
+  }
+  header .subtitle {
+    margin-top: 6px;
+    font-size: 0.72rem;
+    color: var(--muted);
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+  .project-context {
+    margin-top: 8px;
+    font-size: 0.78rem;
+    background: #f0ede6;
+    display: inline-block;
+    padding: 4px 14px;
+    border-radius: 20px;
+    color: #3f3a30;
+  }
+
+  .controls {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-bottom: 16px;
+    align-items: center;
+    background: var(--surface);
+    padding: 10px 14px;
+    border-radius: 6px;
+    border: 1px solid var(--border);
+  }
+  .search-input {
+    flex: 1;
+    min-width: 220px;
+    padding: 8px 12px;
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    font-family: inherit;
+    font-size: 0.9rem;
+  }
+  .filter-group {
+    display: flex;
+    gap: 6px;
+    flex-wrap: wrap;
+  }
+  .filter-btn {
+    font-size: 0.68rem;
+    padding: 5px 11px;
+    border: 1px solid var(--border);
+    background: white;
+    border-radius: 20px;
+    cursor: pointer;
+    white-space: nowrap;
+  }
+  .filter-btn.active {
+    background: var(--accent);
+    color: white;
+    border-color: var(--accent);
+  }
+
+  .tab-row {
+    display: flex;
+    gap: 4px;
+    margin-bottom: 14px;
+    flex-wrap: wrap;
+  }
+  .tab-btn {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 0.72rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    padding: 8px 16px;
+    border-radius: 20px;
+    border: 1px solid var(--border);
+    background: var(--surface);
+    color: var(--muted);
+    cursor: pointer;
+    transition: all 0.15s;
+  }
+  .tab-btn.active {
+    background: #2c2a24;
+    color: white;
+    border-color: #2c2a24;
+  }
+
+  .legend {
+    display: flex;
+    gap: 6px;
+    flex-wrap: wrap;
+    margin-bottom: 14px;
+    font-size: 0.65rem;
+  }
+  .legend-item {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    padding: 2px 9px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 20px;
+  }
+  .ldot { width: 6px; height: 6px; border-radius: 50%; }
+
+  .matrix-container {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 4px;
+    background: var(--border);
+    border-radius: 5px;
+    padding: 4px;
+    margin-bottom: 20px;
+  }
+
+  .quadrant {
+    background: white;
+    padding: 12px 11px 22px;
+    min-height: 210px;
+    position: relative;
+    border-radius: 3px;
+  }
+  .q1 { background: var(--q1-bg); }
+  .q2 { background: var(--q2-bg); }
+  .q3 { background: var(--q3-bg); }
+  .q4 { background: var(--q4-bg); }
+
+  .q-head {
+    font-size: 0.62rem;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    margin-bottom: 8px;
+    padding-bottom: 5px;
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  .q-strategy {
+    position: absolute;
+    bottom: 8px;
+    right: 10px;
+    font-family: 'Playfair Display', serif;
+    font-style: italic;
+    font-size: 0.7rem;
+    opacity: 0.45;
+  }
+
+  .org-card {
+    display: flex;
+    gap: 7px;
+    padding: 6px 7px;
+    border-radius: 3px;
+    border: 1px solid transparent;
+    margin-bottom: 4px;
+    cursor: pointer;
+    transition: all 0.1s;
+    background: rgba(255,255,255,0.7);
+  }
+  .org-card:hover {
+    border-color: #c9c3b5;
+    background: white;
+  }
+  .org-card.active {
+    border-color: #3a3630;
+    background: #f9f7f1;
+  }
+  .dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    margin-top: 4px;
+    flex-shrink: 0;
+  }
+  .org-name {
+    font-size: 0.78rem;
+    font-weight: 500;
+    line-height: 1.25;
+  }
+  .org-tag {
+    font-size: 0.62rem;
+    color: var(--muted);
+    margin-top: 1px;
+    line-height: 1.3;
+  }
+  .badges {
+    display: flex;
+    gap: 3px;
+    flex-wrap: wrap;
+    margin-top: 3px;
+  }
+  .badge {
+    font-size: 0.52rem;
+    padding: 1px 5px;
+    border-radius: 2px;
+    color: white;
+    font-weight: 500;
+    letter-spacing: 0.03em;
+  }
+
+  .detail-panel {
+    background: white;
+    border: 1px solid var(--border);
+    border-radius: 5px;
+    padding: 18px 20px;
+    margin-top: 10px;
+    min-height: 120px;
+  }
+  .detail-empty {
+    color: var(--muted);
+    font-size: 0.85rem;
+    text-align: center;
+    padding: 20px;
+  }
+  .detail-header {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 10px;
+    flex-wrap: wrap;
+  }
+  .detail-name {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.25rem;
+  }
+  .detail-desc {
+    font-size: 0.85rem;
+    line-height: 1.65;
+    color: #3a3730;
+    margin-bottom: 12px;
+  }
+  .action-pills {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 5px;
+  }
+  .pill {
+    font-size: 0.65rem;
+    padding: 3px 9px;
+    border-radius: 20px;
+    border: 1px solid var(--border);
+    color: var(--muted);
+    background: #faf8f3;
+  }
+
+  .priorities-bar {
+    margin-top: 16px;
+    background: #f9f7f1;
+    border: 1px solid var(--border);
+    border-radius: 5px;
+    padding: 12px 14px;
+    font-size: 0.8rem;
+  }
+  .priority-item {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    background: white;
+    border: 1px solid var(--border);
+    padding: 2px 8px;
+    border-radius: 20px;
+    margin: 2px 4px 2px 0;
+    font-size: 0.75rem;
+  }
+  .priority-item .remove {
+    color: #8a6f6f;
+    cursor: pointer;
+    font-weight: bold;
+  }
+
+  .section {
+    margin-top: 24px;
+  }
+  .section-title {
+    font-size: 0.68rem;
+    text-transform: uppercase;
+    letter-spacing: 0.14em;
+    color: var(--muted);
+    margin-bottom: 8px;
+    border-bottom: 1px dashed var(--border);
+    padding-bottom: 4px;
+  }
+
+  .sources {
+    font-size: 0.72rem;
+    color: var(--muted);
+    background: #f9f7f1;
+    padding: 14px 16px;
+    border-radius: 4px;
+    margin-top: 20px;
+  }
+
+  .footer-note {
+    margin-top: 30px;
+    font-size: 0.7rem;
+    color: var(--muted);
+    text-align: center;
+  }
+
+  @media (max-width: 720px) {
+    .matrix-container {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  /* Agency tracker layout */
+  .agency-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+    gap: 10px;
+    margin-bottom: 20px;
+  }
+  .agency-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 13px 15px;
+    cursor: pointer;
+    transition: all 0.12s;
+  }
+  .agency-card:hover { border-color: #a89f8c; }
+  .agency-card.active { border-color: #3a3630; background: #f9f7f1; }
+  .agency-status-row {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    margin-bottom: 6px;
+  }
+  .status-dot { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; }
+  .status-active { background: #2e7d32; }
+  .status-partial { background: #f57c00; }
+  .status-gap { background: #c62828; }
+  .status-framework { background: #6b6558; }
+  .status-civic { background: #1565c0; }
+  .status-label { font-size: 0.6rem; text-transform: uppercase; letter-spacing: 0.08em; color: var(--muted); }
+  .agency-name { font-family: 'Playfair Display', serif; font-size: 1rem; margin-bottom: 4px; }
+  .agency-tag { font-size: 0.7rem; color: var(--muted); line-height: 1.4; }
+</style>
+</head>
+<body>
+
+<div class="container">
+
+<header>
+  <h1>Deaf Community Stakeholder Matrix<br><span style="font-size:0.82em; font-weight:500;">v6 — South London</span></h1>
+  <div class="subtitle">National · SW London ICB · SE London ICB · Broader Ecosystem</div>
+  <div class="project-context">
+    Part of <strong>Deaf Network Health Group</strong> (under GeometricMind) — Home Safety &amp; Doorbell Alert Pilot, Sutton / South London (May 2026)
+  </div>
+</header>
+
+<!-- Controls -->
+<div class="controls">
+  <input type="text" id="search" class="search-input" placeholder="Search organisations..." onkeyup="applyFilters()">
+
+  <div class="filter-group">
+    <button class="filter-btn" data-filter="all" onclick="setFilter(this, 'all')">All</button>
+    <button class="filter-btn" data-filter="swl" onclick="setFilter(this, 'swl')">SWL</button>
+    <button class="filter-btn" data-filter="sel" onclick="setFilter(this, 'sel')">SEL</button>
+    <button class="filter-btn" data-filter="national" onclick="setFilter(this, 'national')">National</button>
+    <button class="filter-btn" data-filter="bsl" onclick="setFilter(this, 'bsl')">BSL</button>
+    <button class="filter-btn" data-filter="deafblind" onclick="setFilter(this, 'deafblind')">Deafblind</button>
+    <button class="filter-btn" data-filter="unverified" onclick="setFilter(this, 'unverified')">⚠ Unverified</button>
+    <button class="filter-btn" data-filter="agency" onclick="setFilter(this, 'agency')">🎧 Agencies</button>
+  </div>
+</div>
+
+<!-- Tabs -->
+<div class="tab-row">
+  <button class="tab-btn active" onclick="switchTab('national', this)">National</button>
+  <button class="tab-btn" onclick="switchTab('swl', this)">SW London ICB</button>
+  <button class="tab-btn" onclick="switchTab('sel', this)">SE London ICB</button>
+  <button class="tab-btn" onclick="switchTab('ecosystem', this)">Broader Ecosystem</button>
+  <button class="tab-btn" onclick="switchTab('agencies', this)">🎧 Interpreting Agencies</button>
+</div>
+
+<!-- Legend -->
+<div class="legend">
+  <div class="legend-item"><div class="ldot" style="background:var(--q1-color)"></div>Manage Closely</div>
+  <div class="legend-item"><div class="ldot" style="background:var(--q2-color)"></div>Keep Satisfied</div>
+  <div class="legend-item"><div class="ldot" style="background:var(--q3-color)"></div>Keep Informed</div>
+  <div class="legend-item"><div class="ldot" style="background:var(--q4-color)"></div>Monitor</div>
+  <div class="legend-item"><span class="badge" style="background:var(--badge-swl);font-size:0.5rem;padding:1px 4px;">SWL</span></div>
+  <div class="legend-item"><span class="badge" style="background:var(--badge-sel);font-size:0.5rem;padding:1px 4px;">SEL</span></div>
+  <div class="legend-item"><span class="badge" style="background:#5c4a8a;font-size:0.5rem;padding:1px 4px;">BSL</span></div>
+  <div class="legend-item"><span class="badge" style="background:#0d5c63;font-size:0.5rem;padding:1px 4px;">DEAFBLIND</span></div>
+  <div class="legend-item"><span class="badge" style="background:#f57c00;font-size:0.5rem;padding:1px 4px;">?</span>&nbsp;Unverified — verify before contact</div>
+  <div class="legend-item"><span class="badge" style="background:#c62828;font-size:0.5rem;padding:1px 4px;">DISSOLVED</span></div>
+</div>
+
+<!-- Matrix -->
+<div id="matrix"></div>
+
+<!-- Detail Panel -->
+<div class="detail-panel" id="detail-panel">
+  <div class="detail-empty" id="detail-empty">Select an organisation above to view detailed engagement notes.</div>
+</div>
+
+<!-- My Priorities -->
+<div class="section">
+  <div class="section-title">My Priorities (saved in browser)</div>
+  <div id="priorities-bar" class="priorities-bar"></div>
+</div>
+
+<!-- Sources -->
+<div class="section">
+  <div class="section-title">Sources &amp; Reality Check Notes</div>
+  <div class="sources">
+    <strong>Primary sources:</strong> 
+    <ul style="margin:6px 0 0 16px; font-size:0.9em;">
+      <li>DEAF_NETWORK_HEALTH_SUMMARY.md (April 2026) — living project source of truth</li>
+      <li>Healthwatch SWL &amp; SEL AIS reviews (2024)</li>
+      <li>Connected Kingston directory (2025)</li>
+      <li>Direct verification passes: Feb–May 2026</li>
+      <li>Deaf Voices community testimony videos</li>
+      <li>geometricCharity research (SignHealth &amp; BDA financials, May 2026)</li>
+    </ul>
+    <strong>Status (May 2026):</strong> Surbiton Deaf Social Club and deafPLUS Bromley confirmed active. Croydon/Merton clubs largely unverified. Verification phase ongoing per April 2026 summary.
+    <br><br>
+    <strong>Update (Sept 2026):</strong> Four organisations updated following a full research and cross-verification pass documented in <span class="mono">research-framework/VERIFICATION_STATUS.md</span> (Sections 19-23) — RNID (confirmed PSR award, Somerset), SignHealth (two confirmed PSR awards, plus lead role on the Nov 2025 sector open letter), RAD (open-letter signatory, prior NCL contract history), and SWLSTG (confirmed Tier 4 status, an unresolved age-range discrepancy). New primary sources this pass: Find a Tender (two independent award notices), SignHealth's own published open letter and signatory list, and a second independent re-read of the Healthwatch SWL BSL report confirming its zero-survey-response finding.
+    <br><br>
+    <strong>v6 restoration note (Sept 2026):</strong> v5's rebuild onto a JS data-array model dropped 16 organisations that existed in v4 without any record of an intentional removal — the file simply carried forward a subset of entries. All 16 are restored in v6: BID Services, Action for Deafness, DeafBlind UK, Croydon Hearing Resource Centre, Deaf First (Oak Lodge), RAD Croydon Caseworker Service, Oak Lodge School, Colliers Wood Deaf Club, Croydon Deaf Club, six borough Healthwatch entries (Croydon, Lambeth, Bromley, Greenwich, Lewisham, Southwark, Bexley), RAD Lambeth Service, DASL, Buddies All CIC, and the Bromley Chain dissolved-organisation context entry. v6 also adds five new entries reflecting Deaf-Blind and BSL-specific access needs: Sense (the sector's only NHS VCSE Health and Wellbeing Alliance member), NRCPD (the national BSL interpreter register — 1,632 registered interpreters, a hard capacity constraint), a flagged deafblind evidence cluster (Sense's ~450,000 estimate plus an unresolved 19-vs-8 interpreter count discrepancy), and BSL/Deafblind badges applied across existing entries where language-access or dual-sensory relevance applies. New filter buttons (BSL, Deafblind, ⚠ Unverified) surface these across all tabs.
+    <br><br>
+    <strong>Interpreting Agencies tracker (added Sept 2026):</strong> A new "🎧 Interpreting Agencies" tab tracks the actual BSL and Deafblind interpreting service providers operating in or near South London, separate from the charity/stakeholder power-interest matrix, because the useful question for these is service status (live contract, gap, or unconfirmed) rather than power/interest. Four agencies researched and added: <strong>DA Languages</strong> (confirmed live on two separate NHS contracts — all SWL GP practices since Oct 2024, and the SEL Primary Care Interpreting Service for Lambeth/Lewisham/Southwark since Mar 2020 — with a confirmed, named gap covering Bexley/Bromley/Greenwich residents); <strong>Remark!</strong> (the Deaf-led national booking agency, distinct from Remark! Community's grassroots clubs already tracked separately — offers both BSL and deafblind interpreter booking); <strong>Deafblind Enablement</strong> (a specialist agency solely focused on deafblind interpreting, holding NHS Trust contracts nationally, though none confirmed in South London yet); and <strong>Deaf Umbrella</strong> (a London/South East BSL agency with no confirmed NHS or deafblind work — flagged as unconfirmed for this project's health-access purpose, not excluded). Sourced from each agency's own published service pages and Healthwatch Sutton/Kingston/Richmond/SEL ICS official announcements, Sept 2026.
+    <br><br>
+    <strong>APPA correction &amp; addition (Sept 2026, Grok deep research + Companies House cross-check):</strong> "APPA UK Ltd" was flagged as a missing agency but does not exist as a current UK interpreting provider — Companies House confirms that name belongs to an unrelated, dissolved Scottish medical-goods retailer (SC231577, wound up 2007). The company actually operating a BSL service under a similar name is <strong>Appa Me Ltd</strong> (APPA ME LIMITED, company no. 07202345, active, Ilford-registered, teaching from Lewisham in the SEL ICB area). Added to the tracker with a "partial" status: it is primarily a Signature-accredited BSL/interpreter <em>training</em> provider rather than a confirmed NHS interpreting supplier — no NHS, ICB or council contract was found in Find a Tender, Contracts Finder, or RNID's own published agency list — and Deafblind interpreting, though initially suspected, is <strong>not confirmed</strong> as a delivered service (only signposted via an external resources page). A 2016 NRCPD minute flagging a training-certification concern is recorded as unresolved historical context, not a current issue. Full source list: Companies House (07202345 and SC231577), appa.me.uk, Trustpilot, LinkedIn, CQC, Find a Tender/Contracts Finder, RNID's agency list, and NRCPD's September 2016 Practitioners' Forum minutes.
+    <br><br>
+    <strong>Full agency sweep &amp; confirmed Bexley/Bromley/Greenwich gap (Sept 2026, Grok deep research pass):</strong> A systematic search across NHS trust pages, ICB/council pages, Find a Tender, Contracts Finder, and framework award notices confirmed the three-borough SEL gap already flagged on the DA Languages entry is a <strong>documented publication gap, not an unknown</strong> — no ICB-wide, borough-wide, or named GP-contract BSL/Deafblind provider exists in the public record for Bexley, Bromley or Greenwich. What those residents do have instead: NHS 111 BSL (24/7 advice, not a booked GP interpreter) and SignHealth's SEL-wide BSL Talking Therapies contract (therapy, not general interpreting — see the updated SignHealth entry above). Nine new agencies added to the Interpreting Agencies tab as a result: <strong>Sign Solutions</strong> (the actual named BSL video subcontractor behind both DA Languages GP contracts, via InterpretersLive!); <strong>LanguageLine Solutions</strong> (the former SWL GP prime, now holding Croydon Health Services/Epsom &amp; St Helier/Kingston &amp; Richmond hospital contracts, though BSL isn't itemised separately in those notices); <strong>thebigword</strong> (Kingston &amp; Richmond children's services only, not health); three civic-desk/VRS entries — <strong>Royal Greenwich Interpreting Service</strong>, <strong>Kingston Interpreting Service</strong>, and <strong>Convo/SignLive</strong> — plus <strong>Significan't UK Ltd t/a SignVideo (now Sorenson)</strong>, the vendor behind NHS 111 BSL; and three framework-eligible-but-no-local-award entries — <strong>Signalise Co-op</strong> (Deaf-owned, genuinely actionable via a direct NHS SBS Lot 2 framework call-off to help close the SEL gap), <strong>Clarion Interpreting</strong> (MoJ tactile-communications framework holder; its own GSTT/King's healthcare claim is a dated, unverified self-description), and <strong>Sign Language Interactions</strong>. Two further entries record known-unknowns rather than active services: <strong>BSL Healthcare</strong> (a patient-facing booking site with no confirmed company identity or NHS award behind it) and a bundled entry for <strong>Positive Signs, Involve Interpreter and BSL First</strong> (all three appear on RNID's national agency list with no confirmed South London presence). <strong>Also noted but not added as a service entry:</strong> King's £1.2m interpreting tender (explicitly including BSL, covering Denmark Hill, PRUH and Queen Mary's Sidcup) was cancelled 6 August 2026 — a significant unresolved gap at a major SEL acute trust, worth monitoring for re-tender. Guy's &amp; St Thomas', Lewisham &amp; Greenwich, Croydon Health Services, Epsom &amp; St Helier and Oxleas trust pages all advertise BSL access without naming the supplying agency — these are the highest-yield FOI targets, together with the three Bexley/Bromley/Greenwich Place primary-care teams directly.
+    <br><br>
+    <strong>Deafblind interpreting capacity resolved — the 19-vs-8 discrepancy (Sept 2026, Grok deep research pass):</strong> Both figures were real, but were snapshots from different dates on the same NRCPD register, not competing claims — see the substantially rewritten "Deafblind interpreting capacity — evidence &amp; register data" entry in Broader Ecosystem for the full timeline (12 in ~2022, then 8 from Feb 2025 through the 23 June 2026 GOV.UK funding announcement, then 19 on the live NRCPD table as of 5 Sept 2026, as competency-assessment weekends add names). The load-bearing number for South London planning: <strong>only 4 of the current 19 RIDBs nationally sit in London + South East combined, and only 1 in London itself</strong> — that, not the reassuring-looking national 19, is the correct local capacity baseline. The NRCPD and Sense entries above were also updated: NRCPD's general RSLI count refreshed to 1,657 (from 1,632) with the RIDB breakdown added; Sense's entry now distinguishes its ~451,211 dual-sensory-loss prevalence estimate from the government's separate, much narrower ~12,000 "communication needs" figure, and documents its communicator-guide/intervenor service model as distinct from (not a substitute for) RIDB clinical interpreting. <strong>Critical operational finding folded into the DA Languages, Sign Solutions and Deafblind Enablement entries:</strong> DA Languages and LanguageLine do not hold their own deafblind interpreting bench — both subcontract deafblind work to Deafblind Enablement, meaning DBE's own national capacity (part of that same 4-in-London+SE figure) is the actual ceiling on any deafblind booking under the South London GP contracts, regardless of which prime the booking nominally runs through. Deafblind Enablement's own new Professional Register for Deafblind Specialists (launched 29 Jun 2026) and its likely match to the Moorfields Eye Hospital good-practice example cited in the BSL Advisory Board's Locked Out report (27 Nov 2025) are both recorded on its entry. Two further additions: <strong>Sight for Surrey</strong>, a communicator-guide provider directly adjacent to Kingston/Richmond/Sutton — genuinely well-placed for community support, but explicitly not a substitute for clinical RIDB interpreting — added to the Interpreting Agencies tab; and Action for Deafness's pre-merger Hertfordshire communicator-guide contract (£904,000, awarded after the previous provider gave sudden notice) added to its existing entry as a concrete illustration of how thin the CG market is nationally, not just in London. RAD's and BID's entries were also updated with newly-confirmed deafblind interpreter booking services (RAD) and 19,643 NHS-inclusive interpreting hours for 2023-24 (BID), both flagged as unconfirmed for South London specifically. Full source list for this pass: NRCPD's live registration-figures table (5 Sep 2026), NRCPD's fee schedule, GOV.UK's 23 June 2026 funding announcement, the BSL Advisory Board/DHSC Locked Out report and "18 areas for action" (27 Nov 2025), Liam O'Dell's reporting (12 Feb 2025) on the Sarah Reed petition, Community Care Inform (24 Jan 2024), Sense's own published prevalence figures, and each named agency's own site (Deafblind Enablement, Remark!, RAD, BID Services, Sorenson UK, Sight for Surrey).
+  </div>
+</div>
+
+<div class="footer-note">
+  v6 • Restored 16 organisations dropped in the v5 rewrite · added Deaf-Blind &amp; BSL-specific entries and filters · added a live Interpreting Agencies service tracker (18 agencies) · corrected "APPA UK Ltd" to the verified Appa Me Ltd · confirmed the Bexley/Bromley/Greenwich interpreting gap as a documented absence · resolved the 19-vs-8 deafblind interpreter discrepancy and traced the DA Languages→Deafblind Enablement subcontract chain
+</div>
+
+</div>
+
+<script>
+// ==================== DATA MODEL ====================
+const organisations = [
+  // NATIONAL
+  {
+    id: "rnid",
+    name: "RNID",
+    tab: "national",
+    quadrant: "q1",
+    power: "high",
+    interest: "high",
+    short: "National policy voice · co-authored Still Ignored NHS report · confirmed NHS commissioning route",
+    long: "The UK's largest Deaf/hearing-loss charity. Co-authored the definitive 'Still Ignored' report on NHS accessible healthcare failures. Led the BSL Act 2022 campaign. <strong>Confirmed Sept 2026:</strong> holds a live NHS Provider Selection Regime (PSR) award — Somerset NHS Foundation Trust, hearing-aid aftercare across Somerset care homes, £46,000/12 months from 13 Jan 2025, awarded via PSR Most Suitable Provider. This is a general hearing-loss service, not BSL/Deaf-culture-specific, but is direct proof PSR is a usable NHS commissioning route for this sector. <strong>Also confirmed:</strong> RNID's own Jan 2026 FOI found 92% of NHS staff untrained on the Accessible Information Standard — RNID's strongest current evidence asset. <strong>Notable absence:</strong> RNID did not sign SignHealth's 50-charity open letter to the Health Secretary (Nov 2025) — reason unconfirmed, worth a direct conversation rather than assumption.",
+    badges: ["national"],
+    actions: ["NHS access campaigns", "Policy endorsement", "BSL Act compliance", "Co-develop pilots", "PSR precedent — ask how they secured the Somerset award"],
+    verification: "Confirmed Sept 2026 (PSR award independently verified against Find a Tender's own notice)",
+    projectRelevance: "High — key national partner for policy and commissioning routes; now also a working precedent for PSR-based NHS funding."
+  },
+  {
+    id: "signhealth",
+    name: "SignHealth",
+    tab: "national",
+    quadrant: "q1",
+    power: "high",
+    interest: "high",
+    short: "Deaf health specialist · TWO confirmed NHS PSR contracts · led the Nov 2025 sector open letter",
+    long: "The dedicated Deaf health charity — most directly aligned nationally, and now the project's clearest proof that NHS commissioning routes for Deaf-specific services actually work. <strong>Confirmed Sept 2026 — holds two separate NHS Provider Selection Regime (PSR) awards for BSL Talking Therapy:</strong> NHS Derby &amp; Derbyshire ICB (£491,036/year, 1 Apr 2026–31 Mar 2029, PSR Most Suitable Provider, justified by specialist BSL clinical skills) and <strong>NHS South East London ICB (£51,020, 1 Aug 2025–31 Mar 2026, PSR urgent-circumstances provision)</strong> — the SEL award covers <strong>all six SEL boroughs, making it the only published SEL service that explicitly includes Bexley, Bromley and Greenwich BSL users</strong> (via BSL-delivered therapy, not a general interpreting desk — see the confirmed Bexley/Bromley/Greenwich interpreting gap on the DA Languages entry below). <strong>A successor SEL contract (2+1 years, envelope up to £330,000, from 1 July 2026) was tendered; no award had been published as of 5 Sept 2026</strong> — worth monitoring, since a lapse here would remove the only confirmed SEL-wide BSL health service reaching those three boroughs. Co-authored 'Still Ignored'. Commissioned by National Deaf CAMHS. Worked with Healthwatch SWL on the AIS review across all SWL GP practices. <strong>Led the 14 Nov 2025 open letter to the Health Secretary</strong> — 49 co-signatory Deaf-sector organisations plus SignHealth itself (50 named parties total, matching SignHealth's own '50 deaf charities' headline exactly); asks included AIS enforcement and delivery of Single Patient Record / NHS App BSL commitments; DHSC responded 18 Nov 2025 but did not commit to the requested ministerial meeting. Runs a DSIT-funded 'Deaf Digital Health Roadshow' (£58,066) on NHS App/111 VRS access across nine English regions including Whitechapel. <strong>Capacity signal (May 2026 research):</strong> ~£2.5m budget, ~190 staff.",
+    badges: ["national"],
+    actions: ["Primary national partner", "AIS compliance", "NHS commissioning routes — ask directly how the PSR awards were secured, as a template for SWL", "User research access", "Open-letter coalition — potential route to co-sign future SWL-specific advocacy", "Monitor the SEL successor contract award (tendered from 1 Jul 2026) — it's the only confirmed BSL health service reaching Bexley/Bromley/Greenwich"],
+    verification: "Confirmed Sept 2026 (both PSR awards independently verified against Find a Tender and a cross-checked mirror; open letter verified directly against SignHealth's own published list)",
+    projectRelevance: "Very High — strongest national route for healthcare accessibility work, and now the strongest evidence anywhere in this project that NHS PSR funding for Deaf-specific services is achievable, not just theoretical."
+  },
+  {
+    id: "ndcs",
+    name: "National Deaf Children's Society",
+    tab: "national",
+    quadrant: "q2",
+    power: "high",
+    interest: "medium",
+    short: "Children & families · institutional reach",
+    long: "High institutional reach but focused on children and young people. Relevant for home safety alerts, EHCP processes, and school environments across SWL and SEL boroughs.",
+    badges: ["national"],
+    actions: ["EHCP & SEND pathways", "Family-facing solutions"],
+    verification: "Confirmed",
+    projectRelevance: "Medium — useful for family and school environments."
+  },
+  {
+    id: "bsmhd",
+    name: "British Society for Mental Health & Deaf People",
+    tab: "national",
+    quadrant: "q2",
+    power: "high",
+    interest: "medium",
+    short: "Deaf mental health specialist · clinical influence",
+    long: "The only UK charity solely focused on Deaf mental health. Strong clinical NHS relationships including with SWLSTG National Deaf Services at Springfield.",
+    badges: ["national"],
+    actions: ["Clinical endorsement", "SWLSTG connection"],
+    verification: "Confirmed",
+    projectRelevance: "Medium — clinical endorsement route."
+  },
+  {
+    id: "rad",
+    name: "Royal Association for Deaf People (RAD)",
+    tab: "national",
+    quadrant: "q2",
+    power: "high",
+    interest: "medium",
+    short: "Founded 1841 · Royal Patron · advocacy, interpreting, wellbeing · signed the Nov 2025 open letter",
+    long: "One of the oldest Deaf charities. Royal Patron: HM King Charles III. Delivers advocacy, wellbeing, employment, interpreting and legal services nationally. Embedded in Croydon Council (confirmed ongoing caseworker appointment service, still live Mar 2026) and runs advice services in Croydon, Lambeth, RBKC and Brent (2023-24 accounts). <strong>Confirmed Sept 2026:</strong> CEO Dr Mark Wheatley personally signed SignHealth's 14 Nov 2025 sector-wide open letter. <strong>Confirmed history:</strong> RAD previously held an NHS BSL interpreting contract with NCL (North Central London) ICB worth £48,948.10, before NCL moved to DALS from 30 June 2025 — exact RAD contract dates and whether a service gap occurred are not stated in the FOI record. RAD is <strong>not</strong> a member of the NHS VCSE Health and Wellbeing Alliance (confirmed directly, Sept 2026 — no Deaf-sector organisation is, except Sense via a consortium). <strong>Also confirmed Sept 2026:</strong> RAD's own interpreting services page includes a \"Book a Deafblind Interpreter\" option covering manual, visual frame, hands-on and social haptics communication — but no public RIDB headcount or named SWL/SEL contract for this specific service was found, so treat as a booking channel to enquire about directly rather than a confirmed local capacity source.",
+    badges: ["national", "deafblind"],
+    actions: ["Croydon social care partner", "Lambeth/RBKC/Brent advice services", "GP Deaf awareness training", "Prior NHS interpreting contract holder (NCL) — worth asking directly about that experience as a lesson for SWL", "Ask directly about RIDB capacity and typical lead times behind their Deafblind interpreter booking option"],
+    verification: "Confirmed Feb 2026; open-letter signatory and NCL contract history confirmed Sept 2026",
+    projectRelevance: "High — strong local South London presence despite national scope, and a genuine track record of holding (and losing) an NHS interpreting contract elsewhere in London, worth learning from directly."
+  },
+  {
+    id: "bda",
+    name: "British Deaf Association",
+    tab: "national",
+    quadrant: "q4",
+    power: "medium",
+    interest: "low",
+    short: "BSL rights · cultural advocacy · all London boroughs",
+    long: "BSL-led national advocacy. Primary focus is language rights and BSL Charter compliance rather than healthcare delivery. Relevant for BSL-accessible design or public body sign-off. <strong>Capacity signal (May 2026 research):</strong> ~£1.86m–£3.6m budget, 41 staff — significant national Deaf-led organisation with reach across all London boroughs.",
+    badges: ["national", "bsl"],
+    actions: ["BSL Charter compliance", "Cultural review"],
+    verification: "Confirmed",
+    projectRelevance: "Medium for policy &amp; cultural alignment; lower for direct pilot delivery."
+  },
+  {
+    id: "bid",
+    name: "BID Services",
+    tab: "national",
+    quadrant: "q3",
+    power: "low",
+    interest: "high",
+    short: "Deaf Cultural Centre · Birmingham · also a national interpreting provider incl. deafblind methods and NHS hospital hours",
+    long: "Birmingham-based Deaf Cultural Centre. Rated 4.4★. Strong local BSL community and learning provision. Useful for Midlands pilots and venue-based testing of assistive technology. <strong>Confirmed Sept 2026:</strong> BID also operates as an interpreting provider — its interpreting page lists all four deafblind communication methods (manual, block, visual frame, hands-on), states all communication professionals are NRCPD-registered, and reports <strong>19,643 interpreting hours delivered in 2023–24, explicitly including patients in NHS hospitals</strong> (per BID's own site, dated 24 Aug 2026). This is a national claim, not a dedicated deafblind bench, and no South London-specific contract was found — but it's a genuine, sizeable national interpreting operation worth a direct enquiry if the local South London supply (Sign Solutions/Deafblind Enablement) proves insufficient.",
+    badges: ["national", "bsl", "deafblind"],
+    actions: ["Midlands pilot site", "BSL community access", "Direct enquiry worth making re: national interpreting capacity, including deafblind methods, if local South London supply is insufficient"],
+    verification: "Confirmed; interpreting-hours and NRCPD-registration claims confirmed Sept 2026 (BID's own site, dated 24 Aug 2026)",
+    projectRelevance: "Low-medium — outside South London footprint but a useful BSL community reference point."
+  },
+  {
+    id: "action",
+    name: "Action for Deafness",
+    tab: "national",
+    quadrant: "q3",
+    power: "low",
+    interest: "high",
+    short: "NHS audiology · Sussex · closest to Sutton",
+    long: "Delivers NHS audiology services in Sussex. Rated 4.8★. Geographically the closest NHS audiology delivery partner to Sutton and West Sussex. Ideal early-adopter pilot site for doorbell alert systems. <strong>Confirmed Sept 2026:</strong> merged with deafPLUS on 16 April 2026 per Charity Commission records — worth confirming current operating name and structure before contact. <strong>Separate market-thinness data point (confirmed Sept 2026):</strong> under its pre-merger name, Action Deafness held a direct-award Hertfordshire communicator-guide and intervenor contract (3 May 2025–31 Oct 2026, £904,000 incl. VAT) awarded after the previous provider gave sudden notice — a concrete illustration of how thin the communicator-guide market is even outside London, and a useful reference point when assessing risk in any South London CG arrangement (e.g. Sight for Surrey, tracked in the Interpreting Agencies tab).",
+    badges: ["national"],
+    actions: ["West Sussex pilot", "NHS audiology access", "User testing"],
+    verification: "Confirmed; 2026 merger with deafPLUS noted, not yet reflected in this entry's contact routing",
+    projectRelevance: "Medium — closest NHS audiology delivery partner geographically, but structure is in flux post-merger."
+  },
+  {
+    id: "deafblind",
+    name: "DeafBlind UK",
+    tab: "national",
+    quadrant: "q4",
+    power: "low",
+    interest: "low",
+    short: "Dual sensory loss · specialist niche · Peterborough",
+    long: "Specialist national charity supporting combined sight and hearing loss (deafblindness / dual sensory loss). Peterborough-based. Relevant if dual-sensory design is a requirement of doorbell alert or home accessibility tool work — a purely auditory or purely visual alert fails this group by definition, so any alert system aiming for genuine accessibility should be designed with dual-sensory needs in mind from the outset, not retrofitted later. Historically the organisation NHS guidance pointed bookers toward (alongside Sense) for communicator-guide support, though no current \"book an RIDB interpreter\" desk was found on their site. <strong>Confirmed Sept 2026:</strong> DeafBlind UK's CEO commented publicly (Feb 2025, via Liam O'Dell's reporting on the Sarah Reed petition) on the case for regulating communicator-guides — relevant context given communicator-guides remain an entirely unregistered profession, unlike NRCPD-regulated RIDB interpreters.",
+    badges: ["national", "deafblind"],
+    actions: ["Dual-sensory design", "Monitor for overlap", "Consult before finalising alert modality (light + vibration + not solely visual)", "Not a confirmed RIDB booking route — refer clinical interpreting needs to Deafblind Enablement or an RIDB-holding agency instead"],
+    verification: "Confirmed; CEO regulation comment confirmed Sept 2026 via Liam O'Dell reporting",
+    projectRelevance: "Medium-High for the doorbell alert project specifically — dual-sensory accessibility should inform core design, not be an afterthought."
+  },
+  {
+    id: "sense",
+    name: "Sense",
+    tab: "national",
+    quadrant: "q2",
+    power: "high",
+    interest: "low",
+    short: "UK's largest deafblind charity · ~451,211 dual-sensory-loss estimate (2022) · communicator-guide/intervenor provider · sole Deaf-sector VCSE Alliance member",
+    long: "The UK's largest charity for people who are deafblind or have complex disabilities affecting sight and hearing, headquartered at 101 Pentonville Road, N1. Publishes a modelled UK dual-sensory-loss estimate of <strong>451,211 in 2022, projected to rise to ~610,000 by 2035</strong> (most acquired later in life, weighted toward older adults — distinct from the smaller congenitally deafblind population DeafBlind UK also serves). <strong>Do not conflate this with the government's separate ~12,000 \"Deafblind people with communication needs\" figure</strong> (used in the June 2026 NRCPD funding announcement) — the two answer different questions and citing the wrong one undermines a funding case. <strong>Service model confirmed Sept 2026:</strong> Sense provides communicator guides (for acquired deafblindness) and intervenors (for congenital deafblindness) — a community-support model, accessed via self-referral or local-authority referral, distinct from NRCPD-regulated RIDB clinical interpreting; Community Care Inform (24 Jan 2024) is explicit that this class of support \"cannot be used for critical service interventions\" in place of a qualified interpreter. <strong>Confirmed Sept 2026:</strong> Sense is the only Deaf/deafblind-sector organisation holding membership of the NHS VCSE Health and Wellbeing Alliance — via a consortium — giving it a direct, structural policy-influence channel that no other organisation in this matrix currently has. High institutional power; lower day-to-day interest in a South London home-safety pilot specifically, but a strategically important door for any national policy ask.",
+    badges: ["national", "deafblind"],
+    actions: ["VCSE Alliance route — the only current structural policy channel for this sector", "National deafblind prevalence data — use the 451,211 dual-sensory-loss figure, not the government's narrower 12,000, unless specifically citing communication-needs policy", "Consult on dual-sensory alert design", "Communicator guides/intervenors are a support model, not a clinical-interpreting substitute — don't propose them as a fix for the RIDB shortage"],
+    verification: "Confirmed Sept 2026 (VCSE Alliance membership; prevalence estimate per Sense's own published figures; service model and Community Care Inform caveat via deep research pass)",
+    projectRelevance: "High strategically — the one organisation in this matrix with a formal NHS policy-influence seat; worth cultivating even though its day-to-day interest in a local pilot is lower."
+  },
+
+  // SW LONDON ICB
+  {
+    id: "swlstg",
+    name: "SWLSTG National Deaf Services",
+    tab: "swl",
+    quadrant: "q1",
+    power: "high",
+    interest: "high",
+    short: "Springfield Hospital, Tooting · national deaf mental health · BSL clinical team · confirmed Tier 4",
+    long: "South West London &amp; St George's Mental Health NHS Trust delivers the National Deaf Mental Health Service from Springfield University Hospital in Tooting — the closest NHS deaf specialist body to Sutton. BSL-fluent clinical staff. <strong>Confirmed Sept 2026:</strong> Corner House (the national Deaf inpatient CAMHS unit) is a <strong>Tier 4</strong> nationally-commissioned service — NHS England's highest specialism classification — offering &quot;up to six beds&quot; for ages 11-17, corroborated across three independent sources (the trust's own current page, a 2022 Limping Chicken piece quoting the trust directly, and a 2021 trust YouTube video). <strong>Unresolved discrepancy:</strong> the 2021 video states the service serves ages 6-18, conflicting with the current page's 11-17 — flagged, not resolved; may reflect a genuine service-scope change over time. <strong>Confirmed gap:</strong> no 2025-26 occupancy rate or waiting-time data has been published for Corner House or the separate National Deaf CAMHS outpatient service (covering Greater London within the M25 plus parts of Surrey) — a strong, specific FOI target.",
+    badges: ["swl", "nhs"],
+    actions: ["Self-referrals accepted", "BSL clinical team", "NHS deaf mental health gateway", "FOI target: 2025-26 occupancy/waiting-time data", "Ask directly about the 6-18 vs 11-17 age-range discrepancy"],
+    verification: "Confirmed Feb 2026; Tier 4 status and bed count confirmed Sept 2026; occupancy/wait data still unconfirmed",
+    projectRelevance: "Very High — most powerful local NHS gateway for Sutton, and the project's clearest example of a nationally-scarce, Tier 4 Deaf-specific service with no published capacity data."
+  },
+  {
+    id: "deafplus",
+    name: "deafPLUS (Bromley)",
+    tab: "swl",
+    quadrant: "q3",
+    power: "low",
+    interest: "high",
+    short: "Bromley Chain successor · equipment demos · BSL & HoH groups",
+    long: "Direct successor to Bromley Chain (dissolved March 2024). Runs Hard of Hearing social group, BSL practice groups, tinnitus support, and a Hearing Equipment Demonstration Service. Office open Mon–Fri. Text: 07732 449349.",
+    badges: ["swl"],
+    actions: ["Equipment demos — direct overlap", "Bromley community access", "BSL & HoH social groups"],
+    verification: "Confirmed active Jan 2025 – Feb 2026",
+    projectRelevance: "Very High — closest existing equipment demonstration model in South London."
+  },
+  {
+    id: "surbiton-deaf",
+    name: "Surbiton Deaf Social Club ★",
+    tab: "swl",
+    quadrant: "q4",
+    power: "low",
+    interest: "high",
+    short: "The Harrow Pub, Cheam SM3 · every 3rd Thursday · inside Sutton borough",
+    long: "Verified active 2025 via Connected Kingston. Meets at The Harrow Pub, Cheam SM3 — physically inside the London Borough of Sutton. Closest confirmed active Deaf social club to home (21 Hilbert Road).",
+    badges: ["swl", "new"],
+    actions: ["Closest grassroots contact to Sutton", "Word-of-mouth borough reach"],
+    verification: "Confirmed 2025",
+    projectRelevance: "Highest priority grassroots contact for Sutton pilot."
+  },
+  {
+    id: "hwswl",
+    name: "Healthwatch South West London",
+    tab: "swl",
+    quadrant: "q2",
+    power: "high",
+    interest: "medium",
+    short: "BSL GP access reform · ICB patient voice across 6 SWL boroughs · source of the project's flagship dataset",
+    long: "Led the Accessible Information Standard review that resulted in DA Languages/Sign Solutions BSL interpreter service rolling out to all GP practices in SWL from 1 October 2024, funded via the SWL Innovation ICP Priorities Fund. <strong>Confirmed Sept 2026 — the source of this project's single most important dataset:</strong> 878 BSL interpretation requests across SWL GP practices, Oct 2024-Jun 2025, full six-borough breakdown (Wandsworth 466, Croydon 185, Sutton 72, Merton 68, Kingston 61, Richmond 26). <strong>Also confirmed, and genuinely significant:</strong> their own written English patient survey received zero responses despite a BSL-video option running alongside it — all 21 patient/carer participants came instead from two in-person BSL focus groups (Wandsworth's Harding House, 4 Apr 2025; Croydon Clocktower, 4 Jun 2025). This is now the project's clearest evidence that written-English-only feedback mechanisms structurally fail this population, and directly informs the case for BSL-first evidence collection going forward.",
+    badges: ["swl"],
+    actions: ["ICB commissioning influence", "AIS monitoring", "GP BSL access", "Model to replicate: BSL-video-first feedback methods, not written English surveys"],
+    verification: "Confirmed; re-verified word-for-word Sept 2026 (including a second independent check of the zero-responses claim after a cross-check briefly queried it)",
+    projectRelevance: "Very High — strong ICB voice, and the direct source of the project's flagship SWL evidence base."
+  },
+  {
+    id: "mertoncil",
+    name: "Merton CIL",
+    tab: "swl",
+    quadrant: "q3",
+    power: "low",
+    interest: "high",
+    short: "Deaf-led DDPO · health, housing, independent living · Merton",
+    long: "Deaf-led Disabled People's Organisation. Covers health, benefits, housing, and independent living in Merton. Closest local DDPO to Sutton.",
+    badges: ["swl"],
+    actions: ["Closest local DDPO to Sutton", "Community user testing"],
+    verification: "Confirmed",
+    projectRelevance: "High — excellent for user testing in Merton/Sutton corridor."
+  },
+  {
+    id: "hwcroydon",
+    name: "Healthwatch Croydon",
+    tab: "swl",
+    quadrant: "q2",
+    power: "high",
+    interest: "medium",
+    short: "SWL ICB borough voice · hearing health pathway partner",
+    long: "Part of the SWL ICB Healthwatch network. Croydon is included in the SWL ICB footprint (not SEL), and Croydon GP practices were included in the 2024 BSL interpreter rollout. Croydon Council runs a specialist deaf sensory impairment service in partnership with RAD — making Healthwatch Croydon a key voice for that intersection. Also relevant to the SWL ICB Hearing Health Pathway pilot (Sutton, Merton, Wandsworth pharmacies), which is expanding.",
+    badges: ["swl"],
+    actions: ["SWL ICB Croydon voice", "RAD partnership link", "Hearing Health Pathway", "GP BSL access reform"],
+    verification: "Confirmed",
+    projectRelevance: "Medium-High — direct link to the RAD/Croydon Council deaf social care partnership."
+  },
+  {
+    id: "croydon-hearing",
+    name: "Croydon Hearing Resource Centre",
+    tab: "swl",
+    quadrant: "q2",
+    power: "high",
+    interest: "medium",
+    short: "Specialist equipment assessment · NHS & RAD caseworker partnership",
+    long: "A specialist assessment and equipment service for deaf and hard of hearing people in Croydon, operated by Croydon Council's sensory impairment team in partnership with RAD. Provides specialist equipment assessments, hearing aid support, and home alert devices — directly overlapping with the doorbell alert system project. Croydon Council notes they provide equipment to alert deaf residents to sounds in their home environment to support safety and independence.",
+    badges: ["swl"],
+    actions: ["Home alert equipment — direct overlap", "Croydon Council partnership", "RAD caseworker embedded", "Equipment loan & assessment"],
+    verification: "Confirmed",
+    projectRelevance: "Very High — the most direct existing operational overlap with the doorbell alert project's exact purpose."
+  },
+  {
+    id: "deaffirst",
+    name: "Deaf First (Oak Lodge)",
+    tab: "swl",
+    quadrant: "q3",
+    power: "low",
+    interest: "high",
+    short: "BSL-first advice & advocacy · Wandsworth",
+    long: "A BSL-first advice and advocacy service based at Oak Lodge School in Wandsworth. Serves Deaf adults and families across South West London. Practical local access point for connecting with Deaf residents needing home accessibility solutions.",
+    badges: ["swl", "bsl"],
+    actions: ["BSL-first advocacy", "Wandsworth local", "Sensory support gateway"],
+    verification: "Confirmed",
+    projectRelevance: "Medium — practical local BSL-first access point."
+  },
+  {
+    id: "rad-croydon",
+    name: "RAD — Croydon Caseworker Service",
+    tab: "swl",
+    quadrant: "q3",
+    power: "low",
+    interest: "high",
+    short: "Embedded with Croydon Council · deaf social care assessments",
+    long: "RAD is formally embedded within Croydon Council's deaf social care service, providing caseworker support for profoundly deaf Croydon residents following social care assessments. This is a frontline service operating at the intersection of deaf community needs and social/health care systems — directly relevant for understanding what home accessibility tools Deaf residents actually need. Confirmed ongoing as of Mar 2026 per RAD's national entry.",
+    badges: ["swl"],
+    actions: ["Croydon deaf social care", "Home needs assessment", "Community trust gateway"],
+    verification: "Confirmed (ongoing as of Mar 2026)",
+    projectRelevance: "High — frontline access to residents' actual home accessibility needs."
+  },
+  {
+    id: "oaklodge",
+    name: "Oak Lodge School",
+    tab: "swl",
+    quadrant: "q4",
+    power: "low",
+    interest: "low",
+    short: "Deaf education + adult lifelong learning · Ofsted Good 2025 · Wandsworth",
+    long: "Maintained special school for D/deaf students aged 10–19 in Wandsworth (Good, Ofsted 2025). Hosts Deaf First and a Lifelong Learning programme for Deaf adults. Draws students from 25 boroughs — a significant local hub. Not a health delivery body but useful for longer-term community building.",
+    badges: ["swl"],
+    actions: ["Deaf adult lifelong learning", "Community hub", "Schools awareness"],
+    verification: "Confirmed (Ofsted 2025)",
+    projectRelevance: "Low-Medium — long-term community building rather than direct pilot delivery."
+  },
+  {
+    id: "colliers",
+    name: "Colliers Wood Deaf Club",
+    tab: "swl",
+    quadrant: "q4",
+    power: "low",
+    interest: "low",
+    short: "Guardian Centre SW19 · venue open · club status unverified · last evidence 2022",
+    long: "Listed at The Guardian Centre, Clarendon Road, SW19 (Merton). The venue is confirmed open and used by other community groups (Merton u3a). However, no evidence the Deaf club specifically still meets there has been found. Last known source: Gallaudet 2022 directory. No contact details have ever been publicly listed. Status unknown — the club may have folded post-COVID. <strong>Before planning any engagement:</strong> call The Guardian Centre directly or contact Merton Council's voluntary sector team to confirm whether the club is still active. Do not plan outreach around this club until status is confirmed. Surbiton Deaf Social Club (Cheam SM3, every 3rd Thursday) is confirmed active and geographically closer to home — treat that as the primary SWL local grassroots contact.",
+    badges: ["swl", "unverified"],
+    actions: ["Venue confirmed open", "Club status unknown", "Call Guardian Centre to verify", "Surbiton club is confirmed alternative"],
+    verification: "⚠ Unverified — verify before contact (last evidence 2022)",
+    projectRelevance: "Low until verified — do not build outreach plans around this club."
+  },
+  {
+    id: "croydon-club",
+    name: "Croydon Deaf Club",
+    tab: "swl",
+    quadrant: "q4",
+    power: "low",
+    interest: "low",
+    short: "Chatsworth Road CR0 · no contact details published · unverified Feb 2026",
+    long: "Listed at Chatsworth House, Unison Social Club, Chatsworth Road CR0. No contact details have ever been published for this club. Last known source: Gallaudet 2022 directory. Status is completely unknown. For Croydon Deaf community reach, the better-confirmed route is through Healthwatch Croydon, RAD Croydon caseworker service (embedded with Croydon Council), or Croydon Hearing Resource Centre — all of which are confirmed active and have formal community relationships.",
+    badges: ["swl", "unverified"],
+    actions: ["Status unknown", "No contact details ever published", "Use RAD Croydon instead", "Use Croydon Hearing Resource Centre"],
+    verification: "⚠ Unverified — verify before contact",
+    projectRelevance: "Low until verified — three confirmed alternative Croydon routes exist."
+  },
+
+  // SE LONDON ICB
+  {
+    id: "slam",
+    name: "South London & Maudsley (SLaM)",
+    tab: "sel",
+    quadrant: "q1",
+    power: "high",
+    interest: "high",
+    short: "Mental health · Deaf services · across SEL boroughs",
+    long: "One of the UK's leading mental health trusts. Formal partner of SWLSTG through South London Mental Health Partnership. Relevant commissioning and referral pathway partner.",
+    badges: ["sel", "nhs"],
+    actions: ["SEL mental health gateway", "Commissioning influence"],
+    verification: "Confirmed",
+    projectRelevance: "High for SEL mental health pathway work."
+  },
+  {
+    id: "rad-lambeth",
+    name: "RAD — Lambeth Service",
+    tab: "sel",
+    quadrant: "q1",
+    power: "high",
+    interest: "high",
+    short: "Weekly advice surgery · BSL · partnered with Age UK Lambeth",
+    long: "RAD runs a dedicated weekly advice surgery in Lambeth (Wednesdays, 10am–4pm, by appointment), in formal partnership with Age UK Lambeth. The service provides BSL-accessible advice covering health, benefits, and welfare. Lambeth Council also commissions RAD for deaf resident support. This is one of the most active and embedded RAD local services in South London — a direct model for what community Deaf healthcare support looks like at borough level.",
+    badges: ["sel", "bsl"],
+    actions: ["Weekly BSL advice surgery", "Age UK Lambeth partner", "Lambeth Council commissioned", "Health & welfare support"],
+    verification: "Confirmed",
+    projectRelevance: "High — a working local template for embedded BSL community health support."
+  },
+  {
+    id: "hwlambeth",
+    name: "Healthwatch Lambeth",
+    tab: "sel",
+    quadrant: "q2",
+    power: "high",
+    interest: "medium",
+    short: "AIS engagement · ICB neighbourhood teams · deaf healthcare feedback",
+    long: "Active in SEL ICB neighbourhood teams and co-hosted integrated care workshops. Has engaged on AIS and Deaf healthcare access. Works within the South East London ICS and is an important voice for Lambeth's large and diverse Deaf community. The RAD–Lambeth service and Clapham BSL social group both operate within this Healthwatch area.",
+    badges: ["sel"],
+    actions: ["SEL ICB neighbourhood voice", "AIS engagement", "Lambeth Deaf community link"],
+    verification: "Confirmed",
+    projectRelevance: "Medium-High — links directly to RAD Lambeth and Clapham Deaf Club."
+  },
+  {
+    id: "hwbromley",
+    name: "Healthwatch Bromley",
+    tab: "sel",
+    quadrant: "q2",
+    power: "high",
+    interest: "low",
+    short: "SEL ICB patient voice · Bromley borough",
+    long: "Part of the South East London Healthwatch Reference Group, feeding into the SEL ICB. Bromley is a large outer London borough with its own Deaf community. Healthwatch Bromley is the patient voice channel for NHS and care services in the borough. Monitor for any Bromley-specific Deaf healthcare engagement work.",
+    badges: ["sel"],
+    actions: ["SEL ICB Bromley voice", "Patient feedback channel"],
+    verification: "Confirmed",
+    projectRelevance: "Medium — relevant given deafPLUS Bromley's presence in the same borough."
+  },
+  {
+    id: "hwgreenwich",
+    name: "Healthwatch Greenwich",
+    tab: "sel",
+    quadrant: "q2",
+    power: "high",
+    interest: "medium",
+    short: "Highlighted NHS AIS Braille failures · SEL deaf feedback",
+    long: "Coordinates the South East London Healthwatch Reference Group. Has specifically flagged NHS AIS failures around Braille provision for sensory impaired patients — demonstrating active engagement with accessibility for Deaf and disabled patients, including relevance to dual-sensory (deafblind) provision. Hosts the SEL Healthwatch collaboration infrastructure.",
+    badges: ["sel", "deafblind"],
+    actions: ["SEL Healthwatch coordinator", "AIS failures raised", "Accessibility advocacy"],
+    verification: "Confirmed",
+    projectRelevance: "Medium-High — coordinating body plus direct evidence of sensory-accessibility gaps."
+  },
+  {
+    id: "hwlewisham",
+    name: "Healthwatch Lewisham",
+    tab: "sel",
+    quadrant: "q2",
+    power: "high",
+    interest: "low",
+    short: "SEL ICB patient voice · Lewisham borough",
+    long: "Part of the SEL Healthwatch network. Lewisham and Greenwich NHS Trust covers Lewisham and is a key SEL ICB provider. Healthwatch Lewisham is the patient voice for NHS services across the borough. Keep informed of any Deaf-specific work emerging through the SEL ICB system.",
+    badges: ["sel"],
+    actions: ["SEL ICB Lewisham voice", "Patient feedback channel"],
+    verification: "Confirmed",
+    projectRelevance: "Low-Medium — part of the complete SEL ICB picture."
+  },
+  {
+    id: "hwsouthwark",
+    name: "Healthwatch Southwark",
+    tab: "sel",
+    quadrant: "q2",
+    power: "high",
+    interest: "low",
+    short: "SEL ICB patient voice · Southwark borough",
+    long: "Part of the SEL Healthwatch network. Guy's and St Thomas' NHS Trust serves Southwark as a major SEL provider. Healthwatch Southwark is the patient voice bridge for NHS services in the borough. DASL (Disability Advice Service Lambeth) also covers Southwark and is a relevant Deaf and disabled people's organisation in this area.",
+    badges: ["sel"],
+    actions: ["SEL ICB Southwark voice", "DASL overlap"],
+    verification: "Confirmed",
+    projectRelevance: "Low-Medium — overlaps with DASL coverage."
+  },
+  {
+    id: "hwbexley",
+    name: "Healthwatch Bexley",
+    tab: "sel",
+    quadrant: "q2",
+    power: "high",
+    interest: "low",
+    short: "SEL ICB patient voice · Bexley borough",
+    long: "Part of the SEL Healthwatch network. Bexley is an outer London borough served by Oxleas NHS Foundation Trust. Healthwatch Bexley is the patient voice for NHS services in the borough. Lower immediate relevance for Deaf healthcare work compared to Lambeth or Greenwich, but part of the complete SEL ICB picture.",
+    badges: ["sel"],
+    actions: ["SEL ICB Bexley voice", "Monitor"],
+    verification: "Confirmed",
+    projectRelevance: "Low — completeness only."
+  },
+  {
+    id: "dasl",
+    name: "DASL — Disability Advice Service Lambeth",
+    tab: "sel",
+    quadrant: "q3",
+    power: "low",
+    interest: "high",
+    short: "Pan-impairment DDPO · Lambeth · independent living & health",
+    long: "Lambeth's leading pan-impairment Disabled People's Organisation, also covering Southwark. Provides independent advice, advocacy, and support for disabled people including Deaf residents. Works within the same ecosystem as RAD Lambeth. A useful community gateway for Deaf residents in inner South London seeking independent living support and health advocacy.",
+    badges: ["sel"],
+    actions: ["Lambeth DDPO", "Independent living advice", "Southwark coverage"],
+    verification: "Confirmed",
+    projectRelevance: "Medium — community gateway alongside RAD Lambeth."
+  },
+  {
+    id: "buddies",
+    name: "Buddies All CIC",
+    tab: "sel",
+    quadrant: "q3",
+    power: "low",
+    interest: "high",
+    short: "Deaf & disabled buddying service · Bromley, Greenwich, Lambeth, Lewisham, Southwark",
+    long: "A buddying service for deaf and disabled adults and those with mental health conditions, operating across Bromley, Croydon, Greenwich, Lambeth, Lewisham and Southwark. Provides online, telephone and face-to-face community access support. Bridges across both SWL and SEL ICB footprints. A useful community companion service that could complement technology-based solutions like doorbell alerts with human social support.",
+    badges: ["sel", "swl"],
+    actions: ["Cross-ICB reach", "Deaf & disabled buddying", "Community access support"],
+    verification: "Confirmed",
+    projectRelevance: "Medium — could complement a tech pilot with human social support."
+  },
+  {
+    id: "bromley-chain",
+    name: "Bromley Chain — DISSOLVED",
+    tab: "sel",
+    quadrant: "q4",
+    power: "low",
+    interest: "low",
+    short: "Dissolved Mar 2024 → succeeded by deafPLUS Bromley",
+    long: "Bromley Chain (charity number 281051) was formally dissolved by the Charity Commission on 19 March 2024. It ran the Bromley Deaf Social Club, Bromley Deaf Children's Society, Deaf Access advisory service, and administered the Phyllis Kither Bequest small grants fund. On dissolution, its assets transferred to Breakthrough (Deaf-Hearing Integration) — charity 1073468 — which operates as deafPLUS. This is not a loss — deafPLUS Bromley has expanded what Bromley Chain offered, adding a professional office with weekday IAG support and a formal equipment demonstration service. The Phyllis Kither Bequest grants fund may also continue under deafPLUS — worth asking when making contact, as it could potentially fund a doorbell alert pilot in Bromley.",
+    badges: ["sel", "dissolved"],
+    actions: ["Remove from active planning", "Contact deafPLUS Bromley instead", "Phyllis Kither grants — enquire with deafPLUS"],
+    verification: "Confirmed dissolved (Charity Commission, 19 Mar 2024)",
+    projectRelevance: "Historical only — retained for context; all activity now routes through deafPLUS Bromley."
+  },
+  {
+    id: "deafplus-sel",
+    name: "deafPLUS Bromley ★",
+    tab: "sel",
+    quadrant: "q3",
+    power: "low",
+    interest: "high",
+    short: "Bromley Chain successor · equipment demos · Mon–Fri office",
+    long: "Same organisation as above but listed under SEL. Bromley services confirmed active with equipment demonstration service — the closest current model to the intended doorbell alert project.",
+    badges: ["sel", "new"],
+    actions: ["Equipment demos", "Bromley community reach"],
+    verification: "Confirmed Jan 2025",
+    projectRelevance: "Very High."
+  },
+  {
+    id: "clapham-deaf",
+    name: "Clapham Deaf Club",
+    tab: "sel",
+    quadrant: "q4",
+    power: "low",
+    interest: "medium",
+    short: "BSL social club · meets Wednesdays · Clapham North",
+    long: "Self-organised social group for Deaf BSL users in Lambeth. Authentic grassroots community hub.",
+    badges: ["sel"],
+    actions: ["Lambeth Deaf community", "Trust building"],
+    verification: "Confirmed 2025",
+    projectRelevance: "Useful for inner South London trust building."
+  },
+
+  // BROADER ECOSYSTEM (from v3 + additional research)
+  {
+    id: "deaf-unity",
+    name: "Deaf Unity",
+    tab: "ecosystem",
+    quadrant: "q3",
+    power: "low",
+    interest: "high",
+    short: "Employment · BSL café at Royal Festival Hall (3rd Friday monthly) · national reach",
+    long: "Strong employment focus and visible community presence. BSL Café at Royal Festival Hall listed as ongoing (third Friday of each month). Inclusion London DDPO directory entry updated May 2025. Active events calendar. Registered charity in good standing.",
+    badges: ["ecosystem"],
+    actions: ["Employment pathways", "Community visibility", "Monthly BSL Café (RFH)"],
+    verification: "Confirmed May 2025 (events calendar active)",
+    projectRelevance: "Good for employment-related messaging and regular visible community touchpoint."
+  },
+  {
+    id: "deafinitely",
+    name: "Deafinitely Theatre",
+    tab: "ecosystem",
+    quadrant: "q3",
+    power: "low",
+    interest: "medium",
+    short: "UK's only professional Deaf-led bilingual theatre · national tour 2025",
+    long: "Founded 2002. Expanding nationally. Paula Garfield MBE. Strong artistic credibility and youth alumni network (including Rose Ayling-Ellis).",
+    badges: ["ecosystem"],
+    actions: ["Arts & cultural reach", "Youth engagement"],
+    verification: "Confirmed 2025",
+    projectRelevance: "Useful for creative/cultural engagement routes."
+  },
+  {
+    id: "remark",
+    name: "Remark! Community",
+    tab: "ecosystem",
+    quadrant: "q2",
+    power: "medium",
+    interest: "high",
+    short: "14 London clubs · sport, youth, social · SEL focus",
+    long: "Large grassroots network with 14 confirmed London clubs. Runs summer playschemes and community activities. Strong reach into families and young people.",
+    badges: ["ecosystem"],
+    actions: ["Wide community reach", "Sport & youth programmes"],
+    verification: "Confirmed 2025",
+    projectRelevance: "Excellent for broad community distribution and youth/family pilots."
+  },
+  {
+    id: "dewa",
+    name: "DEWA",
+    tab: "ecosystem",
+    quadrant: "q4",
+    power: "low",
+    interest: "high",
+    short: "BME Deaf women · all South London boroughs",
+    long: "National organisation run and controlled by Deaf women from Black and Ethnic Minority groups. Covers all South London boroughs.",
+    badges: ["ecosystem", "bsl"],
+    actions: ["Intersectional reach", "BME Deaf women"],
+    verification: "Confirmed",
+    projectRelevance: "Critical for ensuring the pilot reaches the full diversity of the community."
+  },
+  {
+    id: "nrcpd",
+    name: "NRCPD (BSL Interpreter Register)",
+    tab: "ecosystem",
+    quadrant: "q2",
+    power: "high",
+    interest: "low",
+    short: "National register: 1,657 Registered Sign Language Interpreters · 19 Registered Interpreters for Deafblind People (RIDB) — only 4 in London+SE combined",
+    long: "The National Registers of Communication Professionals working with Deaf and Deafblind people — the UK's regulatory body for BSL/English interpreters, lipspeakers, and Registered Interpreters for Deafblind People (RIDB). <strong>Live register figures, checked 5 Sept 2026:</strong> 1,657 Registered Sign Language Interpreters (RSLIs) — updated from the 1,632 previously cited here — plus 241 regulated trainee SLIs, 62 relay/intralingual interpreters (+19 trainees), and a separate <strong>RIDB category: 19 nationally</strong>, of whom only London 1, South East 3 (see the dedicated Deafblind interpreting capacity entry above for the full 8-vs-19 timeline and what this means for South London specifically). Homepage live feed shows 2,080 professionals total across every category. <strong>Caveats:</strong> some RIDBs also hold RSLI registration, so totals are not simply additive; region is self-declared home base, not confirmed work availability; there is no trainee RIDB column — the route is now a Signature Level 6 Certificate in Working Effectively with Deafblind Manual/Visual Frame/Hands-On Signers plus a recognised Level 6 sign-language qualification. NRCPD's own fee schedule lists RIDB registration at £177, versus £234 for RSLI. This is a hard capacity ceiling relevant to any project proposing BSL-dependent services at scale — demand (e.g. 878 SWL GP BSL interpretation requests in nine months alone) draws against the same finite national RSLI pool, and any deafblind-specific ambition draws against a far smaller pool still. Not a delivery or advocacy body itself, but the reference point for interpreter supply, qualification standards, and safeguarding registration status of any interpreter a project engages.",
+    badges: ["ecosystem", "bsl", "deafblind"],
+    actions: ["Verify interpreter registration status before engaging one — RSLI or RIDB as appropriate to the task", "National capacity context for BSL-dependent service design", "Qualification & safeguarding standards", "For deafblind-specific work, note the London/SE RIDB count (4) rather than the reassuring-looking national total (19)"],
+    verification: "Confirmed Sept 2026 (live NRCPD registration-figures table, checked 5 Sep 2026)",
+    projectRelevance: "Medium-High — essential reference point for understanding the real supply constraint behind any BSL interpreting commitment."
+  },
+  {
+    id: "deafblind-uk-impact",
+    name: "Deafblind interpreting capacity — evidence & register data",
+    tab: "ecosystem",
+    quadrant: "q3",
+    power: "low",
+    interest: "high",
+    short: "RESOLVED: 19-vs-8 was a timeline, not a contradiction · only 4 RIDBs nationally in London+SE combined (1 in London) · BSL Advisory Board's Locked Out report",
+    long: "<strong>19-vs-8 discrepancy resolved (Sept 2026, deep research pass):</strong> both figures are real, but they are snapshots from different dates on the same NRCPD register, plus a government baseline that hadn't been updated in press copy. Timeline: ~2022, 12 RIDBs (Registered Interpreters for Deafblind People — a distinct NRCPD category using Deafblind Manual, Block alphabet, Hands-On signing or Visual Frame signing); 12 Feb 2025, 8 (cited by NRCPD to Liam O'Dell amid a petition by Sarah Reed; NRCPD said it was working with the BSL Advisory Board and Signature to grow the register); 27 Nov 2025, 8 (repeated in the BSL Advisory Board/DHSC paper <em>Locked Out</em>: \"There are currently only 8 deafblind interpreters on the NRCPD in the UK\"); 23 June 2026, 8 used as the GOV.UK funding-announcement baseline (\"just 8 registered interpreters... serving a population of approximately 12,000 Deafblind people\"), with a target of 68 (\"more than eightfold\") funded by a £15,000 grant for competency-assessment weekends — quotes from Stephen Timms, Joanna Atkinson (BSL Advisory Board co-chair) and Theresa Thomas-Morton (NRCPD CEO); 5 Sept 2026, <strong>19</strong> on NRCPD's live registration-figures table, broken down London 1, South East 3, West Midlands 4, North West 3, Scotland 3, East of England 2, North East 1, Wales 1, Northern Ireland 1, South West/East Midlands/Yorkshire &amp; Humber 0. <strong>The number that matters for South London planning: only 4 RIDBs nationally sit in the combined London + South East regions, and only 1 in London itself</strong> — against 19 nationally. Region is self-declared home base, not confirmed availability, so a South East RIDB could take London NHS work, but the London=1 figure is still the right conservative local-supply planning number. 68 is a policy aim, not a current stock — the funding pays for assessment weekends adding successful candidates to the existing register, not 60 new training places, and whether 68 is reached (or how many would take London NHS work) is unpublished. For general BSL/English interpreting context (not deafblind-specific), NRCPD's live table also shows 1,657 Registered Sign Language Interpreters nationally (up from the 1,632 previously cited here) plus 241 regulated trainees — note some RIDBs hold dual registration, so RIDB and RSLI totals are not simply additive. <strong>Two population figures must not be conflated:</strong> Sense's ~451,211 UK dual-sensory-loss estimate (2022, projected to ~610,000 by 2035) is a broad prevalence estimate weighted toward older adults; the government's ~12,000 \"Deafblind people with communication needs\" figure (used in the June 2026 funding announcement) is a much narrower operational figure — do not cite one when the other is meant. <strong>Communicator-guides are a separate, unregistered profession</strong>, not on NRCPD at all; NRCPD told Liam O'Dell (Feb 2025) that adding a CG registration category \"will take careful consideration and planning\" — it has not appeared as a live category. The usual CG qualification is Signature's Level 2 DBG. Community Care Inform (24 Jan 2024) is explicit that CGs \"cannot be used for critical service interventions as they are not suitably qualified or insured for this purpose\" — NHS clinical interpreting still needs an RIDB or an RSLI working in the adapted mode. <strong>The BSL Advisory Board's <em>Locked Out</em> report (27 Nov 2025)</strong> is the strongest qualitative evidence found: \"There is a national crisis in provision for deafblind people\"; lived-experience quote: \"It is almost impossible to get a tactile interpreter. Sometimes a regular interpreter will turn up and then they will leave when they see I need hands-on. It's also hard to arrange a communicator guide to get me to the doctor in the first place\"; and: \"When patients ask to use alternative agencies with more suitable specialist deafblind interpreters, their requests are denied or delayed.\" It recommends commissioning specialist Deafblind agencies rather than routing through spoken-language primes, a 98% fulfilment target, and response-time asks (A&amp;E within 1 hour, same-day ward within 4 hours, routine confirmation within 2 working days) — these are asks, not measured current performance. <strong>What is NOT published, so cannot be cited as fact:</strong> national or London RIDB request volumes; fulfilment % for Deafblind vs BSL on any ICB/trust contract; median booking lead time for tactile/hands-on/manual interpreting; occupancy/utilisation of the 19 RIDBs; how many of the 19 actually take NHS work; SWL/SEL Deafblind-specific request counts (the SWL 878 figure already tracked elsewhere is GP <em>BSL</em> requests, Oct 2024–Jun 2025 — not deafblind). RNID/SignHealth's 2025 survey (only 7% of people needing a communication professional always get one; 63% rarely/never) is hearing-loss/BSL, not deafblind-specific — do not cite it for deafblind capacity.",
+    badges: ["ecosystem", "deafblind"],
+    actions: ["Cite the live NRCPD table (19, dated) for current regulated supply — never cite 8 as current, it's the pre-funding baseline", "Cite London=1 / London+SE=4 as the local planning number, not the national 19", "Do not conflate Sense's ~451,211 prevalence estimate with the government's ~12,000 'communication needs' figure — they answer different questions", "Flag the 68 target as a policy aim under way, not a current stock, when citing it", "The BSL Advisory Board's Locked Out report (27 Nov 2025) is the strongest available qualitative/commissioning-recommendation source — use directly in any funding or policy case"],
+    verification: "Resolved Sept 2026 (deep research pass: live NRCPD registration-figures table dated 5 Sep 2026; GOV.UK 23 Jun 2026 announcement; BSL Advisory Board/DHSC Locked Out, 27 Nov 2025; Liam O'Dell reporting, 12 Feb 2025; Community Care Inform, 24 Jan 2024)",
+    projectRelevance: "Very High — this is now the load-bearing evidence entry for any South London deafblind-interpreting capacity argument: national specialist scarcity (4 in London+SE combined) is the correct framing, not a local fulfilment problem a better BSL contract alone would fix."
+  }
+];
+
+// ==================== INTERPRETING AGENCIES (BSL & Deafblind service tracker) ====================
+const interpretingAgencies = [
+  {
+    id: "da-languages",
+    name: "DA Languages",
+    status: "active",
+    statusLabel: "Active — two live NHS contracts",
+    services: ["bsl"],
+    coverage: "SWL: Croydon, Kingston, Merton, Richmond, Sutton, Wandsworth (all GP practices). SEL: Lambeth, Lewisham, Southwark only — Bexley/Bromley/Greenwich confirmed excluded, not just undocumented.",
+    short: "SWL GP BSL contract (from 1 Oct 2024, recommissioned to 2026+) + SEL Primary Care Interpreting Service (since Mar 2020, 3 of 6 SEL boroughs) · BSL video delivered via Sign Solutions",
+    long: "The single most operationally important interpreting agency for this project — DA Languages holds <strong>two separate live NHS contracts</strong> covering most of South London. <strong>SWL:</strong> replaced Language Line as the BSL interpreting provider for all GP practices across the six SWL boroughs from 1 October 2024, offering on-demand video BSL interpretation plus in-person interpreting; GP staff received training materials for the new system. <strong>SEL:</strong> has delivered the South East London ICS Primary Care Interpreting Service since March 2020, covering Lambeth, Lewisham and Southwark specifically (telephone, video-on-demand, face-to-face and BSL). <strong>Recommissioned Jan 2025:</strong> LCP (London Procurement Collaborative) papers confirm the same Lambeth/Lewisham/Southwark-only contract was recommissioned to DA Languages from 1 April 2025 under NHS SBS Lot 6 (3+2 year term); Bexley, Bromley and Greenwich remain unchecked on the recommissioning's own equality/borough impact grid. <strong>Confirmed Sept 2026 (deep research pass):</strong> this is a <em>documented publication gap, not an unknown</em> — the live SEL ICS resident page (first published 12 Oct 2023, still live 5 Sep 2026) explicitly tells Bexley/Bromley/Greenwich residents to contact their own Place primary-care teams directly, and no ICB-wide, borough-wide, or named GP-contract BSL/Deafblind provider was found for any of the three boroughs anywhere in the public record. What those residents have instead: NHS 111 BSL via SignVideo (24/7 advice line, not a booked GP interpreter — tracked separately below), and SEL BSL Talking Therapies from SignHealth covering all six SEL boroughs (therapy delivered in BSL, not a general interpreting desk — see the SignHealth entry above). <strong>Operational detail:</strong> the actual BSL video interpreting behind both DA Languages contracts is delivered by a named subcontractor, <strong>Sign Solutions</strong> (tracked as its own entry below) via the InterpretersLive! platform — a service issue reported against \"DA Languages\" in practice usually means a Sign Solutions/InterpretersLive! issue. Feedback on the SWL service has been mixed: Healthwatch Richmond (Mar 2026) collected user feedback specifically because of concerns raised about the new arrangement. <strong>Deafblind interpreting update (Sept 2026):</strong> no deafblind-specific service is advertised on either DA Languages GP contract directly, but Deafblind Enablement's own site confirms DA Languages subcontracts deafblind interpreting work to them — so a deafblind booking is technically possible under these contracts, but is gated by DBE's own national capacity (only 4 RIDBs nationally sit in London+SE combined — see the Deafblind interpreting capacity entry above), not by anything DA Languages itself can flex.",
+    actions: ["Bexley/Bromley/Greenwich gap is now a confirmed absence, not an open question — an FOI to the three Place primary-care teams is the direct next step", "Review the Healthwatch SWL/Richmond user feedback reports on service quality", "BSL-only — no deafblind offer confirmed under either contract", "Contact the Sign Solutions/InterpretersLive! layer directly for operational/technical questions, not just DA Languages as the named prime", "Potential partner for testing any new alert/booking technology against a live NHS BSL workflow"],
+    verification: "Confirmed Sept 2026 (Healthwatch Sutton/Kingston/Richmond news pages; SEL ICS official service page, live 12 Oct 2023–5 Sep 2026; Jan 2025 LCP recommissioning papers; deep research cross-check confirming the SEL gap as a documented absence)",
+    projectRelevance: "Very High — the de facto default NHS interpreting provider across most of South London, with a documented three-borough gap in SEL that directly affects Bexley, Bromley and Greenwich residents, now confirmed as an actual absence rather than a research limitation.",
+    tags: ["nhs-contracted", "swl", "sel"]
+  },
+  {
+    id: "remark-agency",
+    name: "Remark! (interpreting booking service)",
+    status: "active",
+    statusLabel: "Active — nationwide booking agency",
+    services: ["bsl", "deafblind"],
+    coverage: "Nationwide (40+ UK locations); London-headquartered (Leather Lane, EC1N)",
+    short: "Deaf-led national booking agency · 1,300+ registered interpreters · healthcare bookings including GP/hospital/dental",
+    long: "Distinct from Remark! Community's grassroots club network (already tracked separately in Broader Ecosystem) — this is Remark!'s national interpreter <strong>booking agency</strong> function, London-based (0207 269 2626). Deaf-run and Deaf-led. States access to over 1,300 fully qualified and registered communication professionals and BSL interpreters nationwide. <strong>Confirmed Sept 2026:</strong> Remark! runs a dedicated \"book a Deafblind interpreter\" page distinct from its general BSL booking — claims a pool of qualified deafblind interpreters and guides covering hands-on, visual frame, manual and tactile communication, UK-wide, with 24/7 emergency booking claimed. Markets healthcare appointment support (GP, hospital, dentist) directly. Not confirmed as holding a specific SWL/SEL NHS contract, and no named NHS trust contract was found for the deafblind service specifically — appears to operate on a per-booking commercial basis rather than a fixed area contract, which may make it a useful supplementary or backup route where DA Languages' contracted service has gaps (e.g. the SEL three-borough exclusion) or where Deafblind Enablement's own capacity is stretched.",
+    actions: ["Ask about deafblind interpreter booking process, actual (not claimed) lead times, and how the 24/7 emergency claim works in practice", "Potential fallback for the DA Languages SEL coverage gap (Bexley/Bromley/Greenwich)", "Potential fallback if Deafblind Enablement's capacity is the bottleneck on a DA Languages deafblind booking", "Deaf-led — worth prioritising over non-deaf-led agencies where a choice exists"],
+    verification: "Confirmed Sept 2026 (agency's own service page)",
+    projectRelevance: "High — one of the few agencies confirmed to offer both BSL and deafblind interpreter booking, and Deaf-led.",
+    tags: ["booking-agency", "national"]
+  },
+  {
+    id: "deafblind-enablement",
+    name: "Deafblind Enablement (DBE)",
+    status: "active",
+    statusLabel: "Active — dedicated deafblind specialist agency",
+    services: ["deafblind"],
+    coverage: "Nationwide; named NHS hospital contracts include Addenbrooke's, Papworth, Southend, Moorfields, Newcastle. Operates as the deafblind subcontractor behind DA Languages, LanguageLine, Language Empire, Language Shop and Cintra.",
+    short: "Recognised deafblind interpreter agency · holds NHS Trust & NHS England contracts · Total Communication approach · the actual deafblind subcontractor behind DA Languages/LanguageLine",
+    long: "A specialist, recognised interpreter agency maintaining a national register specifically for deafblind interpreters/interpreter-guides — the only organisation found in this research pass whose sole focus is deafblind interpreting as a service, rather than BSL interpreting with deafblind as an add-on. Holds confirmed contracts with a range of NHS Trusts and NHS England, plus direct hospital partnerships (Addenbrooke's, Papworth, Southend, Moorfields, Newcastle and surrounding areas — no South London hospital named yet, worth a direct enquiry). <strong>Operationally critical finding (Sept 2026):</strong> DBE's own site confirms it subcontracts to and from the major spoken-language/BSL primes — <strong>including DA Languages and LanguageLine, both already tracked here as South London GP interpreting contract holders</strong>. Neither DA Languages nor LanguageLine appears to hold its own RIDB bench; DBE's own statement is that it takes their deafblind subcontracted work. This means <strong>a deafblind booking under the SWL GP contract (DA Languages + Sign Solutions) or the SEL LLS contract (DA Languages + Sign Solutions) is only as good as DBE's same-day capacity</strong> — it is a single specialist pipe, not a competing local market, and DBE's national RIDB-level bench (see the 19-nationally / 4-in-London+SE figures on the Deafblind interpreting capacity entry above) is the real constraint behind any South London deafblind interpreting request, regardless of which prime the booking nominally goes through. <strong>New (confirmed Sept 2026):</strong> DBE launched a Professional Register for Deafblind Specialists on 29 June 2026, covering communicator-guides, interpreter-guides and specialist assessors, with a free first-year subscription — no published registrant count yet. The BSL Advisory Board's <em>Locked Out</em> annex (27 Nov 2025) cites Moorfields Eye Hospital as good practice for having \"commissioned a deafblind specialist agency for interpreting\" without naming the agency — this matches DBE's own Moorfields claim and is very likely the same relationship. Uses a Total Communication approach: Deafblind Manual, block alphabet, hands-on signing, and visual frame signing, tailored to the individual, plus mobility/orientation support alongside communication. Clients engage by sending an appointment letter for DBE to coordinate around.",
+    actions: ["This is the real capacity chokepoint behind both South London GP BSL contracts for any deafblind booking — treat DBE's own capacity, not DA Languages' or Sign Solutions', as the thing to actually monitor", "No confirmed South London hospital contract yet — ask directly whether SWLSTG/SLaM/local trusts could be added, following the Moorfields precedent", "Ask about the new Professional Register for Deafblind Specialists (launched 29 Jun 2026) and whether it changes local capacity", "Reference point for what a genuine deafblind-specific (not BSL-only) service model looks like", "Total Communication approach — relevant model for any alert-system design intended to reach deafblind users"],
+    verification: "Confirmed Sept 2026 (agency's own service page, subcontractor relationships, and new Professional Register launch dated 29 Jun 2026; Moorfields cross-reference via BSL Advisory Board's Locked Out annex, 27 Nov 2025)",
+    projectRelevance: "Very High — not just a reference model but the actual, sole, named deafblind-interpreting delivery mechanism sitting behind both South London GP contracts already tracked; its capacity is the real ceiling on any deafblind interpreting ambition for this project.",
+    tags: ["specialist-deafblind", "national", "nhs-contracted"]
+  },
+  {
+    id: "deaf-umbrella",
+    name: "Deaf Umbrella",
+    status: "partial",
+    statusLabel: "Active — coverage & NHS status unconfirmed",
+    services: ["bsl"],
+    coverage: "London and South East (Kent) — general; no NHS/health-specific service confirmed",
+    short: "London/SE BSL interpreting agency · commercial & education focus · NHS work not confirmed",
+    long: "A London-based (NW10) BSL/English interpreting agency covering London and the South East including Kent. Led by Rachel Hubbard (Director, MIEP). Client list is weighted toward commercial and institutional work (Gatwick Airport, John Lewis, Tesco, Gucci, government agencies) and education/employment support (Deaf awareness training, CPD for Communication Support Workers, an online job club for Deaf BSL users). <strong>No NHS or health-sector work, and no deafblind service, is mentioned anywhere on the agency's own site</strong> — flagged here as a known regional agency worth a direct enquiry rather than an assumed healthcare partner.",
+    actions: ["Confirm directly whether any NHS/GP interpreting work is undertaken before including in healthcare planning", "Not deafblind-specialist — BSL only, unconfirmed for this project's health-access purpose"],
+    verification: "Confirmed Sept 2026 as an active agency; NHS/health involvement unconfirmed — absence noted, not verified absence",
+    projectRelevance: "Low-Medium until NHS involvement is confirmed one way or the other — listed for completeness of the regional agency landscape.",
+    tags: ["booking-agency", "unconfirmed-nhs"]
+  },
+  {
+    id: "appa-me",
+    name: "Appa Me Ltd",
+    status: "partial",
+    statusLabel: "Active — primarily a training provider, not a confirmed NHS interpreting supplier",
+    services: ["bsl"],
+    coverage: "Teaches from Lewisham (SEL ICB area, not SWL); markets support \"across London and the UK\"; registered office in Ilford, Redbridge",
+    short: "BSL & interpreter training provider (Signature Levels 1–6) · also markets CSW/interpreter in-work support · no confirmed NHS contract",
+    long: "<strong>Name correction (verified via Companies House, Sept 2026):</strong> the company is <strong>APPA ME LIMITED</strong> (company no. 07202345, active, incorporated 25 Mar 2010, registered office The Gatehouse, 453 Cranbrook Road, Ilford IG2 6EW) — there is no company called \"APPA UK Ltd\". A separate, unrelated company by that name (APPA UK LIMITED, SC231577, a Scottish medical-goods retailer) was dissolved in 2010; no shared officers or evidence of rebrand between the two. Appa Me Ltd is primarily a <strong>Signature-accredited BSL and interpreter training provider</strong> — Levels 1, 2, 3 and 6, plus a Level 6 Diploma in Sign Language Interpreting and Translation (quoted £6,000) — teaching from Appa House, Lewisham High Street (Ladywell/Lewisham, <strong>South East London ICB area, not SWL</strong>). Alongside training, it markets itself (Trustpilot, self-description) as an \"in-work support provider\" supplying Communication Support Workers, job-coaches and BSL interpreters, and has advertised CSW apprenticeship roles via DWP Find a Job (Feb 2026). <strong>Deafblind interpreting is not confirmed as a delivered service</strong> — the only reference found is a resources page linking out to Deafblind UK and Sense as external reading, not an offered service line; do not list Deafblind as confirmed for this agency. <strong>No NHS, ICB, or council interpreting contract was found</strong> on Find a Tender, Contracts Finder, or in RNID's own published UK interpreting-agency list (which does not include Appa Me). A company blog post (Dec 2025) discusses missed NHS BSL bookings as a sector-wide problem — commentary, not evidence of their own NHS contract. <strong>Historical flag:</strong> a September 2016 NRCPD Practitioners' Forum minute recorded that trainees who completed interpreting training through Appa Me were reportedly not receiving certification, blocking their NRCPD/ASLI applications; NRCPD noted it would raise this with Signature. No record of the outcome was found — flagged as old and unresolved, not as a current issue. CQC also holds an archived (no longer active) domiciliary personal-care registration for the organisation, unrelated to interpreting.",
+    actions: ["Do not add to an SWL commissioned-provider list without an FOI or a named subcontract confirming one", "Ask directly whether Deafblind interpreting is actually offered, or only signposted", "Ask about the outcome of the 2016 NRCPD/Signature certification concern before recommending their training route", "Worth a direct enquiry re: subcontracting under DA Languages or another prime, since public procurement portals wouldn't show that"],
+    verification: "Verified Sept 2026 against Companies House, the live site, CQC, Find a Tender/Contracts Finder, NRCPD minutes, RNID's agency list, Trustpilot and LinkedIn (deep research pass) — several items explicitly could not be confirmed and are marked as such, not inferred",
+    projectRelevance: "Low-Medium currently — a real, active, SEL-based training and in-work-support provider, but not evidenced as an NHS interpreting supplier and not confirmed for Deafblind work; worth a direct conversation rather than inclusion as a confirmed service.",
+    tags: ["training-provider", "sel", "unconfirmed-nhs", "unconfirmed-deafblind"]
+  },
+  {
+    id: "sign-solutions",
+    name: "Sign Solutions (Sign Language Interpreting Agency Ltd)",
+    status: "active",
+    statusLabel: "Active — the actual BSL video delivery layer behind both DA Languages GP contracts",
+    services: ["bsl", "deafblind"],
+    coverage: "Delivers under DA Languages' SWL GP contract (since 1 Oct 2024) and SEL LLS GP contract, via the DAL booking portal and InterpretersLive! on-demand VRI. Confirmed prime contract elsewhere: Devon ICB, £141,710 (notice Mar 2026).",
+    short: "Named BSL video subcontractor behind DA Languages' SWL & SEL GP contracts · InterpretersLive! 24/7 VRI · not Deaf-led",
+    long: "Company no. 04802772, trading as Sign Solutions. This is the single most operationally important finding of this research pass: <strong>Sign Solutions is the actual named BSL video subcontractor</strong> behind DA Languages' two GP interpreting contracts already tracked (SWL, all six boroughs; SEL, Lambeth/Lewisham/Southwark) — meaning most \"DA Languages\" BSL video calls in South London GP practices are technically delivered through Sign Solutions' own platform, InterpretersLive!, accessed via connect.interpreterslive.co.uk/vri_atw and booked through the DAL portal. Also runs NHS England's Customer Contact Centre VRS separately. Lists both BSL and Deafblind interpreting on its own site. <strong>Clarified Sept 2026:</strong> the deafblind side of the South London GP contracts appears to run through a different specialist subcontractor — Deafblind Enablement, which independently confirms it takes deafblind subcontract work from DA Languages — rather than through Sign Solutions' own bench directly, so BSL is the safe assumption for what Sign Solutions itself delivers day-to-day under these contracts. Not Deaf-led. Confirmed holding a separate prime contract with Devon ICB for sign-language interpreting (£141,710, award notice Mar 2026) — evidence they do hold standalone NHS primes elsewhere, not only subcontracts.",
+    actions: ["Treat as the first point of technical/operational contact for any DA Languages BSL video service issue in South London", "Ask directly whether Deafblind interpreting is actually available under the South London GP contracts or only nationally/elsewhere", "Worth approaching directly (not just via DA Languages) for any pilot needing an existing NHS-grade VRI technical integration"],
+    verification: "Confirmed Sept 2026 (deep research pass cross-referencing the DA Languages contracts, InterpretersLive! platform, and Find a Tender's Devon ICB award notice)",
+    projectRelevance: "Very High — this is the real delivery mechanism behind the two most important interpreting contracts already tracked; any service-quality question about DA Languages BSL video in practice routes to this company.",
+    tags: ["subcontractor", "nhs-contracted", "swl", "sel"]
+  },
+  {
+    id: "languageline",
+    name: "LanguageLine Solutions (Language Line Ltd)",
+    status: "partial",
+    statusLabel: "Active on other London hospital contracts — BSL not itemised in public notices",
+    services: ["bsl"],
+    coverage: "Former SWL GP BSL prime until 30 Sep 2024 (replaced by DA Languages). Current confirmed contracts: Croydon Health Services (£116k), Epsom & St Helier (£123k), Kingston & Richmond Hospital (£19k) — award notices published 14 May 2026.",
+    short: "Former SWL GP prime, replaced Oct 2024 · now holds Croydon/Epsom & St Helier/Kingston & Richmond hospital contracts (general interpreting; BSL not itemised)",
+    long: "Company no. 04823110, trading as LanguageLine Solutions. Was the SWL GP BSL interpreting prime before DA Languages replaced it on 1 October 2024 (the switch was made specifically to address reported booking-time and reliability issues with LanguageLine's service). Still holds live interpreting contracts at three acute trusts touching SWL residents — Croydon Health Services (£116,000), Epsom &amp; St Helier (£123,000), and Kingston &amp; Richmond Hospital (£19,000), all per award notices published 14 May 2026 — but these are general spoken-language-plus-BSL-catalogue translation and interpreting packages; <strong>BSL is not separately itemised in the public contract text</strong>, so it's unconfirmed whether BSL interpreting is actually delivered at meaningful volume under these specific awards. Epsom &amp; St Helier's own patient-facing page books BSL via PALS and does not name the contracted agency, which is consistent with BSL sitting inside a bundled contract rather than being tracked separately.",
+    actions: ["Ask Croydon Health Services, Epsom & St Helier, and Kingston & Richmond Hospital directly whether BSL interpreting is actually delivered under these contracts and how often it's used", "Do not assume continuity of BSL service quality from the pre-Oct-2024 SWL GP era — that contract was explicitly replaced over service concerns"],
+    verification: "Confirmed Sept 2026 (award notices published 14 May 2026; Epsom & St Helier's own PALS-booking page)",
+    projectRelevance: "Medium-High — actively delivering interpreting services at three hospitals serving SWL residents, but BSL-specific volume and quality under these particular contracts is unconfirmed and worth a direct enquiry.",
+    tags: ["nhs-contracted", "swl", "unconfirmed-bsl-volume"]
+  },
+  {
+    id: "thebigword",
+    name: "thebigword Interpreting Services Ltd",
+    status: "active",
+    statusLabel: "Active — children's/family services only, not GP or acute health",
+    services: ["bsl"],
+    coverage: "Achieving for Children (Kingston & Richmond), Lot 1, face-to-face including BSL, 1 Oct 2024–30 Sep 2027",
+    short: "Holds the Kingston & Richmond children's services interpreting contract (£690k estimate / £920k award) — not a health contract",
+    long: "Company no. 06232449. Holds the Achieving for Children (the children's services trust for Kingston and Richmond) Lot 1 interpreting contract, covering face-to-face interpreting including BSL, running 1 October 2024 to 30 September 2027 (estimated at £690,000, awarded at £920,000). This is a children's/family-services contract, not a GP or acute health contract, so its relevance to a home-safety/health-access project is indirect — but it is a confirmed, currently-live BSL interpreting contract in the SWL area and worth knowing about if the project's scope ever touches families with Deaf children in Kingston or Richmond.",
+    actions: ["Relevant only if the project's scope extends to children's/family services in Kingston or Richmond", "Not a health/GP contract — do not conflate with the SWL GP BSL service"],
+    verification: "Confirmed Sept 2026 (contract award/estimate notices)",
+    projectRelevance: "Low-Medium — confirmed and live, but outside the health-access scope unless family/children's services become relevant.",
+    tags: ["nhs-adjacent", "swl", "childrens-services"]
+  },
+  {
+    id: "rgis",
+    name: "Royal Greenwich Interpreting Service (RGIS)",
+    status: "civic",
+    statusLabel: "Civic council desk — no evidence Greenwich GPs actually route through it",
+    services: ["bsl"],
+    coverage: "Greenwich borough council contact only",
+    short: "In-house/freelance/agency BSL + SignVideo · booked via council desk (020 8921 3928 / interpreting@royalgreenwich.gov.uk)",
+    long: "Greenwich council's own interpreting desk, offering in-house, freelance and agency BSL interpreting plus SignVideo, alongside freelance BSL bookable from £185 for 1–3 hours. This is the only Greenwich-specific BSL access route confirmed to exist at all — relevant given Greenwich is one of the three SEL boroughs excluded from the DA Languages primary-care contract. However, <strong>no published statement confirms that Greenwich GP practices actually use or route patients through RGIS</strong> — it is a civic/council contact service, not a confirmed NHS booking route.",
+    actions: ["Confirm directly with Greenwich GP practices or the Greenwich Place primary-care team whether RGIS is actually the de facto BSL route for health appointments", "The clearest existing Greenwich-specific BSL contact point regardless — worth engaging even if not NHS-confirmed"],
+    verification: "Confirmed Sept 2026 (council's own interpreting service page)",
+    projectRelevance: "Medium for Greenwich specifically — the only concrete local BSL access point in a borough with a confirmed NHS interpreting gap, even though its NHS/GP applicability is unconfirmed.",
+    tags: ["civic-desk", "sel", "greenwich"]
+  },
+  {
+    id: "kis",
+    name: "Kingston Interpreting Service (KIS)",
+    status: "civic",
+    statusLabel: "Civic council desk — NRCPD-registered BSL, council contact only",
+    services: ["bsl"],
+    coverage: "Kingston borough council contact only",
+    short: "NRCPD-registered BSL interpreters · co-working required for bookings over 120 minutes · T&Cs dated 29 Jul 2026",
+    long: "Kingston council's own interpreting desk, using NRCPD-registered BSL interpreters, with a co-working (two-interpreter) requirement for any booking exceeding 120 minutes — a genuine best-practice detail worth noting for any long appointment or event planning. Terms and conditions dated 29 July 2026 confirm the desk is currently active. Council contact service, not confirmed as an NHS/GP booking route, though Kingston itself is already well covered on the health side via the DA Languages SWL GP contract.",
+    actions: ["Lower priority than RGIS since Kingston already has confirmed NHS GP BSL coverage via DA Languages", "Note the 120-minute co-working rule as a general best-practice reference for any long BSL-dependent event"],
+    verification: "Confirmed Sept 2026 (council T&Cs dated 29 Jul 2026)",
+    projectRelevance: "Low-Medium — Kingston's health-side BSL access is already covered elsewhere; this is civic/council contact only.",
+    tags: ["civic-desk", "swl", "kingston"]
+  },
+  {
+    id: "convo-signlive",
+    name: "Convo (formerly SignLive)",
+    status: "civic",
+    statusLabel: "Civic VRS vendor — powers council contact pages, not NHS booking",
+    services: ["bsl"],
+    coverage: "Powers Lewisham, Richmond and Wandsworth council accessibility/SignLive contact pages",
+    short: "Deaf-founded video relay service (VRS) vendor behind several South London council contact pages",
+    long: "Convo (rebranded from SignLive) is a Deaf-founded video relay service used by Lewisham, Richmond and Wandsworth councils to let Deaf BSL users contact the council directly via video, without needing a booked interpreter. This is a genuinely useful existing accessible-contact model — 24-hour video access to a public body — but it is confirmed only for general council contact, not for NHS appointment booking specifically. Worth studying as a reference model for how a similar approach might work for health-related contact, even though it isn't itself a health service.",
+    actions: ["Reference model for a VRS-style access point, if the project ever proposes something similar for health contact", "Not confirmed as an NHS/GP route — general council contact only"],
+    verification: "Confirmed Sept 2026 (council accessibility pages for Lewisham, Richmond, Wandsworth)",
+    projectRelevance: "Low-Medium directly, but a useful existing model for what accessible video-based contact already looks like in three of the project's boroughs.",
+    tags: ["civic-desk", "vrs-vendor", "deaf-led"]
+  },
+  {
+    id: "signvideo-sorenson",
+    name: "Significan't UK Ltd t/a SignVideo (now Sorenson)",
+    status: "civic",
+    statusLabel: "Vendor behind NHS 111 BSL and Greenwich council SignVideo — advice/contact access, not a booked GP/acute interpreter",
+    services: ["bsl", "deafblind"],
+    coverage: "NHS 111 BSL nationally; Greenwich council desk",
+    short: "Vendor providing NHS 111 BSL video access (24/7) and Greenwich council's SignVideo option · also lists deafblind/low-vision interpreting",
+    long: "Significan't UK Ltd, trading as SignVideo (now part of Sorenson), is the vendor behind two confirmed access points relevant to this project: <strong>NHS 111 BSL</strong>, a 24/7 video BSL access line for NHS advice nationally, and the SignVideo option offered through Greenwich council's interpreting desk. NHS 111 BSL is a genuinely useful, nationally-available, already-confirmed access route for Deaf BSL users needing NHS advice — but it is an advice/triage line, not a booked GP or acute appointment interpreter, and does not resolve the Bexley/Bromley/Greenwich GP-level interpreting gap. <strong>Confirmed Sept 2026:</strong> Sorenson UK's wider service list includes \"Deafblind and low-vision interpreting\" and \"qualified Deaf interpreters\" as specialist products alongside standard VRI/on-site — but no published RIDB count or South London-specific NHS award for the deafblind service was found; it sits alongside the confirmed BSL/NHS-111 offer as an unconfirmed but plausible additional route worth a direct enquiry.",
+    actions: ["Signpost NHS 111 BSL as an existing, confirmed, nationally-available access route in any patient-facing materials", "Do not conflate NHS 111 BSL access with GP appointment interpreting — they solve different problems", "Ask directly about the deafblind/low-vision interpreting product's actual UK capacity and any South London relevance"],
+    verification: "Confirmed Sept 2026 (NHS 111 service information; Greenwich council interpreting page)",
+    projectRelevance: "Medium — a genuinely useful, already-confirmed national access route worth signposting, but not a substitute for the missing Bexley/Bromley/Greenwich GP interpreting service.",
+    tags: ["vrs-vendor", "nhs-111", "national"]
+  },
+  {
+    id: "signalise",
+    name: "Signalise Co-op Ltd",
+    status: "framework",
+    statusLabel: "Framework-eligible (NHS SBS Lot 2 / MoJ) — no South London award found",
+    services: ["bsl", "deafblind"],
+    coverage: "Live published NHS work: Merseyside/Cheshire. Framework-eligible nationally including South London; no local call-off confirmed.",
+    short: "Deaf- and interpreter-owned co-operative · on national NHS framework · no confirmed South London contract yet",
+    long: "A Deaf- and interpreter-owned co-operative, distinctive for its ownership model among the agencies in this tracker. Confirmed live published NHS work is in Merseyside/Cheshire, not South London. It is eligible to be called off under the NHS SBS Lot 2 framework (the £73m national framework awarded 20 Nov 2025, whose wording explicitly includes the deafblind community) for any South London ICB or trust — but no local award or call-off was found in this research pass. This makes it a genuine, concrete option worth approaching directly, particularly for filling the confirmed Bexley/Bromley/Greenwich gap, since a framework call-off can in principle be arranged without a fresh full procurement.",
+    actions: ["A real, actionable option to help close the Bexley/Bromley/Greenwich gap via a direct framework call-off rather than a new procurement", "Deaf-owned — worth prioritising in any procurement or partnership conversation on principle as well as capability", "Confirm current deafblind interpreting capacity directly before relying on it"],
+    verification: "Confirmed Sept 2026 (Merseyside/Cheshire NHS work; NHS SBS Lot 2 framework award notice, 20 Nov 2025)",
+    projectRelevance: "Medium-High — one of the most concrete, actionable options for actually closing the SEL borough gap, precisely because the framework route already exists and just needs a call-off.",
+    tags: ["framework-eligible", "deaf-owned", "deafblind-capable"]
+  },
+  {
+    id: "clarion",
+    name: "Clarion Interpreting Ltd",
+    status: "framework",
+    statusLabel: "Framework-eligible (MoJ) — self-claimed historic GSTT/King's supply, not independently confirmed as current",
+    services: ["bsl", "deafblind"],
+    coverage: "MoJ Lot 3 Visual and Tactile Communications (concluded 21 Jan 2026, £10.9m lot value). Site claims historic supply to Guy's & St Thomas' and King's (claim dated 13 May 2019).",
+    short: "BSL + visual/tactile communications agency · MoJ framework holder · GSTT/King's healthcare claim is dated and self-published, not independently verified",
+    long: "Holds the Ministry of Justice's Lot 3 (Visual and Tactile Communications) framework contract, concluded 21 January 2026 with a lot value of £10.9m — visual and tactile communications framing suggests genuine deafblind interpreting capability, not just BSL. Clarion's own healthcare page (dated 13 May 2019, so not recently refreshed) claims historic supply to Guy's and St Thomas' and King's College Hospital. <strong>This should be treated as a self-description to verify directly, not as a confirmed current contract</strong> — no independent award notice for either trust was found in this research pass, and the page's age means it may simply be stale marketing copy rather than an active relationship.",
+    actions: ["Verify directly with Guy's & St Thomas' and King's whether any current relationship with Clarion exists, rather than citing their own 2019 page as current fact", "A credible option for deafblind-specific work given the MoJ tactile-communications framework, if the healthcare claim can be independently confirmed or a fresh relationship established"],
+    verification: "Confirmed Sept 2026 for the MoJ framework; the GSTT/King's claim is unverified as current (source is the agency's own 2019 page)",
+    projectRelevance: "Medium — a credible national deafblind-capable agency, but its South London healthcare relevance rests on an unverified, dated self-claim rather than a confirmed contract.",
+    tags: ["framework-eligible", "deafblind-capable", "unverified-claim"]
+  },
+  {
+    id: "sign-language-interactions",
+    name: "Sign Language Interactions Ltd",
+    status: "framework",
+    statusLabel: "Framework-eligible (NOE CPC / PiP Lot 5) — no South London call-off found",
+    services: ["bsl"],
+    coverage: "National framework eligibility; often paired with SignVideo technology. No local award found.",
+    short: "BSL interpreting agency on the NOE CPC / PiP Language Services Lot 5 framework · no confirmed South London contract",
+    long: "Holds a place on the NOE CPC / PiP Language Services Lot 5 framework and is often paired with SignVideo technology in its delivery model. No South London-specific award or call-off was found in this research pass, similar to Signalise and Clarion — another framework-eligible option that exists on paper for South London but has no confirmed local presence yet.",
+    actions: ["Framework-eligible option worth including in any wider procurement conversation about closing the SEL gap, alongside Signalise and Clarion"],
+    verification: "Confirmed Sept 2026 (framework listing); no South London award found",
+    projectRelevance: "Low-Medium — a paper option, not a confirmed local presence.",
+    tags: ["framework-eligible"]
+  },
+  {
+    id: "bsl-healthcare-directory",
+    name: "BSL Healthcare (bslhealthcare.co.uk)",
+    status: "partial",
+    statusLabel: "Patient-facing booking platform — no confirmed company identity or NHS award behind it",
+    services: ["bsl"],
+    coverage: "National, patient-initiated booking",
+    short: "NHS-facing BSL booking front end · no Companies House identity or contract award confirmed",
+    long: "A patient-facing website offering NHS BSL interpreter booking, but this research pass could not confirm a Companies House company identity behind it, nor find any Find a Tender or Contracts Finder award naming it. That doesn't necessarily mean it's illegitimate — it may operate under a parent company name not obviously connected to the trading name, or as a genuinely informal signposting service — but it should not be treated as a confirmed NHS contract route until that's established.",
+    actions: ["Verify the legal entity and any underlying NHS relationship before recommending this as a route to patients or including it in any funding/partnership case", "Do not present as a confirmed South London NHS service without further verification"],
+    verification: "Unconfirmed Sept 2026 — flagged specifically because identity and contract status could not be established, not because it was found to be illegitimate",
+    projectRelevance: "Low until independently verified — logged so it isn't mistaken for a confirmed NHS contract route in future planning.",
+    tags: ["unverified-identity", "directory-only"]
+  },
+  {
+    id: "rnid-listed-unconfirmed",
+    name: "Positive Signs, Involve Interpreter & BSL First (RNID-listed, unconfirmed locally)",
+    status: "partial",
+    statusLabel: "On RNID's national agency list — no Find a Tender/Contracts Finder hit for any of the 12 South London boroughs",
+    services: ["bsl"],
+    coverage: "National, per RNID's own listing; no confirmed SWL/SEL presence",
+    short: "Three RNID-listed BSL agencies with no confirmed South London NHS contract as of Sept 2026",
+    long: "RNID's own July 2025 UK interpreting-agency list names Positive Signs Ltd, Involve Interpreter and BSL First alongside the larger providers already tracked individually here (Sign Solutions, LanguageLine, Clarion, Signalise, Sign Language Interactions). None of the three returned a Find a Tender or Contracts Finder hit for any of the twelve SWL/SEL boroughs in this research pass. Bundled into a single entry here rather than three separate ones, since the finding is identical for all three: nationally listed, no confirmed local presence.",
+    actions: ["Re-research individually only if the project specifically needs to approach one of these three by name", "Do not assume any of the three already covers South London — nothing found supports that"],
+    verification: "Confirmed Sept 2026 that all three appear on RNID's list; confirmed absence of any South London-specific award for any of them",
+    projectRelevance: "Low currently — logged mainly so these three names aren't mistakenly treated as already active locally.",
+    tags: ["directory-only", "unconfirmed-locally"]
+  },
+  {
+    id: "sight-for-surrey",
+    name: "Sight for Surrey",
+    status: "civic",
+    statusLabel: "Communicator-guide provider — social-care support model, not RIDB clinical interpreting",
+    services: ["deafblind"],
+    coverage: "Surrey — geographically adjacent to Kingston, Richmond and Sutton (all SWL ICB boroughs)",
+    short: "One of England's larger communicator-guide providers · methods include BSL, hands-on, manual, block · adjacent to Kingston/Richmond/Sutton",
+    long: "One of the larger English communicator-guide (CG) providers, covering Surrey — directly adjacent to the SWL ICB boroughs of Kingston, Richmond and Sutton, making it geographically the closest CG provider of note to the project's own home area. Lists communication methods including BSL, hands-on signing, manual and block. <strong>Important distinction (confirmed Sept 2026):</strong> communicator guides are a social-care support model, not NRCPD-regulated RIDB clinical interpreting — Community Care Inform (24 Jan 2024) is explicit that CGs \"cannot be used for critical service interventions as they are not suitably qualified or insured for this purpose.\" Sight for Surrey is therefore a genuinely useful, geographically well-placed resource for everyday accompaniment and communication support (e.g. getting to and from an appointment, everyday information relay) but should not be proposed as a substitute for RIDB-level clinical interpreting at the appointment itself.",
+    actions: ["Geographically the best-placed CG provider for the Sutton/Kingston/Richmond area — worth a direct relationship for everyday deafblind community support", "Do not propose as a substitute for clinical RIDB interpreting — different legal/insurance product entirely", "Ask about capacity and typical response times given how thin the CG market is nationally (see Action Deafness's Hertfordshire experience for a market-thinness data point)"],
+    verification: "Confirmed Sept 2026 (deep research pass; Community Care Inform, 24 Jan 2024, for the CG/clinical-interpreting distinction)",
+    projectRelevance: "High for community-support and accompaniment purposes specifically, given its direct geographic adjacency to Sutton — but must not be conflated with the separate, much scarcer RIDB clinical-interpreting need.",
+    tags: ["communicator-guide", "swl-adjacent", "not-clinical-interpreting"]
+  }
+];
+
+// ==================== STATE ====================
+let currentTab = 'national';
+let activeFilters = { search: '', scope: 'all' };
+let priorities = JSON.parse(localStorage.getItem('deaf_priorities') || '[]');
+
+// ==================== RENDER AGENCY TRACKER ====================
+function renderAgencies() {
+  const container = document.getElementById('matrix');
+  container.className = '';
+  container.innerHTML = '';
+
+  const s = activeFilters.search.toLowerCase();
+  let filtered = interpretingAgencies.filter(a => {
+    if (s && !a.name.toLowerCase().includes(s) && !a.short.toLowerCase().includes(s)) return false;
+    return true;
+  });
+
+  const intro = document.createElement('div');
+  intro.style.cssText = 'font-size:0.75rem;color:var(--muted);margin-bottom:12px;';
+  intro.innerHTML = '<strong>Service tracker</strong> — BSL &amp; Deafblind interpreting agencies with confirmed or claimed activity relevant to this project, tracked separately from the charity/stakeholder matrix above because the question here is <em>which services are actually live, where, and with what gaps</em> — not power/interest.' +
+    '<div style="margin-top:8px;display:flex;gap:12px;flex-wrap:wrap;font-size:0.68rem;">' +
+    '<span><span class="status-dot status-active" style="display:inline-block;vertical-align:middle;margin-right:4px;"></span>Active — confirmed live contract/service</span>' +
+    '<span><span class="status-dot status-partial" style="display:inline-block;vertical-align:middle;margin-right:4px;"></span>Partial/caution — active but coverage, NHS status, or identity unconfirmed</span>' +
+    '<span><span class="status-dot status-civic" style="display:inline-block;vertical-align:middle;margin-right:4px;"></span>Civic desk/VRS — council contact access, not a confirmed NHS booking route</span>' +
+    '<span><span class="status-dot status-framework" style="display:inline-block;vertical-align:middle;margin-right:4px;"></span>Framework-eligible — nationally available, no South London call-off found yet</span>' +
+    '</div>';
+  container.appendChild(intro);
+
+  const grid = document.createElement('div');
+  grid.className = 'agency-grid';
+
+  if (filtered.length === 0) {
+    grid.innerHTML = '<div style="color:#9a9282;font-size:0.8rem;">No matches in current filter.</div>';
+  } else {
+    filtered.forEach(a => {
+      const statusClass = a.status === 'active' ? 'status-active' :
+                           a.status === 'partial' ? 'status-partial' :
+                           a.status === 'framework' ? 'status-framework' :
+                           a.status === 'civic' ? 'status-civic' : 'status-gap';
+      const serviceBadges = a.services.map(sv => {
+        const color = sv === 'bsl' ? '#5c4a8a' : sv === 'deafblind' ? '#0d5c63' : '#555';
+        return `<span class="badge" style="background:${color}">${sv.toUpperCase()}</span>`;
+      }).join('');
+      const card = document.createElement('div');
+      card.className = 'agency-card';
+      card.id = 'agency-card-' + a.id;
+      card.onclick = () => showAgencyDetail(a.id, card);
+      card.innerHTML = `
+        <div class="agency-status-row">
+          <div class="status-dot ${statusClass}"></div>
+          <span class="status-label">${a.statusLabel}</span>
+        </div>
+        <div class="agency-name">${a.name}</div>
+        <div class="agency-tag">${a.short}</div>
+        <div class="badges" style="margin-top:6px;">${serviceBadges}</div>
+      `;
+      grid.appendChild(card);
+    });
+  }
+
+  container.appendChild(grid);
+}
+
+let currentAgency = null;
+
+function showAgencyDetail(id, cardEl) {
+  const a = interpretingAgencies.find(x => x.id === id);
+  if (!a) return;
+
+  if (currentAgency === id) { clearDetail(); return; }
+  currentAgency = id;
+  currentOrg = null;
+
+  document.querySelectorAll('.agency-card').forEach(c => c.classList.remove('active'));
+  if (cardEl) cardEl.classList.add('active');
+
+  const panel = document.getElementById('detail-panel');
+  panel.innerHTML = `
+    <div class="detail-header">
+      <div class="detail-name">${a.name}</div>
+      <span class="pill" style="background:#f0ede6;color:#3a3630;border-color:#d8d3c8">${a.statusLabel}</span>
+    </div>
+    <div class="detail-desc">${a.long}</div>
+    <div style="margin-bottom:8px;font-size:0.68rem;color:#5f5a4f;"><strong>Coverage:</strong> ${a.coverage}</div>
+    <div class="action-pills">
+      ${a.actions.map(x => `<span class="pill">${x}</span>`).join('')}
+    </div>
+    <div style="margin-top:12px;">
+      <span style="font-size:0.65rem;color:#8a8278;">Verified: ${a.verification}</span>
+    </div>
+  `;
+}
+
+// ==================== RENDER MATRIX ====================
+function renderMatrix(tab) {
+  if (tab === 'agencies') { renderAgencies(); return; }
+  const container = document.getElementById('matrix');
+  container.innerHTML = '';
+  container.className = 'matrix-container';
+
+  const filtered = organisations.filter(o => {
+    if (o.tab !== tab) return false;
+    const s = activeFilters.search.toLowerCase();
+    if (s && !o.name.toLowerCase().includes(s) && !o.short.toLowerCase().includes(s)) return false;
+    if (activeFilters.scope !== 'all') {
+      if (!o.badges.includes(activeFilters.scope)) return false;
+    }
+    return true;
+  });
+
+  const quadrants = {
+    q1: filtered.filter(o => o.quadrant === 'q1'),
+    q2: filtered.filter(o => o.quadrant === 'q2'),
+    q3: filtered.filter(o => o.quadrant === 'q3'),
+    q4: filtered.filter(o => o.quadrant === 'q4')
+  };
+
+  const labels = {
+    q1: '▲ High Power · High Interest',
+    q2: '▲ High Power · Low Interest',
+    q3: '▼ Low Power · High Interest',
+    q4: '▼ Low Power · Low Interest'
+  };
+
+  const strategies = {
+    q1: 'Manage Closely',
+    q2: 'Keep Satisfied',
+    q3: 'Keep Informed',
+    q4: 'Monitor'
+  };
+
+  const grid = document.createElement('div');
+  grid.className = 'matrix-container';
+
+  ['q1','q2','q3','q4'].forEach(q => {
+    const div = document.createElement('div');
+    div.className = `quadrant ${q}`;
+
+    let html = `<div class="q-head"><span>${labels[q]}</span></div>`;
+
+    if (quadrants[q].length === 0) {
+      html += `<div style="color:#9a9282;font-size:0.75rem;padding:10px 0;">No matches in current filter.</div>`;
+    } else {
+      quadrants[q].forEach(org => {
+        const badgeHtml = org.badges.map(b => {
+          const color = b === 'swl' ? 'var(--badge-swl)' :
+                       b === 'sel' ? 'var(--badge-sel)' :
+                       b === 'nhs' ? 'var(--badge-nhs)' :
+                       b === 'new' ? '#2e7d32' :
+                       b === 'bsl' ? '#5c4a8a' :
+                       b === 'deafblind' ? '#0d5c63' :
+                       b === 'unverified' ? '#f57c00' :
+                       b === 'dissolved' ? '#c62828' : '#555';
+          const label = b === 'unverified' ? '?' : b.toUpperCase();
+          return `<span class="badge" style="background:${color}">${label}</span>`;
+        }).join('');
+
+        const isPriority = priorities.includes(org.id);
+        html += `
+          <div class="org-card" id="card-${org.id}" onclick="showDetail('${org.id}', this)">
+            <div class="dot" style="background: var(--${org.quadrant}-color)"></div>
+            <div style="flex:1">
+              <div class="org-name">${org.name}${isPriority ? ' ★' : ''}</div>
+              <div class="org-tag">${org.short}</div>
+              <div class="badges">${badgeHtml}</div>
+            </div>
+          </div>`;
+      });
+    }
+
+    html += `<div class="q-strategy">${strategies[q]}</div>`;
+    div.innerHTML = html;
+    grid.appendChild(div);
+  });
+
+  container.appendChild(grid);
+}
+
+// ==================== FILTERS ====================
+function applyFilters() {
+  activeFilters.search = document.getElementById('search').value;
+  renderMatrix(currentTab);
+}
+
+function setFilter(btn, scope) {
+  document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+
+  if (scope === 'agency') {
+    // Interpreting agencies live in a separate tracker, not the org matrix — jump to that tab.
+    const agencyTabBtn = Array.from(document.querySelectorAll('.tab-btn')).find(b => b.textContent.includes('Interpreting Agencies'));
+    document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+    if (agencyTabBtn) agencyTabBtn.classList.add('active');
+    currentTab = 'agencies';
+    renderMatrix('agencies');
+    clearDetail();
+    return;
+  }
+
+  activeFilters.scope = scope;
+  renderMatrix(currentTab);
+}
+
+function switchTab(tab, btn) {
+  document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  currentTab = tab;
+  renderMatrix(tab);
+  clearDetail();
+}
+
+// ==================== DETAIL PANEL ====================
+let currentOrg = null;
+
+function showDetail(id, cardElement) {
+  const org = organisations.find(o => o.id === id);
+  if (!org) return;
+
+  // Toggle off if already open
+  if (currentOrg === id) {
+    clearDetail();
+    return;
+  }
+
+  currentOrg = id;
+  currentAgency = null;
+
+  // Remove previous active states
+  document.querySelectorAll('.org-card').forEach(c => c.classList.remove('active'));
+  if (cardElement) cardElement.classList.add('active');
+
+  const panel = document.getElementById('detail-panel');
+  panel.innerHTML = `
+    <div class="detail-header">
+      <div class="detail-name">${org.name}</div>
+      <span class="pill" style="background:#f0ede6;color:#3a3630;border-color:#d8d3c8">${org.tab.toUpperCase()}</span>
+    </div>
+    <div class="detail-desc">${org.long}</div>
+    
+    <div style="margin-bottom:8px;font-size:0.68rem;color:#5f5a4f;"><strong>Project relevance:</strong> ${org.projectRelevance}</div>
+    
+    <div class="action-pills">
+      ${org.actions.map(a => `<span class="pill">${a}</span>`).join('')}
+    </div>
+
+    <div style="margin-top:12px;display:flex;gap:8px;flex-wrap:wrap;">
+      <button onclick="togglePriority('${org.id}', this)" style="font-size:0.75rem;padding:6px 12px;border-radius:20px;border:1px solid #c9c3b5;background:#f9f7f1;cursor:pointer;">
+        ${priorities.includes(org.id) ? '★ Remove from My Priorities' : '☆ Add to My Priorities'}
+      </button>
+      <span style="font-size:0.65rem;color:#8a8278;align-self:center;">Verified: ${org.verification}</span>
+    </div>
+  `;
+}
+
+function clearDetail() {
+  currentOrg = null;
+  currentAgency = null;
+  document.querySelectorAll('.org-card').forEach(c => c.classList.remove('active'));
+  document.querySelectorAll('.agency-card').forEach(c => c.classList.remove('active'));
+  document.getElementById('detail-panel').innerHTML = `
+    <div class="detail-empty">Select an organisation above to view detailed engagement notes.</div>
+  `;
+}
+
+// ==================== PRIORITIES ====================
+function togglePriority(id, btn) {
+  const index = priorities.indexOf(id);
+  if (index === -1) {
+    priorities.push(id);
+  } else {
+    priorities.splice(index, 1);
+  }
+  localStorage.setItem('deaf_priorities', JSON.stringify(priorities));
+  renderMatrix(currentTab);
+  renderPriorities();
+
+  // Update the button text if it's still in the DOM
+  if (btn) {
+    btn.textContent = priorities.includes(id) ? '★ Remove from My Priorities' : '☆ Add to My Priorities';
+  }
+}
+
+function renderPriorities() {
+  const container = document.getElementById('priorities-bar');
+  if (priorities.length === 0) {
+    container.innerHTML = `<span style="color:#8a8278;">No organisations added yet. Click ★ on any card to save priorities.</span>`;
+    return;
+  }
+
+  let html = '';
+  priorities.forEach(id => {
+    const org = organisations.find(o => o.id === id);
+    if (!org) return;
+    html += `
+      <span class="priority-item">
+        ${org.name}
+        <span class="remove" onclick="removePriority('${id}')">×</span>
+      </span>`;
+  });
+  container.innerHTML = html;
+}
+
+function removePriority(id) {
+  priorities = priorities.filter(p => p !== id);
+  localStorage.setItem('deaf_priorities', JSON.stringify(priorities));
+  renderMatrix(currentTab);
+  renderPriorities();
+}
+
+// ==================== INIT ====================
+function init() {
+  // Initial render
+  renderMatrix('national');
+  renderPriorities();
+
+  // Set initial filter button
+  const firstFilter = document.querySelector('.filter-btn[data-filter="all"]');
+  if (firstFilter) firstFilter.classList.add('active');
+
+  // Keyboard support
+  document.addEventListener('keydown', function(e) {
+    if (e.key === 'Escape') clearDetail();
+    if (e.key === '/' && document.activeElement.tagName === 'BODY') {
+      e.preventDefault();
+      document.getElementById('search').focus();
+    }
+  });
+
+  console.log('%c[DeafCommunityMapping] v6 initialised — full roster restored + BSL/Deafblind additions', 'color:#8a8278');
+}
+
+init();
+</script>
+</body>
+</html>

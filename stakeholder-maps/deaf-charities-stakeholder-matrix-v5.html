@@ -1,0 +1,926 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Deaf Community Stakeholder Matrix v5 • South London</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,500;0,700;1,500&family=IBM+Plex+Mono:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #f5f2ec;
+    --surface: #ffffff;
+    --border: #d8d3c8;
+    --text: #1a1814;
+    --muted: #8a8278;
+    --q1-color: #1a472a;
+    --q2-color: #7b3f00;
+    --q3-color: #0a3d62;
+    --q4-color: #4a0e2f;
+    --badge-swl: #1565c0;
+    --badge-sel: #6a1b9a;
+    --badge-national: #37474f;
+    --badge-nhs: #003087;
+    --badge-local: #e8a020;
+    --q1-bg: rgba(26,71,42,0.06);
+    --q2-bg: rgba(123,63,0,0.055);
+    --q3-bg: rgba(10,61,98,0.06);
+    --q4-bg: rgba(74,14,47,0.055);
+    --accent: #2e5a3c;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'IBM Plex Mono', monospace;
+    min-height: 100vh;
+    padding: 24px 16px 60px;
+    line-height: 1.5;
+  }
+
+  .container { max-width: 1080px; margin: 0 auto; }
+
+  header {
+    text-align: center;
+    margin-bottom: 20px;
+  }
+  header h1 {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(1.6rem, 3.2vw, 2.4rem);
+    font-weight: 700;
+    line-height: 1.1;
+  }
+  header .subtitle {
+    margin-top: 6px;
+    font-size: 0.72rem;
+    color: var(--muted);
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+  .project-context {
+    margin-top: 8px;
+    font-size: 0.78rem;
+    background: #f0ede6;
+    display: inline-block;
+    padding: 4px 14px;
+    border-radius: 20px;
+    color: #3f3a30;
+  }
+
+  .controls {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-bottom: 16px;
+    align-items: center;
+    background: var(--surface);
+    padding: 10px 14px;
+    border-radius: 6px;
+    border: 1px solid var(--border);
+  }
+  .search-input {
+    flex: 1;
+    min-width: 220px;
+    padding: 8px 12px;
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    font-family: inherit;
+    font-size: 0.9rem;
+  }
+  .filter-group {
+    display: flex;
+    gap: 6px;
+    flex-wrap: wrap;
+  }
+  .filter-btn {
+    font-size: 0.68rem;
+    padding: 5px 11px;
+    border: 1px solid var(--border);
+    background: white;
+    border-radius: 20px;
+    cursor: pointer;
+    white-space: nowrap;
+  }
+  .filter-btn.active {
+    background: var(--accent);
+    color: white;
+    border-color: var(--accent);
+  }
+
+  .tab-row {
+    display: flex;
+    gap: 4px;
+    margin-bottom: 14px;
+    flex-wrap: wrap;
+  }
+  .tab-btn {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 0.72rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    padding: 8px 16px;
+    border-radius: 20px;
+    border: 1px solid var(--border);
+    background: var(--surface);
+    color: var(--muted);
+    cursor: pointer;
+    transition: all 0.15s;
+  }
+  .tab-btn.active {
+    background: #2c2a24;
+    color: white;
+    border-color: #2c2a24;
+  }
+
+  .legend {
+    display: flex;
+    gap: 6px;
+    flex-wrap: wrap;
+    margin-bottom: 14px;
+    font-size: 0.65rem;
+  }
+  .legend-item {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    padding: 2px 9px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 20px;
+  }
+  .ldot { width: 6px; height: 6px; border-radius: 50%; }
+
+  .matrix-container {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 4px;
+    background: var(--border);
+    border-radius: 5px;
+    padding: 4px;
+    margin-bottom: 20px;
+  }
+
+  .quadrant {
+    background: white;
+    padding: 12px 11px 22px;
+    min-height: 210px;
+    position: relative;
+    border-radius: 3px;
+  }
+  .q1 { background: var(--q1-bg); }
+  .q2 { background: var(--q2-bg); }
+  .q3 { background: var(--q3-bg); }
+  .q4 { background: var(--q4-bg); }
+
+  .q-head {
+    font-size: 0.62rem;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    margin-bottom: 8px;
+    padding-bottom: 5px;
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  .q-strategy {
+    position: absolute;
+    bottom: 8px;
+    right: 10px;
+    font-family: 'Playfair Display', serif;
+    font-style: italic;
+    font-size: 0.7rem;
+    opacity: 0.45;
+  }
+
+  .org-card {
+    display: flex;
+    gap: 7px;
+    padding: 6px 7px;
+    border-radius: 3px;
+    border: 1px solid transparent;
+    margin-bottom: 4px;
+    cursor: pointer;
+    transition: all 0.1s;
+    background: rgba(255,255,255,0.7);
+  }
+  .org-card:hover {
+    border-color: #c9c3b5;
+    background: white;
+  }
+  .org-card.active {
+    border-color: #3a3630;
+    background: #f9f7f1;
+  }
+  .dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    margin-top: 4px;
+    flex-shrink: 0;
+  }
+  .org-name {
+    font-size: 0.78rem;
+    font-weight: 500;
+    line-height: 1.25;
+  }
+  .org-tag {
+    font-size: 0.62rem;
+    color: var(--muted);
+    margin-top: 1px;
+    line-height: 1.3;
+  }
+  .badges {
+    display: flex;
+    gap: 3px;
+    flex-wrap: wrap;
+    margin-top: 3px;
+  }
+  .badge {
+    font-size: 0.52rem;
+    padding: 1px 5px;
+    border-radius: 2px;
+    color: white;
+    font-weight: 500;
+    letter-spacing: 0.03em;
+  }
+
+  .detail-panel {
+    background: white;
+    border: 1px solid var(--border);
+    border-radius: 5px;
+    padding: 18px 20px;
+    margin-top: 10px;
+    min-height: 120px;
+  }
+  .detail-empty {
+    color: var(--muted);
+    font-size: 0.85rem;
+    text-align: center;
+    padding: 20px;
+  }
+  .detail-header {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 10px;
+    flex-wrap: wrap;
+  }
+  .detail-name {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.25rem;
+  }
+  .detail-desc {
+    font-size: 0.85rem;
+    line-height: 1.65;
+    color: #3a3730;
+    margin-bottom: 12px;
+  }
+  .action-pills {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 5px;
+  }
+  .pill {
+    font-size: 0.65rem;
+    padding: 3px 9px;
+    border-radius: 20px;
+    border: 1px solid var(--border);
+    color: var(--muted);
+    background: #faf8f3;
+  }
+
+  .priorities-bar {
+    margin-top: 16px;
+    background: #f9f7f1;
+    border: 1px solid var(--border);
+    border-radius: 5px;
+    padding: 12px 14px;
+    font-size: 0.8rem;
+  }
+  .priority-item {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    background: white;
+    border: 1px solid var(--border);
+    padding: 2px 8px;
+    border-radius: 20px;
+    margin: 2px 4px 2px 0;
+    font-size: 0.75rem;
+  }
+  .priority-item .remove {
+    color: #8a6f6f;
+    cursor: pointer;
+    font-weight: bold;
+  }
+
+  .section {
+    margin-top: 24px;
+  }
+  .section-title {
+    font-size: 0.68rem;
+    text-transform: uppercase;
+    letter-spacing: 0.14em;
+    color: var(--muted);
+    margin-bottom: 8px;
+    border-bottom: 1px dashed var(--border);
+    padding-bottom: 4px;
+  }
+
+  .sources {
+    font-size: 0.72rem;
+    color: var(--muted);
+    background: #f9f7f1;
+    padding: 14px 16px;
+    border-radius: 4px;
+    margin-top: 20px;
+  }
+
+  .footer-note {
+    margin-top: 30px;
+    font-size: 0.7rem;
+    color: var(--muted);
+    text-align: center;
+  }
+
+  @media (max-width: 720px) {
+    .matrix-container {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>
+</head>
+<body>
+
+<div class="container">
+
+<header>
+  <h1>Deaf Community Stakeholder Matrix<br><span style="font-size:0.82em; font-weight:500;">v5 — South London</span></h1>
+  <div class="subtitle">National · SW London ICB · SE London ICB · Broader Ecosystem</div>
+  <div class="project-context">
+    Part of <strong>Deaf Network Health Group</strong> (under GeometricMind) — Home Safety &amp; Doorbell Alert Pilot, Sutton / South London (May 2026)
+  </div>
+</header>
+
+<!-- Controls -->
+<div class="controls">
+  <input type="text" id="search" class="search-input" placeholder="Search organisations..." onkeyup="applyFilters()">
+
+  <div class="filter-group">
+    <button class="filter-btn" data-filter="all" onclick="setFilter(this, 'all')">All</button>
+    <button class="filter-btn" data-filter="swl" onclick="setFilter(this, 'swl')">SWL</button>
+    <button class="filter-btn" data-filter="sel" onclick="setFilter(this, 'sel')">SEL</button>
+    <button class="filter-btn" data-filter="national" onclick="setFilter(this, 'national')">National</button>
+  </div>
+</div>
+
+<!-- Tabs -->
+<div class="tab-row">
+  <button class="tab-btn active" onclick="switchTab('national', this)">National</button>
+  <button class="tab-btn" onclick="switchTab('swl', this)">SW London ICB</button>
+  <button class="tab-btn" onclick="switchTab('sel', this)">SE London ICB</button>
+  <button class="tab-btn" onclick="switchTab('ecosystem', this)">Broader Ecosystem</button>
+</div>
+
+<!-- Legend -->
+<div class="legend">
+  <div class="legend-item"><div class="ldot" style="background:var(--q1-color)"></div>Manage Closely</div>
+  <div class="legend-item"><div class="ldot" style="background:var(--q2-color)"></div>Keep Satisfied</div>
+  <div class="legend-item"><div class="ldot" style="background:var(--q3-color)"></div>Keep Informed</div>
+  <div class="legend-item"><div class="ldot" style="background:var(--q4-color)"></div>Monitor</div>
+  <div class="legend-item"><span class="badge" style="background:var(--badge-swl);font-size:0.5rem;padding:1px 4px;">SWL</span></div>
+  <div class="legend-item"><span class="badge" style="background:var(--badge-sel);font-size:0.5rem;padding:1px 4px;">SEL</span></div>
+</div>
+
+<!-- Matrix -->
+<div id="matrix"></div>
+
+<!-- Detail Panel -->
+<div class="detail-panel" id="detail-panel">
+  <div class="detail-empty" id="detail-empty">Select an organisation above to view detailed engagement notes.</div>
+</div>
+
+<!-- My Priorities -->
+<div class="section">
+  <div class="section-title">My Priorities (saved in browser)</div>
+  <div id="priorities-bar" class="priorities-bar"></div>
+</div>
+
+<!-- Sources -->
+<div class="section">
+  <div class="section-title">Sources &amp; Reality Check Notes</div>
+  <div class="sources">
+    <strong>Primary sources:</strong> 
+    <ul style="margin:6px 0 0 16px; font-size:0.9em;">
+      <li>DEAF_NETWORK_HEALTH_SUMMARY.md (April 2026) — living project source of truth</li>
+      <li>Healthwatch SWL &amp; SEL AIS reviews (2024)</li>
+      <li>Connected Kingston directory (2025)</li>
+      <li>Direct verification passes: Feb–May 2026</li>
+      <li>Deaf Voices community testimony videos</li>
+      <li>geometricCharity research (SignHealth &amp; BDA financials, May 2026)</li>
+    </ul>
+    <strong>Status (May 2026):</strong> Surbiton Deaf Social Club and deafPLUS Bromley confirmed active. Croydon/Merton clubs largely unverified. Verification phase ongoing per April 2026 summary.
+    <br><br>
+    <strong>Update (Sept 2026):</strong> Four organisations updated following a full research and cross-verification pass documented in <span class="mono">research-framework/VERIFICATION_STATUS.md</span> (Sections 19-23) — RNID (confirmed PSR award, Somerset), SignHealth (two confirmed PSR awards, plus lead role on the Nov 2025 sector open letter), RAD (open-letter signatory, prior NCL contract history), and SWLSTG (confirmed Tier 4 status, an unresolved age-range discrepancy). New primary sources this pass: Find a Tender (two independent award notices), SignHealth's own published open letter and signatory list, and a second independent re-read of the Healthwatch SWL BSL report confirming its zero-survey-response finding.
+  </div>
+</div>
+
+<div class="footer-note">
+  v5 • Moved to ~/Projects/DeafCommunityMapping • Data model + filters + priorities tracker added • Updated Sept 2026 with PSR/open-letter/Tier-4 findings
+</div>
+
+</div>
+
+<script>
+// ==================== DATA MODEL ====================
+const organisations = [
+  // NATIONAL
+  {
+    id: "rnid",
+    name: "RNID",
+    tab: "national",
+    quadrant: "q1",
+    power: "high",
+    interest: "high",
+    short: "National policy voice · co-authored Still Ignored NHS report · confirmed NHS commissioning route",
+    long: "The UK's largest Deaf/hearing-loss charity. Co-authored the definitive 'Still Ignored' report on NHS accessible healthcare failures. Led the BSL Act 2022 campaign. <strong>Confirmed Sept 2026:</strong> holds a live NHS Provider Selection Regime (PSR) award — Somerset NHS Foundation Trust, hearing-aid aftercare across Somerset care homes, £46,000/12 months from 13 Jan 2025, awarded via PSR Most Suitable Provider. This is a general hearing-loss service, not BSL/Deaf-culture-specific, but is direct proof PSR is a usable NHS commissioning route for this sector. <strong>Also confirmed:</strong> RNID's own Jan 2026 FOI found 92% of NHS staff untrained on the Accessible Information Standard — RNID's strongest current evidence asset. <strong>Notable absence:</strong> RNID did not sign SignHealth's 50-charity open letter to the Health Secretary (Nov 2025) — reason unconfirmed, worth a direct conversation rather than assumption.",
+    badges: ["national"],
+    actions: ["NHS access campaigns", "Policy endorsement", "BSL Act compliance", "Co-develop pilots", "PSR precedent — ask how they secured the Somerset award"],
+    verification: "Confirmed Sept 2026 (PSR award independently verified against Find a Tender's own notice)",
+    projectRelevance: "High — key national partner for policy and commissioning routes; now also a working precedent for PSR-based NHS funding."
+  },
+  {
+    id: "signhealth",
+    name: "SignHealth",
+    tab: "national",
+    quadrant: "q1",
+    power: "high",
+    interest: "high",
+    short: "Deaf health specialist · TWO confirmed NHS PSR contracts · led the Nov 2025 sector open letter",
+    long: "The dedicated Deaf health charity — most directly aligned nationally, and now the project's clearest proof that NHS commissioning routes for Deaf-specific services actually work. <strong>Confirmed Sept 2026 — holds two separate NHS Provider Selection Regime (PSR) awards for BSL Talking Therapy:</strong> NHS Derby &amp; Derbyshire ICB (£491,036/year, 1 Apr 2026–31 Mar 2029, PSR Most Suitable Provider, justified by specialist BSL clinical skills) and NHS South East London ICB (1 Aug 2025–31 Mar 2026 + extension, PSR urgent-circumstances provision). Co-authored 'Still Ignored'. Commissioned by National Deaf CAMHS. Worked with Healthwatch SWL on the AIS review across all SWL GP practices. <strong>Led the 14 Nov 2025 open letter to the Health Secretary</strong> — 49 co-signatory Deaf-sector organisations plus SignHealth itself (50 named parties total, matching SignHealth's own '50 deaf charities' headline exactly); asks included AIS enforcement and delivery of Single Patient Record / NHS App BSL commitments; DHSC responded 18 Nov 2025 but did not commit to the requested ministerial meeting. Runs a DSIT-funded 'Deaf Digital Health Roadshow' (£58,066) on NHS App/111 VRS access across nine English regions including Whitechapel. <strong>Capacity signal (May 2026 research):</strong> ~£2.5m budget, ~190 staff.",
+    badges: ["national"],
+    actions: ["Primary national partner", "AIS compliance", "NHS commissioning routes — ask directly how the PSR awards were secured, as a template for SWL", "User research access", "Open-letter coalition — potential route to co-sign future SWL-specific advocacy"],
+    verification: "Confirmed Sept 2026 (both PSR awards independently verified against Find a Tender and a cross-checked mirror; open letter verified directly against SignHealth's own published list)",
+    projectRelevance: "Very High — strongest national route for healthcare accessibility work, and now the strongest evidence anywhere in this project that NHS PSR funding for Deaf-specific services is achievable, not just theoretical."
+  },
+  {
+    id: "ndcs",
+    name: "National Deaf Children's Society",
+    tab: "national",
+    quadrant: "q2",
+    power: "high",
+    interest: "medium",
+    short: "Children & families · institutional reach",
+    long: "High institutional reach but focused on children and young people. Relevant for home safety alerts, EHCP processes, and school environments across SWL and SEL boroughs.",
+    badges: ["national"],
+    actions: ["EHCP & SEND pathways", "Family-facing solutions"],
+    verification: "Confirmed",
+    projectRelevance: "Medium — useful for family and school environments."
+  },
+  {
+    id: "bsmhd",
+    name: "British Society for Mental Health & Deaf People",
+    tab: "national",
+    quadrant: "q2",
+    power: "high",
+    interest: "medium",
+    short: "Deaf mental health specialist · clinical influence",
+    long: "The only UK charity solely focused on Deaf mental health. Strong clinical NHS relationships including with SWLSTG National Deaf Services at Springfield.",
+    badges: ["national"],
+    actions: ["Clinical endorsement", "SWLSTG connection"],
+    verification: "Confirmed",
+    projectRelevance: "Medium — clinical endorsement route."
+  },
+  {
+    id: "rad",
+    name: "Royal Association for Deaf People (RAD)",
+    tab: "national",
+    quadrant: "q2",
+    power: "high",
+    interest: "medium",
+    short: "Founded 1841 · Royal Patron · advocacy, interpreting, wellbeing · signed the Nov 2025 open letter",
+    long: "One of the oldest Deaf charities. Royal Patron: HM King Charles III. Delivers advocacy, wellbeing, employment, interpreting and legal services nationally. Embedded in Croydon Council (confirmed ongoing caseworker appointment service, still live Mar 2026) and runs advice services in Croydon, Lambeth, RBKC and Brent (2023-24 accounts). <strong>Confirmed Sept 2026:</strong> CEO Dr Mark Wheatley personally signed SignHealth's 14 Nov 2025 sector-wide open letter. <strong>Confirmed history:</strong> RAD previously held an NHS BSL interpreting contract with NCL (North Central London) ICB worth £48,948.10, before NCL moved to DALS from 30 June 2025 — exact RAD contract dates and whether a service gap occurred are not stated in the FOI record. RAD is <strong>not</strong> a member of the NHS VCSE Health and Wellbeing Alliance (confirmed directly, Sept 2026 — no Deaf-sector organisation is, except Sense via a consortium).",
+    badges: ["national"],
+    actions: ["Croydon social care partner", "Lambeth/RBKC/Brent advice services", "GP Deaf awareness training", "Prior NHS interpreting contract holder (NCL) — worth asking directly about that experience as a lesson for SWL"],
+    verification: "Confirmed Feb 2026; open-letter signatory and NCL contract history confirmed Sept 2026",
+    projectRelevance: "High — strong local South London presence despite national scope, and a genuine track record of holding (and losing) an NHS interpreting contract elsewhere in London, worth learning from directly."
+  },
+  {
+    id: "bda",
+    name: "British Deaf Association",
+    tab: "national",
+    quadrant: "q4",
+    power: "medium",
+    interest: "low",
+    short: "BSL rights · cultural advocacy · all London boroughs",
+    long: "BSL-led national advocacy. Primary focus is language rights and BSL Charter compliance rather than healthcare delivery. Relevant for BSL-accessible design or public body sign-off. <strong>Capacity signal (May 2026 research):</strong> ~£1.86m–£3.6m budget, 41 staff — significant national Deaf-led organisation with reach across all London boroughs.",
+    badges: ["national"],
+    actions: ["BSL Charter compliance", "Cultural review"],
+    verification: "Confirmed",
+    projectRelevance: "Medium for policy &amp; cultural alignment; lower for direct pilot delivery."
+  },
+
+  // SW LONDON ICB
+  {
+    id: "swlstg",
+    name: "SWLSTG National Deaf Services",
+    tab: "swl",
+    quadrant: "q1",
+    power: "high",
+    interest: "high",
+    short: "Springfield Hospital, Tooting · national deaf mental health · BSL clinical team · confirmed Tier 4",
+    long: "South West London &amp; St George's Mental Health NHS Trust delivers the National Deaf Mental Health Service from Springfield University Hospital in Tooting — the closest NHS deaf specialist body to Sutton. BSL-fluent clinical staff. <strong>Confirmed Sept 2026:</strong> Corner House (the national Deaf inpatient CAMHS unit) is a <strong>Tier 4</strong> nationally-commissioned service — NHS England's highest specialism classification — offering &quot;up to six beds&quot; for ages 11-17, corroborated across three independent sources (the trust's own current page, a 2022 Limping Chicken piece quoting the trust directly, and a 2021 trust YouTube video). <strong>Unresolved discrepancy:</strong> the 2021 video states the service serves ages 6-18, conflicting with the current page's 11-17 — flagged, not resolved; may reflect a genuine service-scope change over time. <strong>Confirmed gap:</strong> no 2025-26 occupancy rate or waiting-time data has been published for Corner House or the separate National Deaf CAMHS outpatient service (covering Greater London within the M25 plus parts of Surrey) — a strong, specific FOI target.",
+    badges: ["swl", "nhs"],
+    actions: ["Self-referrals accepted", "BSL clinical team", "NHS deaf mental health gateway", "FOI target: 2025-26 occupancy/waiting-time data", "Ask directly about the 6-18 vs 11-17 age-range discrepancy"],
+    verification: "Confirmed Feb 2026; Tier 4 status and bed count confirmed Sept 2026; occupancy/wait data still unconfirmed",
+    projectRelevance: "Very High — most powerful local NHS gateway for Sutton, and the project's clearest example of a nationally-scarce, Tier 4 Deaf-specific service with no published capacity data."
+  },
+  {
+    id: "deafplus",
+    name: "deafPLUS (Bromley)",
+    tab: "swl",
+    quadrant: "q3",
+    power: "low",
+    interest: "high",
+    short: "Bromley Chain successor · equipment demos · BSL & HoH groups",
+    long: "Direct successor to Bromley Chain (dissolved March 2024). Runs Hard of Hearing social group, BSL practice groups, tinnitus support, and a Hearing Equipment Demonstration Service. Office open Mon–Fri. Text: 07732 449349.",
+    badges: ["swl"],
+    actions: ["Equipment demos — direct overlap", "Bromley community access", "BSL & HoH social groups"],
+    verification: "Confirmed active Jan 2025 – Feb 2026",
+    projectRelevance: "Very High — closest existing equipment demonstration model in South London."
+  },
+  {
+    id: "surbiton-deaf",
+    name: "Surbiton Deaf Social Club ★",
+    tab: "swl",
+    quadrant: "q4",
+    power: "low",
+    interest: "high",
+    short: "The Harrow Pub, Cheam SM3 · every 3rd Thursday · inside Sutton borough",
+    long: "Verified active 2025 via Connected Kingston. Meets at The Harrow Pub, Cheam SM3 — physically inside the London Borough of Sutton. Closest confirmed active Deaf social club to home (21 Hilbert Road).",
+    badges: ["swl", "new"],
+    actions: ["Closest grassroots contact to Sutton", "Word-of-mouth borough reach"],
+    verification: "Confirmed 2025",
+    projectRelevance: "Highest priority grassroots contact for Sutton pilot."
+  },
+  {
+    id: "hwswl",
+    name: "Healthwatch South West London",
+    tab: "swl",
+    quadrant: "q2",
+    power: "high",
+    interest: "medium",
+    short: "BSL GP access reform · ICB patient voice across 6 SWL boroughs · source of the project's flagship dataset",
+    long: "Led the Accessible Information Standard review that resulted in DA Languages/Sign Solutions BSL interpreter service rolling out to all GP practices in SWL from 1 October 2024, funded via the SWL Innovation ICP Priorities Fund. <strong>Confirmed Sept 2026 — the source of this project's single most important dataset:</strong> 878 BSL interpretation requests across SWL GP practices, Oct 2024-Jun 2025, full six-borough breakdown (Wandsworth 466, Croydon 185, Sutton 72, Merton 68, Kingston 61, Richmond 26). <strong>Also confirmed, and genuinely significant:</strong> their own written English patient survey received zero responses despite a BSL-video option running alongside it — all 21 patient/carer participants came instead from two in-person BSL focus groups (Wandsworth's Harding House, 4 Apr 2025; Croydon Clocktower, 4 Jun 2025). This is now the project's clearest evidence that written-English-only feedback mechanisms structurally fail this population, and directly informs the case for BSL-first evidence collection going forward.",
+    badges: ["swl"],
+    actions: ["ICB commissioning influence", "AIS monitoring", "GP BSL access", "Model to replicate: BSL-video-first feedback methods, not written English surveys"],
+    verification: "Confirmed; re-verified word-for-word Sept 2026 (including a second independent check of the zero-responses claim after a cross-check briefly queried it)",
+    projectRelevance: "Very High — strong ICB voice, and the direct source of the project's flagship SWL evidence base."
+  },
+  {
+    id: "mertoncil",
+    name: "Merton CIL",
+    tab: "swl",
+    quadrant: "q3",
+    power: "low",
+    interest: "high",
+    short: "Deaf-led DDPO · health, housing, independent living · Merton",
+    long: "Deaf-led Disabled People's Organisation. Covers health, benefits, housing, and independent living in Merton. Closest local DDPO to Sutton.",
+    badges: ["swl"],
+    actions: ["Closest local DDPO to Sutton", "Community user testing"],
+    verification: "Confirmed",
+    projectRelevance: "High — excellent for user testing in Merton/Sutton corridor."
+  },
+
+  // SE LONDON ICB
+  {
+    id: "slam",
+    name: "South London & Maudsley (SLaM)",
+    tab: "sel",
+    quadrant: "q1",
+    power: "high",
+    interest: "high",
+    short: "Mental health · Deaf services · across SEL boroughs",
+    long: "One of the UK's leading mental health trusts. Formal partner of SWLSTG through South London Mental Health Partnership. Relevant commissioning and referral pathway partner.",
+    badges: ["sel", "nhs"],
+    actions: ["SEL mental health gateway", "Commissioning influence"],
+    verification: "Confirmed",
+    projectRelevance: "High for SEL mental health pathway work."
+  },
+  {
+    id: "deafplus-sel",
+    name: "deafPLUS Bromley ★",
+    tab: "sel",
+    quadrant: "q3",
+    power: "low",
+    interest: "high",
+    short: "Bromley Chain successor · equipment demos · Mon–Fri office",
+    long: "Same organisation as above but listed under SEL. Bromley services confirmed active with equipment demonstration service — the closest current model to the intended doorbell alert project.",
+    badges: ["sel", "new"],
+    actions: ["Equipment demos", "Bromley community reach"],
+    verification: "Confirmed Jan 2025",
+    projectRelevance: "Very High."
+  },
+  {
+    id: "clapham-deaf",
+    name: "Clapham Deaf Club",
+    tab: "sel",
+    quadrant: "q4",
+    power: "low",
+    interest: "medium",
+    short: "BSL social club · meets Wednesdays · Clapham North",
+    long: "Self-organised social group for Deaf BSL users in Lambeth. Authentic grassroots community hub.",
+    badges: ["sel"],
+    actions: ["Lambeth Deaf community", "Trust building"],
+    verification: "Confirmed 2025",
+    projectRelevance: "Useful for inner South London trust building."
+  },
+
+  // BROADER ECOSYSTEM (from v3 + additional research)
+  {
+    id: "deaf-unity",
+    name: "Deaf Unity",
+    tab: "ecosystem",
+    quadrant: "q3",
+    power: "low",
+    interest: "high",
+    short: "Employment · BSL café at Royal Festival Hall (3rd Friday monthly) · national reach",
+    long: "Strong employment focus and visible community presence. BSL Café at Royal Festival Hall listed as ongoing (third Friday of each month). Inclusion London DDPO directory entry updated May 2025. Active events calendar. Registered charity in good standing.",
+    badges: ["ecosystem"],
+    actions: ["Employment pathways", "Community visibility", "Monthly BSL Café (RFH)"],
+    verification: "Confirmed May 2025 (events calendar active)",
+    projectRelevance: "Good for employment-related messaging and regular visible community touchpoint."
+  },
+  {
+    id: "deafinitely",
+    name: "Deafinitely Theatre",
+    tab: "ecosystem",
+    quadrant: "q3",
+    power: "low",
+    interest: "medium",
+    short: "UK's only professional Deaf-led bilingual theatre · national tour 2025",
+    long: "Founded 2002. Expanding nationally. Paula Garfield MBE. Strong artistic credibility and youth alumni network (including Rose Ayling-Ellis).",
+    badges: ["ecosystem"],
+    actions: ["Arts & cultural reach", "Youth engagement"],
+    verification: "Confirmed 2025",
+    projectRelevance: "Useful for creative/cultural engagement routes."
+  },
+  {
+    id: "remark",
+    name: "Remark! Community",
+    tab: "ecosystem",
+    quadrant: "q2",
+    power: "medium",
+    interest: "high",
+    short: "14 London clubs · sport, youth, social · SEL focus",
+    long: "Large grassroots network with 14 confirmed London clubs. Runs summer playschemes and community activities. Strong reach into families and young people.",
+    badges: ["ecosystem"],
+    actions: ["Wide community reach", "Sport & youth programmes"],
+    verification: "Confirmed 2025",
+    projectRelevance: "Excellent for broad community distribution and youth/family pilots."
+  },
+  {
+    id: "dewa",
+    name: "DEWA",
+    tab: "ecosystem",
+    quadrant: "q4",
+    power: "low",
+    interest: "high",
+    short: "BME Deaf women · all South London boroughs",
+    long: "National organisation run and controlled by Deaf women from Black and Ethnic Minority groups. Covers all South London boroughs.",
+    badges: ["ecosystem"],
+    actions: ["Intersectional reach", "BME Deaf women"],
+    verification: "Confirmed",
+    projectRelevance: "Critical for ensuring the pilot reaches the full diversity of the community."
+  }
+];
+
+// ==================== STATE ====================
+let currentTab = 'national';
+let activeFilters = { search: '', scope: 'all' };
+let priorities = JSON.parse(localStorage.getItem('deaf_priorities') || '[]');
+
+// ==================== RENDER MATRIX ====================
+function renderMatrix(tab) {
+  const container = document.getElementById('matrix');
+  container.innerHTML = '';
+  container.className = 'matrix-container';
+
+  const filtered = organisations.filter(o => {
+    if (o.tab !== tab) return false;
+    const s = activeFilters.search.toLowerCase();
+    if (s && !o.name.toLowerCase().includes(s) && !o.short.toLowerCase().includes(s)) return false;
+    if (activeFilters.scope !== 'all') {
+      if (activeFilters.scope === 'swl' && !o.badges.includes('swl')) return false;
+      if (activeFilters.scope === 'sel' && !o.badges.includes('sel')) return false;
+      if (activeFilters.scope === 'national' && !o.badges.includes('national')) return false;
+    }
+    return true;
+  });
+
+  const quadrants = {
+    q1: filtered.filter(o => o.quadrant === 'q1'),
+    q2: filtered.filter(o => o.quadrant === 'q2'),
+    q3: filtered.filter(o => o.quadrant === 'q3'),
+    q4: filtered.filter(o => o.quadrant === 'q4')
+  };
+
+  const labels = {
+    q1: '▲ High Power · High Interest',
+    q2: '▲ High Power · Low Interest',
+    q3: '▼ Low Power · High Interest',
+    q4: '▼ Low Power · Low Interest'
+  };
+
+  const strategies = {
+    q1: 'Manage Closely',
+    q2: 'Keep Satisfied',
+    q3: 'Keep Informed',
+    q4: 'Monitor'
+  };
+
+  const grid = document.createElement('div');
+  grid.className = 'matrix-container';
+
+  ['q1','q2','q3','q4'].forEach(q => {
+    const div = document.createElement('div');
+    div.className = `quadrant ${q}`;
+
+    let html = `<div class="q-head"><span>${labels[q]}</span></div>`;
+
+    if (quadrants[q].length === 0) {
+      html += `<div style="color:#9a9282;font-size:0.75rem;padding:10px 0;">No matches in current filter.</div>`;
+    } else {
+      quadrants[q].forEach(org => {
+        const badgeHtml = org.badges.map(b => {
+          const color = b === 'swl' ? 'var(--badge-swl)' : 
+                       b === 'sel' ? 'var(--badge-sel)' : 
+                       b === 'nhs' ? 'var(--badge-nhs)' : 
+                       b === 'new' ? '#2e7d32' : '#555';
+          return `<span class="badge" style="background:${color}">${b.toUpperCase()}</span>`;
+        }).join('');
+
+        const isPriority = priorities.includes(org.id);
+        html += `
+          <div class="org-card" id="card-${org.id}" onclick="showDetail('${org.id}', this)">
+            <div class="dot" style="background: var(--${org.quadrant}-color)"></div>
+            <div style="flex:1">
+              <div class="org-name">${org.name}${isPriority ? ' ★' : ''}</div>
+              <div class="org-tag">${org.short}</div>
+              <div class="badges">${badgeHtml}</div>
+            </div>
+          </div>`;
+      });
+    }
+
+    html += `<div class="q-strategy">${strategies[q]}</div>`;
+    div.innerHTML = html;
+    grid.appendChild(div);
+  });
+
+  container.appendChild(grid);
+}
+
+// ==================== FILTERS ====================
+function applyFilters() {
+  activeFilters.search = document.getElementById('search').value;
+  renderMatrix(currentTab);
+}
+
+function setFilter(btn, scope) {
+  document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  activeFilters.scope = scope;
+  renderMatrix(currentTab);
+}
+
+function switchTab(tab, btn) {
+  document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  currentTab = tab;
+  renderMatrix(tab);
+  clearDetail();
+}
+
+// ==================== DETAIL PANEL ====================
+let currentOrg = null;
+
+function showDetail(id, cardElement) {
+  const org = organisations.find(o => o.id === id);
+  if (!org) return;
+
+  // Toggle off if already open
+  if (currentOrg === id) {
+    clearDetail();
+    return;
+  }
+
+  currentOrg = id;
+
+  // Remove previous active states
+  document.querySelectorAll('.org-card').forEach(c => c.classList.remove('active'));
+  if (cardElement) cardElement.classList.add('active');
+
+  const panel = document.getElementById('detail-panel');
+  panel.innerHTML = `
+    <div class="detail-header">
+      <div class="detail-name">${org.name}</div>
+      <span class="pill" style="background:#f0ede6;color:#3a3630;border-color:#d8d3c8">${org.tab.toUpperCase()}</span>
+    </div>
+    <div class="detail-desc">${org.long}</div>
+    
+    <div style="margin-bottom:8px;font-size:0.68rem;color:#5f5a4f;"><strong>Project relevance:</strong> ${org.projectRelevance}</div>
+    
+    <div class="action-pills">
+      ${org.actions.map(a => `<span class="pill">${a}</span>`).join('')}
+    </div>
+
+    <div style="margin-top:12px;display:flex;gap:8px;flex-wrap:wrap;">
+      <button onclick="togglePriority('${org.id}', this)" style="font-size:0.75rem;padding:6px 12px;border-radius:20px;border:1px solid #c9c3b5;background:#f9f7f1;cursor:pointer;">
+        ${priorities.includes(org.id) ? '★ Remove from My Priorities' : '☆ Add to My Priorities'}
+      </button>
+      <span style="font-size:0.65rem;color:#8a8278;align-self:center;">Verified: ${org.verification}</span>
+    </div>
+  `;
+}
+
+function clearDetail() {
+  currentOrg = null;
+  document.querySelectorAll('.org-card').forEach(c => c.classList.remove('active'));
+  document.getElementById('detail-panel').innerHTML = `
+    <div class="detail-empty">Select an organisation above to view detailed engagement notes.</div>
+  `;
+}
+
+// ==================== PRIORITIES ====================
+function togglePriority(id, btn) {
+  const index = priorities.indexOf(id);
+  if (index === -1) {
+    priorities.push(id);
+  } else {
+    priorities.splice(index, 1);
+  }
+  localStorage.setItem('deaf_priorities', JSON.stringify(priorities));
+  renderMatrix(currentTab);
+  renderPriorities();
+
+  // Update the button text if it's still in the DOM
+  if (btn) {
+    btn.textContent = priorities.includes(id) ? '★ Remove from My Priorities' : '☆ Add to My Priorities';
+  }
+}
+
+function renderPriorities() {
+  const container = document.getElementById('priorities-bar');
+  if (priorities.length === 0) {
+    container.innerHTML = `<span style="color:#8a8278;">No organisations added yet. Click ★ on any card to save priorities.</span>`;
+    return;
+  }
+
+  let html = '';
+  priorities.forEach(id => {
+    const org = organisations.find(o => o.id === id);
+    if (!org) return;
+    html += `
+      <span class="priority-item">
+        ${org.name}
+        <span class="remove" onclick="removePriority('${id}')">×</span>
+      </span>`;
+  });
+  container.innerHTML = html;
+}
+
+function removePriority(id) {
+  priorities = priorities.filter(p => p !== id);
+  localStorage.setItem('deaf_priorities', JSON.stringify(priorities));
+  renderMatrix(currentTab);
+  renderPriorities();
+}
+
+// ==================== INIT ====================
+function init() {
+  // Initial render
+  renderMatrix('national');
+  renderPriorities();
+
+  // Set initial filter button
+  const firstFilter = document.querySelector('.filter-btn[data-filter="all"]');
+  if (firstFilter) firstFilter.classList.add('active');
+
+  // Keyboard support
+  document.addEventListener('keydown', function(e) {
+    if (e.key === 'Escape') clearDetail();
+    if (e.key === '/' && document.activeElement.tagName === 'BODY') {
+      e.preventDefault();
+      document.getElementById('search').focus();
+    }
+  });
+
+  console.log('%c[DeafCommunityMapping] v5 initialised with data-driven model', 'color:#8a8278');
+}
+
+init();
+</script>
+</body>
+</html>

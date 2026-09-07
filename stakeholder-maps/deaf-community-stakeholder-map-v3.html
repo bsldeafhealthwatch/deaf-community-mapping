@@ -1,0 +1,991 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Deaf Community Organisations — Reality-Checked Stakeholder Map</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=Syne+Mono&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0e0e10;
+    --surface: #17171a;
+    --surface2: #1e1e23;
+    --border: #2a2a32;
+    --border-bright: #3a3a48;
+    --text: #e8e6f0;
+    --muted: #6b6880;
+    --accent: #c8b96e;
+    --accent2: #7ec8a4;
+    --accent3: #b87fc8;
+    --accent4: #e88a5a;
+    --q-tl: rgba(200,185,110,0.08);
+    --q-tr: rgba(126,200,164,0.07);
+    --q-bl: rgba(184,127,200,0.07);
+    --q-br: rgba(232,138,90,0.07);
+    --q-tl-c: #c8b96e;
+    --q-tr-c: #7ec8a4;
+    --q-bl-c: #b87fc8;
+    --q-br-c: #e88a5a;
+    --confirmed: #7ec8a4;
+    --unverified: #e8c86e;
+    --dissolved: #e87c7c;
+    --new-find: #90b8f0;
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'Syne', sans-serif;
+    min-height: 100vh;
+    padding: 36px 16px 80px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");
+    pointer-events: none;
+    z-index: 0;
+    opacity: 0.6;
+  }
+
+  * { position: relative; z-index: 1; }
+
+  header {
+    text-align: center;
+    margin-bottom: 28px;
+    animation: riseIn 0.8s cubic-bezier(.22,1,.36,1) both;
+  }
+  .eyebrow {
+    font-family: 'Syne Mono', monospace;
+    font-size: 0.58rem;
+    letter-spacing: 0.25em;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 10px;
+  }
+  header h1 {
+    font-size: clamp(1.6rem, 3.5vw, 2.8rem);
+    font-weight: 800;
+    line-height: 1.05;
+    letter-spacing: -0.02em;
+  }
+  header h1 span { color: var(--accent); }
+  .sub {
+    margin-top: 8px;
+    font-family: 'Syne Mono', monospace;
+    font-size: 0.55rem;
+    color: var(--muted);
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+  }
+
+  /* Reality check banner */
+  .rc-banner {
+    width: 100%;
+    max-width: 960px;
+    background: rgba(232,138,90,0.08);
+    border: 1px solid rgba(232,138,90,0.3);
+    border-radius: 4px;
+    padding: 12px 18px;
+    margin-bottom: 20px;
+    font-family: 'Syne Mono', monospace;
+    font-size: 0.58rem;
+    color: var(--accent4);
+    letter-spacing: 0.07em;
+    line-height: 1.7;
+    animation: riseIn 0.7s 0.05s both;
+  }
+  .rc-banner strong { color: #f0a070; }
+
+  /* Status legend */
+  .legend {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 5px;
+    justify-content: center;
+    margin: 0 0 20px;
+    animation: riseIn 0.7s 0.1s both;
+    width: 100%;
+    max-width: 960px;
+  }
+  .legend-item {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding: 3px 10px;
+    border: 1px solid var(--border);
+    border-radius: 20px;
+    background: var(--surface);
+    font-family: 'Syne Mono', monospace;
+    font-size: 0.52rem;
+    color: var(--muted);
+    letter-spacing: 0.07em;
+  }
+  .l-dot { width: 7px; height: 7px; border-radius: 50%; flex-shrink: 0; }
+
+  .axis-wrapper {
+    width: 100%;
+    max-width: 960px;
+    animation: riseIn 0.8s 0.12s cubic-bezier(.22,1,.36,1) both;
+  }
+
+  .y-axis-label {
+    writing-mode: vertical-rl;
+    transform: rotate(180deg);
+    font-family: 'Syne Mono', monospace;
+    font-size: 0.52rem;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--muted);
+    padding: 0 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    min-width: 34px;
+  }
+  .y-hi, .y-lo { font-size: 0.46rem; color: var(--border-bright); }
+
+  .grid-row {
+    display: flex;
+    align-items: stretch;
+    gap: 0;
+    width: 100%;
+  }
+
+  .grid {
+    flex: 1;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: 1fr 1fr;
+    gap: 2px;
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    overflow: hidden;
+    background: var(--border);
+  }
+
+  .quad {
+    background: var(--surface);
+    padding: 14px 13px 36px;
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
+    position: relative;
+    min-height: 180px;
+  }
+  .quad-tl { background: var(--q-tl); }
+  .quad-tr { background: var(--q-tr); }
+  .quad-bl { background: var(--q-bl); }
+  .quad-br { background: var(--q-br); }
+
+  .quad::after {
+    content: attr(data-label);
+    position: absolute;
+    bottom: 8px;
+    right: 11px;
+    font-family: 'Syne Mono', monospace;
+    font-size: 0.5rem;
+    opacity: 0.2;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+  }
+  .quad-tl::after { color: var(--q-tl-c); }
+  .quad-tr::after { color: var(--q-tr-c); }
+  .quad-bl::after { color: var(--q-bl-c); }
+  .quad-br::after { color: var(--q-br-c); }
+
+  .quad-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 5px;
+    padding-bottom: 6px;
+    border-bottom: 1px solid var(--border);
+  }
+  .quad-title {
+    font-family: 'Syne Mono', monospace;
+    font-size: 0.5rem;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    font-weight: 400;
+  }
+  .quad-tl .quad-title { color: var(--q-tl-c); }
+  .quad-tr .quad-title { color: var(--q-tr-c); }
+  .quad-bl .quad-title { color: var(--q-bl-c); }
+  .quad-br .quad-title { color: var(--q-br-c); }
+
+  /* STATUS INDICATORS */
+  .status-dot {
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    flex-shrink: 0;
+    margin-top: 5px;
+  }
+  .s-confirmed { background: var(--confirmed); box-shadow: 0 0 5px rgba(126,200,164,0.5); }
+  .s-unverified { background: var(--unverified); }
+  .s-dissolved  { background: var(--dissolved); opacity: 0.7; }
+  .s-new        { background: var(--new-find); box-shadow: 0 0 5px rgba(144,184,240,0.6); }
+
+  /* STATUS BADGE (inline) */
+  .sbadge {
+    font-family: 'Syne Mono', monospace;
+    font-size: 0.38rem;
+    padding: 1px 5px;
+    border-radius: 20px;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    flex-shrink: 0;
+  }
+  .sb-confirmed { background: rgba(126,200,164,0.12); color: var(--confirmed); border: 1px solid rgba(126,200,164,0.3); }
+  .sb-unverified { background: rgba(232,200,110,0.12); color: var(--unverified); border: 1px solid rgba(232,200,110,0.3); }
+  .sb-dissolved { background: rgba(232,124,124,0.12); color: var(--dissolved); border: 1px solid rgba(232,124,124,0.3); text-decoration: line-through; }
+  .sb-new { background: rgba(144,184,240,0.12); color: var(--new-find); border: 1px solid rgba(144,184,240,0.3); }
+
+  /* TYPE BADGES */
+  .badge {
+    display: inline-block;
+    font-family: 'Syne Mono', monospace;
+    font-size: 0.38rem;
+    padding: 1px 5px;
+    border-radius: 2px;
+    text-transform: uppercase;
+    letter-spacing: 0.07em;
+  }
+  .b-social { background: rgba(200,185,110,0.12); color: var(--accent); border: 1px solid rgba(200,185,110,0.25); }
+  .b-sport { background: rgba(126,200,164,0.12); color: var(--accent2); border: 1px solid rgba(126,200,164,0.25); }
+  .b-arts { background: rgba(184,127,200,0.12); color: var(--accent3); border: 1px solid rgba(184,127,200,0.25); }
+  .b-employ { background: rgba(232,138,90,0.12); color: var(--accent4); border: 1px solid rgba(232,138,90,0.25); }
+  .b-youth { background: rgba(100,160,240,0.12); color: #90b8f0; border: 1px solid rgba(100,160,240,0.25); }
+  .b-bsl { background: rgba(240,120,140,0.12); color: #f09090; border: 1px solid rgba(240,120,140,0.25); }
+  .b-swl { background: rgba(80,140,240,0.10); color: #80b0f0; border: 1px solid rgba(80,140,240,0.2); }
+  .b-sel { background: rgba(160,100,220,0.10); color: #c090e0; border: 1px solid rgba(160,100,220,0.2); }
+  .b-sutton { background: rgba(90,210,160,0.12); color: #5fd4a0; border: 1px solid rgba(90,210,160,0.28); }
+
+  .card {
+    display: flex;
+    align-items: flex-start;
+    gap: 8px;
+    padding: 6px 8px;
+    border-radius: 3px;
+    border: 1px solid transparent;
+    cursor: pointer;
+    transition: all 0.15s ease;
+  }
+  .card:hover:not(.dissolved-card) { border-color: var(--border-bright); background: rgba(255,255,255,0.04); transform: translateX(2px); }
+  .card.active { border-color: var(--border-bright); background: rgba(255,255,255,0.06); }
+
+  .dissolved-card {
+    opacity: 0.4;
+    cursor: default;
+  }
+
+  .card-body { flex: 1; min-width: 0; }
+  .card-name-row { display: flex; align-items: center; flex-wrap: wrap; gap: 3px; margin-bottom: 2px; }
+  .card-name { font-size: 0.68rem; font-weight: 600; color: var(--text); line-height: 1.25; }
+  .dissolved-card .card-name { color: var(--muted); text-decoration: line-through; }
+  .card-desc { font-family: 'Syne Mono', monospace; font-size: 0.52rem; color: var(--muted); line-height: 1.5; }
+
+  .x-axis-outer { padding-left: 34px; margin-top: 3px; }
+  .x-axis-inner {
+    display: flex;
+    justify-content: space-between;
+    font-family: 'Syne Mono', monospace;
+    font-size: 0.48rem;
+    color: var(--border-bright);
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+  }
+  .x-center {
+    text-align: center;
+    font-family: 'Syne Mono', monospace;
+    font-size: 0.54rem;
+    color: var(--muted);
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    margin-top: 4px;
+  }
+
+  /* DETAIL PANEL */
+  .detail-panel {
+    width: 100%;
+    max-width: 960px;
+    margin-top: 16px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    padding: 22px 26px;
+    min-height: 90px;
+    animation: riseIn 0.7s 0.15s both;
+  }
+  .panel-empty {
+    font-family: 'Syne Mono', monospace;
+    font-size: 0.62rem;
+    color: var(--muted);
+    text-align: center;
+    padding: 10px;
+    letter-spacing: 0.1em;
+  }
+  .panel-content { display: none; }
+  .panel-content.visible { display: block; animation: riseIn 0.3s ease both; }
+
+  .panel-top {
+    display: flex;
+    align-items: flex-start;
+    gap: 14px;
+    margin-bottom: 12px;
+    flex-wrap: wrap;
+  }
+  .panel-status-dot { width: 12px; height: 12px; border-radius: 50%; flex-shrink: 0; margin-top: 6px; }
+
+  .panel-name { font-size: 1.25rem; font-weight: 800; letter-spacing: -0.01em; flex: 1; line-height: 1.15; }
+
+  .panel-zone {
+    font-family: 'Syne Mono', monospace;
+    font-size: 0.5rem;
+    padding: 3px 10px;
+    border-radius: 20px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    border: 1px solid;
+    flex-shrink: 0;
+    margin-top: 4px;
+  }
+
+  .status-callout {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    padding: 10px 14px;
+    border-radius: 3px;
+    margin-bottom: 13px;
+    font-family: 'Syne Mono', monospace;
+    font-size: 0.6rem;
+    line-height: 1.6;
+  }
+  .sc-confirmed { background: rgba(126,200,164,0.08); border: 1px solid rgba(126,200,164,0.25); color: var(--confirmed); }
+  .sc-unverified { background: rgba(232,200,110,0.08); border: 1px solid rgba(232,200,110,0.25); color: var(--unverified); }
+  .sc-dissolved { background: rgba(232,124,124,0.08); border: 1px solid rgba(232,124,124,0.25); color: var(--dissolved); }
+  .sc-new { background: rgba(144,184,240,0.08); border: 1px solid rgba(144,184,240,0.25); color: var(--new-find); }
+
+  .panel-tags { display: flex; flex-wrap: wrap; gap: 5px; margin-bottom: 12px; }
+
+  .panel-desc { font-size: 0.73rem; line-height: 1.8; color: #b8b6c6; margin-bottom: 12px; }
+
+  .panel-strategy {
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 3px;
+    padding: 11px 15px;
+  }
+  .strategy-label {
+    font-family: 'Syne Mono', monospace;
+    font-size: 0.47rem;
+    color: var(--muted);
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    margin-bottom: 5px;
+  }
+  .strategy-text { font-size: 0.7rem; color: var(--text); line-height: 1.75; }
+
+  @keyframes riseIn {
+    from { opacity: 0; transform: translateY(12px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="eyebrow">South London · Non-Healthcare Deaf Organisations · Reality Check Feb 2026</div>
+  <h1>Community<br><span>Stakeholder Map v2</span></h1>
+  <div class="sub">Verified Status · Community Reach × Relevance to Accessibility / Doorbell Alert Project</div>
+</header>
+
+<!-- Reality check banner -->
+<div class="rc-banner">
+  <strong>Reality check completed Feb 2026.</strong> Bromley Chain formally dissolved Mar 2024 (funds transferred to Breakthrough). Guardian Centre "Colliers Wood Deaf Club" — venue confirmed open, club unverified. Croydon Deaf Club unverified. Epsom Deaf Club unverified. D-Zone Lewisham unverified. <strong>New find:</strong> Surbiton Deaf Social Club confirmed active at The Harrow Pub, Cheam SM3 — physically inside Sutton borough, the closest active Deaf social club to home.
+</div>
+
+<!-- Legend -->
+<div class="legend">
+  <div class="legend-item"><div class="l-dot" style="background:var(--confirmed)"></div>Confirmed active</div>
+  <div class="legend-item"><div class="l-dot" style="background:var(--unverified)"></div>Unverified — needs check</div>
+  <div class="legend-item"><div class="l-dot" style="background:var(--dissolved)"></div>Dissolved / closed</div>
+  <div class="legend-item"><div class="l-dot" style="background:var(--new-find)"></div>New discovery</div>
+</div>
+
+<!-- Grid -->
+<div class="axis-wrapper">
+  <div class="grid-row">
+
+    <div class="y-axis-label">
+      <span class="y-hi">WIDE</span>
+      <span>Community Reach</span>
+      <span class="y-lo">LOCAL</span>
+    </div>
+
+    <div class="grid">
+
+      <!-- TL: Wide + High Relevance -->
+      <div class="quad quad-tl" data-label="Engage Now">
+        <div class="quad-header"><span class="quad-title">▲ Wide Reach · High Relevance</span></div>
+
+        <div class="card" onclick="showPanel('remark')" id="c-remark">
+          <div class="status-dot s-confirmed"></div>
+          <div class="card-body">
+            <div class="card-name-row">
+              <span class="card-name">Remark! Community</span>
+              <span class="sbadge sb-confirmed">✓ Active</span>
+              <span class="badge b-social">Social</span><span class="badge b-sport">Sport</span><span class="badge b-youth">Youth</span><span class="badge b-sel">SEL</span>
+            </div>
+            <div class="card-desc">Charity accounts to Oct 2024 · Summer Playscheme 2025 complete · 14 London clubs confirmed</div>
+          </div>
+        </div>
+
+        <div class="card" onclick="showPanel('deaf-unity')" id="c-deaf-unity">
+          <div class="status-dot s-confirmed"></div>
+          <div class="card-body">
+            <div class="card-name-row">
+              <span class="card-name">Deaf Unity</span>
+              <span class="sbadge sb-confirmed">✓ Active</span>
+              <span class="badge b-employ">Employment</span><span class="badge b-bsl">BSL</span>
+            </div>
+            <div class="card-desc">Royal Festival Hall BSL café confirmed on live site · Inclusion London updated May 2025</div>
+          </div>
+        </div>
+
+        <div class="card" onclick="showPanel('deaf-dmcs')" id="c-deaf-dmcs">
+          <div class="status-dot s-confirmed"></div>
+          <div class="card-body">
+            <div class="card-name-row">
+              <span class="card-name">Deaf DMCS</span>
+              <span class="sbadge sb-confirmed">✓ Active</span>
+              <span class="badge b-social">Community</span>
+            </div>
+            <div class="card-desc">Full name: Deaf Multilingual Community Support · Active on Inclusion London May 2025 · IAG officer twice weekly</div>
+          </div>
+        </div>
+
+        <div class="card" onclick="showPanel('dewa')" id="c-dewa">
+          <div class="status-dot s-confirmed"></div>
+          <div class="card-body">
+            <div class="card-name-row">
+              <span class="card-name">DEWA</span>
+              <span class="sbadge sb-confirmed">✓ Active</span>
+              <span class="badge b-social">BME Women</span>
+            </div>
+            <div class="card-desc">Inclusion London directory updated May 2025 · covers all South London boroughs</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- TR: Wide + Lower Relevance -->
+      <div class="quad quad-tr" data-label="Keep in View">
+        <div class="quad-header"><span class="quad-title">▲ Wide Reach · Lower Relevance</span></div>
+
+        <div class="card" onclick="showPanel('deafinitely')" id="c-deafinitely">
+          <div class="status-dot s-confirmed"></div>
+          <div class="card-body">
+            <div class="card-name-row">
+              <span class="card-name">Deafinitely Theatre</span>
+              <span class="sbadge sb-confirmed">✓ Active</span>
+              <span class="badge b-arts">Arts</span><span class="badge b-bsl">BSL</span>
+            </div>
+            <div class="card-desc">2025 national tour confirmed · Companies House active · Paula Garfield MBE 2024</div>
+          </div>
+        </div>
+
+        <div class="card" onclick="showPanel('bda-comm')" id="c-bda-comm">
+          <div class="status-dot s-confirmed"></div>
+          <div class="card-body">
+            <div class="card-name-row">
+              <span class="card-name">British Deaf Association</span>
+              <span class="sbadge sb-confirmed">✓ Active</span>
+              <span class="badge b-bsl">BSL Rights</span>
+            </div>
+            <div class="card-desc">Inclusion London updated May 2025 · all South London boroughs</div>
+          </div>
+        </div>
+
+        <div class="card" onclick="showPanel('bright-deafblind')" id="c-bright-deafblind">
+          <div class="status-dot s-confirmed"></div>
+          <div class="card-body">
+            <div class="card-name-row">
+              <span class="card-name">Bright DeafBlind</span>
+              <span class="sbadge sb-confirmed">✓ Active</span>
+              <span class="badge b-social">Dual-sensory</span>
+            </div>
+            <div class="card-desc">Inclusion London updated May 2025 · London-wide · deafblind BSL users</div>
+          </div>
+        </div>
+
+        <div class="card" onclick="showPanel('deaf-umbrella')" id="c-deaf-umbrella">
+          <div class="status-dot s-unverified"></div>
+          <div class="card-body">
+            <div class="card-name-row">
+              <span class="card-name">Deaf Umbrella Job Club</span>
+              <span class="sbadge sb-unverified">? Verify</span>
+              <span class="badge b-employ">Employment</span>
+            </div>
+            <div class="card-desc">Online job club · website present but no recent activity confirmable · verify before contact</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- BL: Local + High Relevance -->
+      <div class="quad quad-bl" data-label="Prioritise Locally">
+        <div class="quad-header"><span class="quad-title">▼ Local Reach · High Relevance</span></div>
+
+        <!-- NEW FIND -->
+        <div class="card" onclick="showPanel('surbiton')" id="c-surbiton">
+          <div class="status-dot s-new"></div>
+          <div class="card-body">
+            <div class="card-name-row">
+              <span class="card-name">Surbiton Deaf Social Club</span>
+              <span class="sbadge sb-new">★ New Find</span>
+              <span class="sbadge sb-confirmed">✓ Active</span>
+              <span class="badge b-social">Social</span><span class="badge b-sutton">Sutton</span>
+            </div>
+            <div class="card-desc">The Harrow Pub, High St Cheam SM3 8RL — every 3rd Thursday · verified on Connected Kingston 2025</div>
+          </div>
+        </div>
+
+        <div class="card" onclick="showPanel('clapham-bsl')" id="c-clapham-bsl">
+          <div class="status-dot s-confirmed"></div>
+          <div class="card-body">
+            <div class="card-name-row">
+              <span class="card-name">Clapham Deaf & Sports Social</span>
+              <span class="sbadge sb-confirmed">✓ Active</span>
+              <span class="badge b-social">Social</span><span class="badge b-bsl">BSL</span><span class="badge b-sel">SEL</span>
+            </div>
+            <div class="card-desc">Email confirmed on Deaf Unity live page · <a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="74171815041c15191011151207174d4c341c1b0019151d185a171b5a011f">[email&#160;protected]</a></div>
+          </div>
+        </div>
+
+        <div class="card" onclick="showPanel('colliers')" id="c-colliers">
+          <div class="status-dot s-unverified"></div>
+          <div class="card-body">
+            <div class="card-name-row">
+              <span class="card-name">Colliers Wood Deaf Club</span>
+              <span class="sbadge sb-unverified">? Verify</span>
+              <span class="badge b-social">Social</span><span class="badge b-swl">SWL</span>
+            </div>
+            <div class="card-desc">Guardian Centre SW19 — venue confirmed open, but club status unverified · last source 2022</div>
+          </div>
+        </div>
+
+        <div class="card" onclick="showPanel('croydon-club')" id="c-croydon-club">
+          <div class="status-dot s-unverified"></div>
+          <div class="card-body">
+            <div class="card-name-row">
+              <span class="card-name">Croydon Deaf Club</span>
+              <span class="sbadge sb-unverified">? Verify</span>
+              <span class="badge b-social">Social</span><span class="badge b-swl">SWL</span>
+            </div>
+            <div class="card-desc">Chatsworth Road CR0 · status unverified · last source 2022 Gallaudet directory</div>
+          </div>
+        </div>
+
+        <div class="card" onclick="showPanel('epsom-deaf')" id="c-epsom-deaf">
+          <div class="status-dot s-unverified"></div>
+          <div class="card-body">
+            <div class="card-name-row">
+              <span class="card-name">Epsom Deaf Club</span>
+              <span class="sbadge sb-unverified">? Verify</span>
+              <span class="badge b-social">Social</span>
+            </div>
+            <div class="card-desc">Longmead Day Centre KT19 · day centre confirmed open as Wellbeing Centre, but deaf club unverified</div>
+          </div>
+        </div>
+
+        <div class="card" onclick="showPanel('deafplus-bromley')" id="c-deafplus-bromley">
+          <div class="status-dot s-new"></div>
+          <div class="card-body">
+            <div class="card-name-row">
+              <span class="card-name">deafPLUS — Bromley ★</span>
+              <span class="sbadge sb-new">★ Successor</span>
+              <span class="sbadge sb-confirmed">✓ Active</span>
+              <span class="badge b-social">Social</span><span class="badge b-employ">IAG</span><span class="badge b-sel">SEL</span>
+            </div>
+            <div class="card-desc">Bromley Chain successor · equipment demos · BSL + HoH social groups · Mon–Fri office · Jan 2025 confirmed · closest existing analogue to doorbell project</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- BR: Local + Lower Relevance -->
+      <div class="quad quad-br" data-label="Monitor / Review">
+        <div class="quad-header"><span class="quad-title">▼ Local Reach · Lower Relevance</span></div>
+
+        <!-- DISSOLVED -->
+        <div class="card dissolved-card" onclick="showPanel('bromley-deaf')" id="c-bromley-deaf">
+          <div class="status-dot s-dissolved"></div>
+          <div class="card-body">
+            <div class="card-name-row">
+              <span class="card-name">Bromley Chain / Deaf Social Club</span>
+              <span class="sbadge sb-dissolved">✗ Dissolved</span>
+            </div>
+            <div class="card-desc">Dissolved Mar 2024 · funds → deafPLUS Bromley (now in Prioritise Locally)</div>
+          </div>
+        </div>
+
+        <div class="card" onclick="showPanel('dzone')" id="c-dzone">
+          <div class="status-dot s-unverified"></div>
+          <div class="card-body">
+            <div class="card-name-row">
+              <span class="card-name">D-Zone Youth Club</span>
+              <span class="sbadge sb-unverified">? Verify</span>
+              <span class="badge b-youth">Youth</span><span class="badge b-sel">SEL</span>
+            </div>
+            <div class="card-desc">Crofton School SE4 · mobile number listed on Deaf Unity page · current status unverified</div>
+          </div>
+        </div>
+
+        <div class="card" onclick="showPanel('remark-lunch')" id="c-remark-lunch">
+          <div class="status-dot s-confirmed"></div>
+          <div class="card-body">
+            <div class="card-name-row">
+              <span class="card-name">Remark! Lunch Clubs — Eltham & Beckenham</span>
+              <span class="sbadge sb-confirmed">✓ Active</span>
+              <span class="badge b-social">Social</span><span class="badge b-sel">SEL</span>
+            </div>
+            <div class="card-desc">Charity accounts Oct 2024 confirm 4 weekly London lunch clubs operational · over-55s</div>
+          </div>
+        </div>
+
+        <div class="card" onclick="showPanel('oak-lodge')" id="c-oak-lodge">
+          <div class="status-dot s-confirmed"></div>
+          <div class="card-body">
+            <div class="card-name-row">
+              <span class="card-name">Oak Lodge — Lifelong Learning</span>
+              <span class="sbadge sb-confirmed">✓ Active</span>
+              <span class="badge b-youth">Education</span><span class="badge b-swl">SWL</span>
+            </div>
+            <div class="card-desc">Ofsted Good 2025 · adult lifelong learning programme confirmed · Wandsworth</div>
+          </div>
+        </div>
+
+      </div>
+
+    </div>
+  </div>
+
+  <div class="x-axis-outer">
+    <div class="x-axis-inner"><span>LOWER</span><span>HIGHER</span></div>
+    <div class="x-center">Relevance to Accessibility / Doorbell Alert Project</div>
+  </div>
+</div>
+
+<!-- DETAIL PANEL -->
+<div class="detail-panel" id="detail-panel">
+  <div class="panel-empty" id="panel-empty">← Click any organisation to see status and engagement approach</div>
+
+  <!-- ── CONFIRMED ACTIVE ── -->
+
+  <div class="panel-content" id="pc-remark">
+    <div class="panel-top">
+      <div class="panel-status-dot s-confirmed"></div>
+      <div class="panel-name">Remark! Community</div>
+      <span class="panel-zone" style="color:var(--q-tl-c);border-color:rgba(200,185,110,0.3)">Engage Now</span>
+    </div>
+    <div class="status-callout sc-confirmed">✓ <strong>Confirmed active</strong> — Charity Commission accounts filed to October 2024. Summer Playscheme 2025 announced and completed (summer 2025). Website updated 2025. 4 weekly London lunch clubs confirmed including Eltham (SE9) and Beckenham. South London Badminton Club at Haberdashers' Knights Academy BR1 every Monday. South London youth football on Saturdays. SE6 (Catford) playscheme active.</div>
+    <div class="panel-tags"><span class="badge b-social">Social</span><span class="badge b-sport">Sport</span><span class="badge b-youth">Youth</span><span class="badge b-sel">SE London</span></div>
+    <div class="panel-desc">UK's largest Deaf club network — 14 clubs across London, charity income £407,994 (2024 accounts). Entirely community-focused with no healthcare delivery. South London presence is strongest in SE boroughs: Eltham lunch club (SE9), SE6 playscheme, BR1 badminton, Beckenham lunch club. The Parent & Children Group welcomes hearing CODAs and hearing parents of deaf children.</div>
+    <div class="panel-strategy">
+      <div class="strategy-label">Engagement Approach</div>
+      <div class="strategy-text">The Monday South London Badminton Club (BR1) and Monday Eltham Lunch Club (SE9) are your two most practical in-person entry points. Remark!'s charity team is based at 18 Leather Lane, EC1N — contactable via remarkcommunity.org. The lunch club advocacy element (making phone calls, writing letters for members) shows they already work on everyday independence tasks, making doorbell alerts a natural fit to raise informally.</div>
+    </div>
+  </div>
+
+  <div class="panel-content" id="pc-deaf-unity">
+    <div class="panel-top">
+      <div class="panel-status-dot s-confirmed"></div>
+      <div class="panel-name">Deaf Unity</div>
+      <span class="panel-zone" style="color:var(--q-tl-c);border-color:rgba(200,185,110,0.3)">Engage Now</span>
+    </div>
+    <div class="status-callout sc-confirmed">✓ <strong>Confirmed active</strong> — BSL Café at Royal Festival Hall listed on live Deaf Unity website as ongoing monthly event (third Friday of each month). Inclusion London DDPO directory entry updated May 2025. Active events calendar. Registered charity in good standing.</div>
+    <div class="panel-tags"><span class="badge b-employ">Employment</span><span class="badge b-bsl">BSL</span></div>
+    <div class="panel-desc">Deaf-led London charity focused on education-to-employment transitions. Monthly community BSL café at the Royal Festival Hall Southbank is a publicly accessible, longstanding Deaf community gathering point — free to attend, no appointment needed. Join their Facebook group for dates. They also run a West London community project (Heathrow Community Trust funded) and employment empowerment workshops.</div>
+    <div class="panel-strategy">
+      <div class="strategy-label">Engagement Approach</div>
+      <div class="strategy-text">The Royal Festival Hall BSL café is the single most accessible entry point into the South London Deaf community for an outsider. Attend as a community member, not a project promoter. Facebook group for event updates. Deaf Unity can also be approached via deafunity.org for awareness training partnerships — their employment toolkit angle (working from home, receiving deliveries safely) aligns directly with the doorbell project.</div>
+    </div>
+  </div>
+
+  <div class="panel-content" id="pc-deaf-dmcs">
+    <div class="panel-top">
+      <div class="panel-status-dot s-confirmed"></div>
+      <div class="panel-name">Deaf DMCS — Deaf Multilingual Community Support</div>
+      <span class="panel-zone" style="color:var(--q-tl-c);border-color:rgba(200,185,110,0.3)">Engage Now</span>
+    </div>
+    <div class="status-callout sc-confirmed">✓ <strong>Confirmed active</strong> — Inclusion London DDPO directory listing confirmed updated May 2025. IAG officer provides support twice weekly. Website deaf-dmcs.org is live.</div>
+    <div class="panel-tags"><span class="badge b-social">Community</span><span class="badge b-bsl">Multilingual</span></div>
+    <div class="panel-desc">Full name is Deaf Multilingual Community Support (DMCS) — an important correction from the original map. They serve multilingual Deaf communities (BSL plus other sign languages), covering all South London boroughs. Their IAG (Information, Advice and Guidance) service includes help with housing, benefits, education, Home Office immigration issues, and translating documents into BSL. They have in-house interpreters. Note: they do accompany people to medical appointments, which puts them at the edge of the "no healthcare involvement" boundary, but their primary purpose is community support and information access.</div>
+    <div class="panel-strategy">
+      <div class="strategy-label">Engagement Approach</div>
+      <div class="strategy-text">DMCS is particularly important for reaching South London's multilingual Deaf community — people whose first language may be Arabic Sign Language, Kenyan Sign Language or another national sign language, who are often the most isolated from mainstream Deaf services. A doorbell alert that only reaches the BSL-first community misses a significant proportion of London's Deaf population. Contact via deaf-dmcs.org to understand community distribution.</div>
+    </div>
+  </div>
+
+  <div class="panel-content" id="pc-dewa">
+    <div class="panel-top">
+      <div class="panel-status-dot s-confirmed"></div>
+      <div class="panel-name">DEWA</div>
+      <span class="panel-zone" style="color:var(--q-tl-c);border-color:rgba(200,185,110,0.3)">Engage Now</span>
+    </div>
+    <div class="status-callout sc-confirmed">✓ <strong>Confirmed active</strong> — Inclusion London DDPO listing updated May 2025. Website dewa.org.uk active.</div>
+    <div class="panel-tags"><span class="badge b-social">BME Deaf Women</span><span class="badge b-employ">Empowerment</span></div>
+    <div class="panel-desc">National organisation run and controlled by Deaf women from Black and Ethnic Minority groups. Covers all South London boroughs. Empowers BME Deaf women to have choice and control without compromising identity.</div>
+    <div class="panel-strategy">
+      <div class="strategy-label">Engagement Approach</div>
+      <div class="strategy-text">Critical for inclusive co-design. Reach via dewa.org.uk. Treat as co-designers, not just end users — BME Deaf women's insight on home safety, privacy expectations, and cultural dimensions of having a visible external alert system on your door is essential to getting the product right.</div>
+    </div>
+  </div>
+
+  <div class="panel-content" id="pc-deafinitely">
+    <div class="panel-top">
+      <div class="panel-status-dot s-confirmed"></div>
+      <div class="panel-name">Deafinitely Theatre</div>
+      <span class="panel-zone" style="color:var(--q-tr-c);border-color:rgba(126,200,164,0.3)">Keep in View</span>
+    </div>
+    <div class="status-callout sc-confirmed">✓ <strong>Very active</strong> — 2025 season formally announced April 2025: UK tour of The Vagina Monologues (BSL) plus premiere of Barrier(s) by deaf writer Eloise Pennycott. Companies House status: Active. National Lottery funded. Paula Garfield awarded MBE 2024. 2025 accounts due Dec 2025.</div>
+    <div class="panel-tags"><span class="badge b-arts">Arts</span><span class="badge b-bsl">BSL</span></div>
+    <div class="panel-desc">The UK's only professional Deaf-led bilingual theatre company. Founded 2002, currently in its strongest position — expanding from London into national touring. Deafinitely Youth Theatre alumni include Rose (EastEnders) and William Grint (RSC). Paula Garfield directed BSL Shakespeare at the Globe. Arts Council England and National Lottery supported.</div>
+    <div class="panel-strategy">
+      <div class="strategy-label">Engagement Approach</div>
+      <div class="strategy-text">High cultural authority in the Deaf community — a connection signals genuine engagement with Deaf identity rather than medical/welfare framing. Consider approaching their Deaf Awareness training arm for consultation on how to frame accessibility tools as empowerment. Contact via deafinitelytheatre.co.uk.</div>
+    </div>
+  </div>
+
+  <div class="panel-content" id="pc-bda-comm">
+    <div class="panel-top">
+      <div class="panel-status-dot s-confirmed"></div>
+      <div class="panel-name">British Deaf Association</div>
+      <span class="panel-zone" style="color:var(--q-tr-c);border-color:rgba(126,200,164,0.3)">Keep in View</span>
+    </div>
+    <div class="status-callout sc-confirmed">✓ <strong>Confirmed active</strong> — Inclusion London DDPO updated May 2025. National campaigning organisation, founded 1890. bda.org.uk active.</div>
+    <div class="panel-tags"><span class="badge b-bsl">BSL Rights</span><span class="badge b-social">Advocacy</span></div>
+    <div class="panel-desc">Oldest national Deaf-led organisation in the UK. All board trustees are Deaf, 80% of staff are Deaf. Campaigns for BSL language rights and equal access. The BSL Charter is their public commitment tool — organisations sign it to formally recognise BSL users' needs.</div>
+    <div class="panel-strategy">
+      <div class="strategy-label">Engagement Approach</div>
+      <div class="strategy-text">Keep informed of the doorbell alert project's existence. If Sutton Council or a housing provider adopts the alert system as policy, the BDA's BSL Charter is a useful public commitment framework to cite. Contact via bda.org.uk.</div>
+    </div>
+  </div>
+
+  <div class="panel-content" id="pc-bright-deafblind">
+    <div class="panel-top">
+      <div class="panel-status-dot s-confirmed"></div>
+      <div class="panel-name">Bright DeafBlind</div>
+      <span class="panel-zone" style="color:var(--q-tr-c);border-color:rgba(126,200,164,0.3)">Keep in View</span>
+    </div>
+    <div class="status-callout sc-confirmed">✓ <strong>Confirmed active</strong> — brightdeafblind.com website live · Inclusion London DDPO directory May 2025.</div>
+    <div class="panel-tags"><span class="badge b-social">Dual-sensory</span></div>
+    <div class="panel-desc">Provides deafblind-friendly social activities and workshops for profoundly deaf, visually impaired BSL users across London. Their membership is among the most isolated in the Deaf community. Standard visual flashing doorbells may be insufficient for deafblind users — vibration or tactile alerts would be needed.</div>
+    <div class="panel-strategy">
+      <div class="strategy-label">Engagement Approach</div>
+      <div class="strategy-text">Consult early on dual-sensory design requirements. If the doorbell alert system can incorporate vibration components, Bright DeafBlind moves from "keep in view" to a high-priority partner. Contact via brightdeafblind.com.</div>
+    </div>
+  </div>
+
+  <div class="panel-content" id="pc-deaf-umbrella">
+    <div class="panel-top">
+      <div class="panel-status-dot s-unverified"></div>
+      <div class="panel-name">Deaf Umbrella Job Club</div>
+      <span class="panel-zone" style="color:var(--q-tr-c);border-color:rgba(126,200,164,0.3)">Keep in View — Verify First</span>
+    </div>
+    <div class="status-callout sc-unverified">⚠ <strong>Unverified</strong> — deafumbrella.com website is live but no recent activity evidence found. The online job club was described as London and South East region only. Verify status before attempting contact or partnership planning.</div>
+    <div class="panel-tags"><span class="badge b-employ">Employment</span></div>
+    <div class="panel-desc">Community Interest Company providing a fully funded online BSL job club for Deaf people in London and SE. Focuses on pre-employment journeys with BSL support workers rather than interpreter waiting times. Lower priority until status confirmed.</div>
+    <div class="panel-strategy">
+      <div class="strategy-label">Engagement Approach</div>
+      <div class="strategy-text">Verify current status via deafumbrella.com or their social media before investing time. If active, their employment-focused BSL cohort are independent adults who would naturally be interested in home safety tools. Could offer to include a "Deaf Home Safety" information resource in their pre-employment digital pack.</div>
+    </div>
+  </div>
+
+  <!-- ── NEW FIND ── -->
+
+  <div class="panel-content" id="pc-surbiton">
+    <div class="panel-top">
+      <div class="panel-status-dot s-new"></div>
+      <div class="panel-name">Surbiton Deaf Social Club ★</div>
+      <span class="panel-zone" style="color:var(--new-find);border-color:rgba(144,184,240,0.3)">New Find · Prioritise</span>
+    </div>
+    <div class="status-callout sc-new">★ <strong>New discovery — confirmed active.</strong> Not in original map. Verified on Connected Kingston directory (last updated 2025). Meets every third Thursday at The Harrow Pub, High Street, Cheam, SM3 8RL. Nearest railway: Cheam Station. Join via Facebook page (linked on Connected Kingston listing). This is physically inside Sutton borough — the closest active Deaf social club to home.</div>
+    <div class="panel-tags"><span class="badge b-social">Social</span><span class="badge b-sutton">Sutton Borough</span><span class="badge b-swl">SWL</span></div>
+    <div class="panel-desc">Surbiton Deaf Social Club is a grassroots community social club meeting monthly at a pub in Cheam — directly within the London Borough of Sutton. It was listed on the Deaf Unity UK Deaf Clubs page (as "Surbiton Deaf Social Club") and fully confirmed via Connected Kingston's community directory as of 2025. Members are Deaf adults from Sutton and neighbouring areas (Kingston, Cheam, Epsom). The Facebook page is the active communication channel — check there for monthly dates. Open to all.</div>
+    <div class="panel-strategy">
+      <div class="strategy-label">Engagement Approach</div>
+      <div class="strategy-text">This is your most valuable discovery from the reality check. Meeting monthly at a pub in Cheam SM3 — inside Sutton — it is literally your home borough's Deaf social club. This is the most direct, lowest-friction entry point for the entire doorbell alert project. Find the Facebook page, attend as a neighbour, bring a prototype to a social session. Word-of-mouth from this club would spread through Sutton's Deaf community faster than any formal outreach. This replaces both Colliers Wood (unverified) and Epsom Deaf Club (unverified) as the primary local grassroots contact.</div>
+    </div>
+  </div>
+
+  <!-- ── UNVERIFIED ── -->
+
+  <div class="panel-content" id="pc-clapham-bsl">
+    <div class="panel-top">
+      <div class="panel-status-dot s-confirmed"></div>
+      <div class="panel-name">Clapham Deaf & Sports Social Club</div>
+      <span class="panel-zone" style="color:var(--q-bl-c);border-color:rgba(184,127,200,0.3)">Prioritise Locally</span>
+    </div>
+    <div class="status-callout sc-confirmed">✓ <strong>Confirmed active</strong> — Email address <a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="9efdf2ffeef6fff3fafbfff8edfda7a6def6f1eaf3fff7f2b0fdf1b0ebf5">[email&#160;protected]</a> listed on Deaf Unity's live UK Deaf Clubs page (article updated 2020, still on live site). Combined name on Deaf Unity suggests it's both a deaf social and sports club. Note: the original map described this as two separate sessions (Wed evenings at Clapham North + monthly Thursday at Clapham Library). The precise current format needs a direct email to confirm.</div>
+    <div class="panel-tags"><span class="badge b-social">Social</span><span class="badge b-bsl">BSL</span><span class="badge b-sel">SEL · Lambeth</span></div>
+    <div class="panel-desc">Grassroots Lambeth community club. A direct email to <a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="5e3d323f2e363f333a3b3f382d3d67661e36312a333f3732703d31702b35">[email&#160;protected]</a> is the best way to confirm current meeting times and format before attending.</div>
+    <div class="panel-strategy">
+      <div class="strategy-label">Engagement Approach</div>
+      <div class="strategy-text">Email first to confirm current meeting format. Once verified, Clapham is a key SEL community touchpoint — particularly given its proximity to the RAD Lambeth advice surgery. A warm introduction to a doorbell alert demonstration would come naturally through building a relationship at the social club first.</div>
+    </div>
+  </div>
+
+  <div class="panel-content" id="pc-colliers">
+    <div class="panel-top">
+      <div class="panel-status-dot s-unverified"></div>
+      <div class="panel-name">Colliers Wood Deaf Club</div>
+      <span class="panel-zone" style="color:var(--q-bl-c);border-color:rgba(184,127,200,0.3)">Prioritise Locally — Verify First</span>
+    </div>
+    <div class="status-callout sc-unverified">⚠ <strong>Unverified.</strong> The Guardian Centre venue at 67 Clarendon Road SW19 is confirmed active (used by Merton u3a and other groups). However, no evidence found that the Deaf Club specifically is still meeting there. Last known source: Gallaudet University directory 2022. No phone number or email was ever published. Status unknown — it may have folded post-COVID like many small community groups.</div>
+    <div class="panel-tags"><span class="badge b-social">Social</span><span class="badge b-swl">SWL · Merton</span></div>
+    <div class="panel-desc">If active, this would be the second-closest South London Deaf club to Sutton after the newly discovered Surbiton club. But without confirmation, do not plan around it. The Guardian Centre can be contacted to ask if any Deaf group still meets there.</div>
+    <div class="panel-strategy">
+      <div class="strategy-label">Engagement Approach</div>
+      <div class="strategy-text">Contact Merton Council's community directory or the Guardian Centre directly to ask if a Deaf club still uses the venue. If confirmed alive, this remains a valuable SWL grassroots touchpoint. If gone, the Surbiton Deaf Social Club (now confirmed in Cheam SM3) fully replaces it as the primary Sutton-area local club.</div>
+    </div>
+  </div>
+
+  <div class="panel-content" id="pc-croydon-club">
+    <div class="panel-top">
+      <div class="panel-status-dot s-unverified"></div>
+      <div class="panel-name">Croydon Deaf Club</div>
+      <span class="panel-zone" style="color:var(--q-bl-c);border-color:rgba(184,127,200,0.3)">Prioritise Locally — Verify First</span>
+    </div>
+    <div class="status-callout sc-unverified">⚠ <strong>Unverified.</strong> Listed at Chatsworth House, Unison Social Club, Chatsworth Road, Croydon CR0. No phone number, email or website ever published. Last source: Gallaudet 2022. The Unison Social Club building would need to be contacted directly. No evidence of current activity found.</div>
+    <div class="panel-tags"><span class="badge b-social">Social</span><span class="badge b-swl">SWL · Croydon</span></div>
+    <div class="panel-desc">If active, an important grassroots Croydon touchpoint alongside the RAD Croydon caseworker service. However, given no contact details were ever published, this club may have always been purely word-of-mouth or may have quietly closed post-COVID.</div>
+    <div class="panel-strategy">
+      <div class="strategy-label">Engagement Approach</div>
+      <div class="strategy-text">The RAD Croydon caseworker embedded in Croydon Council's sensory service would know if this club is still active — a better route than trying to find the club directly. Ask RAD Croydon whether any community social groups are meeting in Croydon outside of the formal social care pathway.</div>
+    </div>
+  </div>
+
+  <div class="panel-content" id="pc-epsom-deaf">
+    <div class="panel-top">
+      <div class="panel-status-dot s-unverified"></div>
+      <div class="panel-name">Epsom Deaf Club</div>
+      <span class="panel-zone" style="color:var(--q-bl-c);border-color:rgba(184,127,200,0.3)">Prioritise Locally — Verify First</span>
+    </div>
+    <div class="status-callout sc-unverified">⚠ <strong>Unverified.</strong> Listed at Longmead Day Centre, Sefton Road, Epsom KT19 9HG. The Longmead Day Centre is confirmed active (now branded as the Epsom and Ewell Wellbeing Centre, run by Epsom and Ewell Borough Council, tel: 01372 727583) — but this is now a dementia/elderly day service. No evidence of a Deaf club meeting there currently. Calling the centre directly would quickly confirm or deny.</div>
+    <div class="panel-tags"><span class="badge b-social">Social</span></div>
+    <div class="panel-desc">If active, this is the key bridging club between Sutton and West Sussex — within 5 miles of Sutton town centre. However given the day centre's apparent shift to dementia/elderly services, it is possible the Deaf club no longer uses this venue. Given the discovery of the Surbiton Deaf Social Club (also close, also confirmed), Epsom is now a secondary priority for verification.</div>
+    <div class="panel-strategy">
+      <div class="strategy-label">Engagement Approach</div>
+      <div class="strategy-text">Call Epsom and Ewell Wellbeing Centre on 01372 727583 and ask directly. A five-minute call would resolve the question. If closed, look at Action for Deafness (Haywards Heath) as the West Sussex corridor partner instead — they are confirmed active and serve the same geographic area.</div>
+    </div>
+  </div>
+
+  <div class="panel-content" id="pc-bromley-deaf">
+    <div class="panel-top">
+      <div class="panel-status-dot s-dissolved"></div>
+      <div class="panel-name">Bromley Chain / Bromley Deaf Social Club — DISSOLVED</div>
+      <span class="panel-zone" style="color:var(--dissolved);border-color:rgba(232,124,124,0.3)">Closed · Succeeded by deafPLUS Bromley</span>
+    </div>
+    <div class="status-callout sc-dissolved">✗ <strong>Formally dissolved — but positively succeeded.</strong> Bromley Chain (charity 281051) was formally dissolved by the Charity Commission on 19 March 2024. Its funds were transferred to Breakthrough (Deaf-Hearing Integration) — charity 1073468 — which operates as <strong>deafPLUS</strong>. This is not a dead end: deafPLUS Bromley is confirmed active and has actually expanded what Bromley Chain offered, including a physical office with professional IAG support. The Bromley Chain social club activities may have merged into deafPLUS's Bromley social groups.</div>
+    <div class="panel-tags"><span class="badge b-social">Dissolved</span><span class="badge b-sel">SEL · Bromley</span></div>
+    <div class="panel-desc">Bromley Chain was a parent charity founded by parents of deaf children. It ran Deaf Access, Bromley Deaf Social Club, Bromley Deaf Children's Society, and administered the Phyllis Kither Bequest grants fund. All of these activities were absorbed into deafPLUS when the funds transferred in March 2024. Contact deafPLUS Bromley to understand what continues.</div>
+    <div class="panel-strategy">
+      <div class="strategy-label">What This Means</div>
+      <div class="strategy-text">The dissolution of Bromley Chain is not a loss — it's a consolidation into a stronger organisation. deafPLUS Bromley (see panel) is now the relevant Bromley contact. The Phyllis Kither Bequest small grants fund may also still be available via deafPLUS for community projects — potentially relevant for a doorbell alert pilot.</div>
+    </div>
+  </div>
+
+  <div class="panel-content" id="pc-deafplus-bromley">
+    <div class="panel-top">
+      <div class="panel-status-dot s-new"></div>
+      <div class="panel-name">deafPLUS — Bromley ★</div>
+      <span class="panel-zone" style="color:var(--new-find);border-color:rgba(144,184,240,0.3)">Bromley Chain Successor · Confirmed Active</span>
+    </div>
+    <div class="status-callout sc-new">★ <strong>Confirmed active as of January 2025.</strong> NHS service directory listing updated 14 January 2025. Bromley Council local organisations directory lists deafPLUS. Bromley Simply Connect directory confirms current services including BSL practice group (all levels, hearing welcome), Hard of Hearing social group (2nd and 4th Monday), tinnitus support group, and hearing equipment demonstration service. Office open Mon–Fri 9:30am–4pm by appointment. Text/SMS: 07732 449349. Formerly known as Breakthrough (Deaf-Hearing Integration), which received Bromley Chain's funds on dissolution in March 2024.</div>
+    <div class="panel-tags"><span class="badge b-social">Social Groups</span><span class="badge b-employ">IAG</span><span class="badge b-sel">SEL · Bromley</span></div>
+    <div class="panel-desc">deafPLUS was established in 1971 as Breakthrough (Deaf-Hearing Integration) — one of the oldest deaf support organisations in the UK. It has offices in Bromley, Ealing, Whitechapel, Birmingham, Bath, Hampshire and Surrey. The Bromley office provides face-to-face information, advice and guidance; a BSL practice social group (all levels including hearing BSL learners); Hard of Hearing social group with cake and guest speakers; tinnitus support; lipreading classes; and hearing equipment demos. The Bromley Chain fund transfer in 2024 strengthened their Bromley presence. Supported by Rose Ayling-Ellis (EastEnders deaf actress) and Gok Wan.</div>
+    <div class="panel-strategy">
+      <div class="strategy-label">Engagement Approach</div>
+      <div class="strategy-text">This is the highest-priority Bromley contact — replacing the dissolved Bromley Chain entirely. The Hard of Hearing social group (2nd and 4th Monday) and the BSL practice group are both in-person community touchpoints ideal for introducing a doorbell alert prototype. The equipment demonstration service is directly relevant — deafPLUS Bromley already helps people assess assistive technology. Text 07732 449349 or email via deafplus.org. Ask specifically about the Bromley social groups schedule and whether they'd be interested in co-presenting an assistive technology session.</div>
+    </div>
+  </div>
+
+
+
+  <!-- ── LOWER PRIORITY CONFIRMED ── -->
+
+  <div class="panel-content" id="pc-dzone">
+    <div class="panel-top">
+      <div class="panel-status-dot s-unverified"></div>
+      <div class="panel-name">D-Zone Youth Club — Lewisham</div>
+      <span class="panel-zone" style="color:var(--q-br-c);border-color:rgba(232,138,90,0.3)">Monitor — Verify</span>
+    </div>
+    <div class="status-callout sc-unverified">⚠ <strong>Unverified.</strong> Listed on Deaf Unity's UK Deaf Clubs page with a contact name (Bronwen Bakare) and mobile: 07930471581. The venue (Crofton School, Manwood Road, SE4) is an existing secondary school in Brockley — it would need to confirm if an external deaf club still uses its premises. No website or social media presence found.</div>
+    <div class="panel-tags"><span class="badge b-youth">Youth</span><span class="badge b-sel">SEL · Lewisham</span></div>
+    <div class="panel-desc">Youth club for deaf children and young adults in SE London. If still active, a pipeline relationship for future doorbell alert awareness — but lower immediate priority given the focus on independent adult householders.</div>
+    <div class="panel-strategy">
+      <div class="strategy-label">Engagement Approach</div>
+      <div class="strategy-text">Text or call 07930471581 to check if still running before taking any further steps. If active, useful for longer-term youth pipeline work, not immediate pilot deployment.</div>
+    </div>
+  </div>
+
+  <div class="panel-content" id="pc-remark-lunch">
+    <div class="panel-top">
+      <div class="panel-status-dot s-confirmed"></div>
+      <div class="panel-name">Remark! Lunch Clubs — Eltham & Beckenham</div>
+      <span class="panel-zone" style="color:var(--q-br-c);border-color:rgba(232,138,90,0.3)">Monitor</span>
+    </div>
+    <div class="status-callout sc-confirmed">✓ <strong>Confirmed active</strong> — Remark! Community charity accounts (Oct 2024) confirm 4 weekly London lunch clubs. Website lists Eltham (Mondays, SE9), Beckenham (Tuesdays), Camden and Harrow. Over-55s. Donation of £3.</div>
+    <div class="panel-tags"><span class="badge b-social">Social · Over-55s</span><span class="badge b-sel">SEL</span></div>
+    <div class="panel-desc">Weekly lunch clubs for Deaf adults aged 55+ in SE London. Members are exactly the demographic most likely to benefit from doorbell alert technology and least likely to have sought formal social care assessments. Remark! also provides basic advocacy (phone calls, letters) within the lunch club setting.</div>
+    <div class="panel-strategy">
+      <div class="strategy-label">Engagement Approach</div>
+      <div class="strategy-text">Coordinate through Remark! Community's central team (remarkcommunity.org) rather than approaching clubs individually. The lunch club context is warm and social — ideal for an informal prototype demonstration. Frame doorbell alerts as an extension of the independence toolkit the club already supports.</div>
+    </div>
+  </div>
+
+  <div class="panel-content" id="pc-oak-lodge">
+    <div class="panel-top">
+      <div class="panel-status-dot s-confirmed"></div>
+      <div class="panel-name">Oak Lodge School — Adult Lifelong Learning</div>
+      <span class="panel-zone" style="color:var(--q-br-c);border-color:rgba(232,138,90,0.3)">Monitor</span>
+    </div>
+    <div class="status-callout sc-confirmed">✓ <strong>Confirmed active</strong> — Oak Lodge School received Ofsted "Good" rating in 2025. Adult Lifelong Learning programme is an ongoing feature of the school. Nightingale Lane, SW12, Wandsworth.</div>
+    <div class="panel-tags"><span class="badge b-youth">Education</span><span class="badge b-swl">SWL · Wandsworth</span></div>
+    <div class="panel-desc">Specialist Deaf school for 10–19 year olds drawing from 25 London boroughs, plus an adult Deaf Lifelong Learning programme. Deaf First advice/advocacy also operates from the site. Good route into Wandsworth's Deaf community via the adult learners.</div>
+    <div class="panel-strategy">
+      <div class="strategy-label">Engagement Approach</div>
+      <div class="strategy-text">Contact the school directly through Wandsworth Council — the Lifelong Learning adult programme is the relevant access point rather than the school itself. Adult returners are independent community members who may be interested in home accessibility tools. Monitor now; approach once the prototype is demo-ready.</div>
+    </div>
+  </div>
+
+</div>
+
+<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
+const allIds = [
+  'remark','deaf-unity','deaf-dmcs','dewa',
+  'deafinitely','bda-comm','bright-deafblind','deaf-umbrella',
+  'surbiton','clapham-bsl','colliers','croydon-club','epsom-deaf',
+  'bromley-deaf','deafplus-bromley','dzone','remark-lunch','oak-lodge'
+];
+let active = null;
+function showPanel(id) {
+  if (id === 'bromley-deaf' || id === 'dzone' || id === 'colliers' || id === 'croydon-club' || id === 'epsom-deaf' || id === 'deaf-umbrella') {
+    // still allow click-through for these
+  }
+  allIds.forEach(i => {
+    const pc = document.getElementById('pc-' + i);
+    const card = document.getElementById('c-' + i);
+    if (pc) pc.classList.remove('visible');
+    if (card) card.classList.remove('active');
+  });
+  if (ac

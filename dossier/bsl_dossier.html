@@ -1,0 +1,1628 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>BSL & Deaf Health Access — Evidence Dossier</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600;9..144,700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --ink:#14182B;
+    --ink-soft:#2A3050;
+    --paper:#F1F0E6;
+    --paper-card:#FAF9F4;
+    --verified:#2F7A52;
+    --alert:#C4501F;
+    --gold:#D9A441;
+    --line:#D8D4C6;
+    --line-dark:#3A4066;
+    --cluster-health:#2F5F8A;
+    --cluster-welfare:#6B4F8A;
+    --cluster-law:#2F7A52;
+    --cluster-money:#C4501F;
+    --cluster-education:#8A6D3B;
+    /* AA-contrast text variants (4.5:1+ on --paper) for small/body text uses
+       of the gold, alert and muted tones above, which fail AA at that size */
+    --gold-text:#7A5810;
+    --alert-text:#8F3714;
+    --muted-text:#565A75;
+  }
+  *{box-sizing:border-box; margin:0; padding:0;}
+  body{
+    background:var(--paper);
+    color:var(--ink);
+    font-family:'Inter',sans-serif;
+    line-height:1.5;
+    -webkit-font-smoothing:antialiased;
+  }
+  ::selection{background:var(--gold); color:var(--ink);}
+
+  a{color:inherit;}
+
+  /* ---------- ACCESSIBILITY: focus, skip link, motion, sr-only ---------- */
+  .skip-link{
+    position:absolute; left:12px; top:-60px; background:var(--gold); color:var(--ink);
+    padding:10px 16px; font-size:14px; font-weight:600; z-index:100; transition:top .15s ease;
+    text-decoration:none;
+  }
+  .skip-link:focus{top:12px;}
+  .sr-only{
+    position:absolute; width:1px; height:1px; padding:0; margin:-1px; overflow:hidden;
+    clip:rect(0,0,0,0); white-space:nowrap; border:0;
+  }
+  a:focus-visible, button:focus-visible, input:focus-visible, textarea:focus-visible,
+  select:focus-visible, [tabindex]:focus-visible{
+    outline:3px solid var(--gold); outline-offset:2px;
+  }
+  header a:focus-visible{outline-color:#fff;}
+  @media (prefers-reduced-motion: reduce){
+    *{animation-duration:0.01ms !important; animation-iteration-count:1 !important;
+      transition-duration:0.01ms !important; scroll-behavior:auto !important;}
+  }
+
+  .wrap{max-width:1180px; margin:0 auto; padding:0 32px;}
+  @media (max-width:640px){ .wrap{padding:0 18px;} }
+
+  /* ---------- HEADER ---------- */
+  header{
+    background:var(--ink);
+    color:var(--paper);
+    padding:20px 0;
+    border-bottom:4px solid var(--gold);
+  }
+  header .wrap{display:flex; justify-content:space-between; align-items:center; gap:16px; flex-wrap:wrap;}
+  .brand{display:flex; align-items:baseline; gap:12px;}
+  .brand-mark{
+    font-family:'Fraunces',serif; font-weight:700; font-size:22px; letter-spacing:-0.01em;
+  }
+  .brand-sub{font-size:13px; color:#B9BCD6;}
+  nav.top-nav{display:flex; gap:22px; font-size:14px; flex-wrap:wrap;}
+  nav.top-nav a{text-decoration:none; color:#D7D9EC; border-bottom:1px solid transparent; padding-bottom:2px;}
+  nav.top-nav a:hover{border-bottom-color:var(--gold); color:#fff;}
+
+  .sync-strip{
+    background:var(--ink-soft); color:#C7CAE4; font-size:12.5px;
+    padding:8px 0; border-bottom:1px solid var(--line-dark);
+  }
+  .sync-strip .wrap{display:flex; justify-content:space-between; flex-wrap:wrap; gap:8px;}
+
+  /* ---------- SEARCH ---------- */
+  .search-section{background:var(--paper-card); border-bottom:1px solid var(--line); padding:22px 0;}
+  .search-label{display:block; font-size:13.5px; color:var(--ink-soft); margin-bottom:8px; max-width:70ch;}
+  .search-row{display:flex; gap:10px; max-width:640px;}
+  .search-row input[type="search"]{
+    flex:1; font-family:'Inter',sans-serif; font-size:15px; padding:11px 14px;
+    border:1.5px solid var(--ink); background:#fff; color:var(--ink);
+  }
+  .search-row input[type="search"]::-webkit-search-cancel-button{cursor:pointer;}
+  .search-status{font-size:13px; color:var(--muted-text); margin-top:10px; min-height:1em;}
+  .search-results{list-style:none; margin-top:14px; display:grid; gap:10px; max-width:820px;}
+  .search-result{
+    background:#fff; border:1px solid var(--line); border-left:4px solid var(--gold);
+    padding:14px 16px; display:block; text-decoration:none; color:inherit;
+  }
+  .search-result:hover{border-left-color:var(--ink);}
+  .search-result .sr-kind{font-size:11px; text-transform:uppercase; letter-spacing:0.04em; color:var(--gold-text);}
+  .search-result .sr-title{font-family:'Fraunces',serif; font-weight:600; font-size:16px; margin-top:3px;}
+  .search-result .sr-snippet{font-size:13.5px; color:var(--ink-soft); margin-top:5px; line-height:1.5;}
+  .search-result mark{background:var(--gold); color:var(--ink); padding:0 1px;}
+
+  /* ---------- HERO ---------- */
+  .hero{padding:64px 0 48px; border-bottom:1px solid var(--line);}
+  .hero-grid{display:grid; grid-template-columns:1.3fr 1fr; gap:56px; align-items:end;}
+  @media (max-width:860px){ .hero-grid{grid-template-columns:1fr; gap:32px;} }
+
+  .hero-eyebrow{
+    font-size:13.5px; color:var(--ink-soft); margin-bottom:14px; max-width:44ch;
+  }
+  .hero-stat{
+    font-family:'Fraunces',serif; font-weight:600; font-size:clamp(56px,9vw,108px);
+    line-height:0.92; letter-spacing:-0.02em; color:var(--ink);
+  }
+  .hero-stat .unit{font-size:0.42em; font-weight:500; color:var(--alert);}
+  .hero-label{font-size:17px; max-width:38ch; margin-top:14px; color:var(--ink-soft);}
+  .hero-source{font-size:12.5px; color:var(--muted-text); margin-top:10px;}
+  .hero-source a{text-decoration:underline; text-decoration-color:var(--line);}
+
+  .hero-side{border-left:3px solid var(--ink); padding-left:24px;}
+  .hero-side p{font-size:15px; color:var(--ink-soft); max-width:36ch;}
+  .hero-side p + p{margin-top:12px;}
+  .hero-side strong{color:var(--ink);}
+
+  /* ---------- KNOW YOUR RIGHTS ---------- */
+  .rights-section{background:var(--ink); color:var(--paper); padding:56px 0;}
+  .rights-section .section-title{color:var(--paper);}
+  .rights-section .section-desc{color:#C7CAE4;}
+  .rights-disclaimer{
+    background:var(--ink-soft); border-left:4px solid var(--gold); padding:16px 20px;
+    font-size:14.5px; color:#E4E6F2; margin-bottom:28px; max-width:78ch;
+  }
+  .rights-disclaimer strong{color:var(--gold);}
+  .rights-grid{display:grid; grid-template-columns:repeat(2,1fr); gap:18px;}
+  @media (max-width:800px){ .rights-grid{grid-template-columns:1fr;} }
+  .right-card{
+    background:var(--paper-card); color:var(--ink); padding:22px 24px;
+    border-top:4px solid var(--gold);
+  }
+  .right-card h4{font-family:'Fraunces',serif; font-weight:600; font-size:19px; line-height:1.3; margin-bottom:10px;}
+  .right-card .r-plain{font-size:15.5px; line-height:1.6; color:var(--ink);}
+  .right-card .r-action{
+    font-size:14.5px; line-height:1.55; color:var(--ink-soft); margin-top:12px;
+    padding-top:12px; border-top:1px solid var(--line);
+  }
+  .right-card .r-action strong{color:var(--ink);}
+  .right-card .r-meta{display:flex; justify-content:space-between; align-items:center; margin-top:14px; gap:10px; flex-wrap:wrap;}
+  .r-basis{font-size:11.5px; color:var(--muted-text);}
+  .r-strength{font-size:11px; padding:4px 9px; border:1px solid; white-space:nowrap;}
+  .r-strength.strong{color:var(--verified); border-color:var(--verified);}
+  .r-strength.limited{color:var(--gold-text); border-color:var(--gold);}
+  .right-card .r-edit-btn{
+    font-size:12px; background:none; border:none; color:var(--ink-soft);
+    text-decoration:underline; cursor:pointer; padding:0; margin-top:12px; font-family:'Inter',sans-serif;
+  }
+  .r-edit-form{display:none; margin-top:12px; border-top:1px solid var(--line); padding-top:12px; gap:8px; grid-template-columns:1fr 1fr;}
+  .r-edit-form.open{display:grid;}
+  .r-edit-form label{font-size:11.5px; color:var(--ink-soft); display:block; margin-bottom:3px;}
+  .r-edit-form input, .r-edit-form select, .r-edit-form textarea{
+    width:100%; font-family:'Inter',sans-serif; font-size:13px; padding:7px 8px;
+    border:1px solid var(--line); background:#fff; color:var(--ink);
+  }
+  .r-edit-form textarea{resize:vertical; min-height:60px;}
+  .r-edit-form .full{grid-column:1/-1;}
+  .r-edit-form .actions{grid-column:1/-1; display:flex; gap:10px; margin-top:2px;}
+  .add-right-btn{
+    font-size:13px; padding:10px 18px; border:1.5px dashed var(--gold); background:none;
+    color:var(--gold-text); cursor:pointer; font-family:'Inter',sans-serif; margin-top:20px;
+  }
+  .add-right-btn:hover{border-style:solid; background:var(--ink-soft);}
+  .rights-contacts{margin-top:28px; font-size:14px; color:#C7CAE4;}
+  .rights-contacts a{text-decoration:underline; color:var(--paper);}
+
+  /* ---------- AUDIENCES: CHARITIES & BUSINESSES ---------- */
+  .audience-tabs{display:flex; gap:10px; margin-bottom:28px;}
+  .audience-tab{
+    font-size:14px; padding:10px 20px; border:1.5px solid var(--ink); background:transparent;
+    cursor:pointer; font-family:'Inter',sans-serif; color:var(--ink); min-height:44px;
+  }
+  .audience-tab.active{background:var(--ink); color:var(--paper);}
+  .audience-panel{display:none;}
+  .audience-panel.active{display:block;}
+  .audience-grid{display:grid; grid-template-columns:repeat(2,1fr); gap:18px;}
+  @media (max-width:800px){ .audience-grid{grid-template-columns:1fr;} }
+  .audience-card{
+    background:var(--paper-card); border-top:4px solid var(--cluster-money); padding:22px 24px;
+  }
+  .audience-card h4{font-family:'Fraunces',serif; font-weight:600; font-size:18px; margin-bottom:10px;}
+  .audience-card .a-plain{font-size:14.5px; line-height:1.6; color:var(--ink);}
+  .audience-card .a-action{
+    font-size:14px; line-height:1.55; color:var(--ink-soft); margin-top:12px;
+    padding-top:12px; border-top:1px solid var(--line);
+  }
+  .audience-card .a-action strong{color:var(--ink);}
+  .audience-card .a-source{font-size:11.5px; color:var(--muted-text); margin-top:10px;}
+  .audience-card .a-edit-btn{
+    font-size:12px; background:none; border:none; color:var(--ink-soft);
+    text-decoration:underline; cursor:pointer; padding:0; margin-top:12px; font-family:'Inter',sans-serif;
+  }
+  .a-edit-form{display:none; margin-top:12px; border-top:1px solid var(--line); padding-top:12px; gap:8px; grid-template-columns:1fr 1fr;}
+  .a-edit-form.open{display:grid;}
+  .a-edit-form label{font-size:11.5px; color:var(--ink-soft); display:block; margin-bottom:3px;}
+  .a-edit-form input, .a-edit-form textarea{
+    width:100%; font-family:'Inter',sans-serif; font-size:13px; padding:7px 8px;
+    border:1px solid var(--line); background:#fff; color:var(--ink);
+  }
+  .a-edit-form textarea{resize:vertical; min-height:60px;}
+  .a-edit-form .full{grid-column:1/-1;}
+  .a-edit-form .actions{grid-column:1/-1; display:flex; gap:10px; margin-top:2px;}
+  .add-audience-btn{
+    font-size:13px; padding:9px 16px; border:1.5px dashed var(--ink-soft); background:none;
+    color:var(--ink-soft); cursor:pointer; font-family:'Inter',sans-serif; margin-top:20px;
+  }
+  .add-audience-btn:hover{border-style:solid; color:var(--ink);}
+
+  .section{padding:56px 0; border-bottom:1px solid var(--line);}
+  .section-head{display:flex; justify-content:space-between; align-items:baseline; gap:16px; margin-bottom:28px; flex-wrap:wrap;}
+  .section-title{font-family:'Fraunces',serif; font-weight:600; font-size:30px; letter-spacing:-0.01em;}
+  .section-desc{font-size:14.5px; color:var(--ink-soft); max-width:60ch; margin-top:6px;}
+
+  /* ---------- CLUSTER NAV ---------- */
+  .cluster-tabs{display:flex; gap:10px; flex-wrap:wrap; margin-bottom:32px;}
+  .cluster-tab{
+    font-size:13.5px; padding:8px 16px; border:1.5px solid var(--ink); background:transparent;
+    cursor:pointer; font-family:'Inter',sans-serif; color:var(--ink); transition:background .15s, color .15s;
+    min-height:44px;
+  }
+  .cluster-tab.active{background:var(--ink); color:var(--paper);}
+  .cluster-tab:hover:not(.active){background:#E5E2D3;}
+
+  /* ---------- DOMAIN GRID ---------- */
+  .domain-grid{
+    display:grid; grid-template-columns:repeat(3,1fr); gap:20px;
+  }
+  @media (max-width:900px){ .domain-grid{grid-template-columns:repeat(2,1fr);} }
+  @media (max-width:640px){ .domain-grid{grid-template-columns:1fr;} }
+
+  .domain-card{
+    background:var(--paper-card);
+    border-left:5px solid var(--cluster-health);
+    padding:20px 20px 18px;
+    display:flex; flex-direction:column; min-height:180px;
+  }
+  .domain-card[data-cluster="welfare"]{border-left-color:var(--cluster-welfare);}
+  .domain-card[data-cluster="law"]{border-left-color:var(--cluster-law);}
+  .domain-card[data-cluster="money"]{border-left-color:var(--cluster-money);}
+  .domain-card[data-cluster="education"]{border-left-color:var(--cluster-education);}
+
+  .domain-card .dc-top{display:flex; justify-content:space-between; align-items:flex-start; gap:8px;}
+  .domain-card h3{font-family:'Fraunces',serif; font-weight:600; font-size:17px; line-height:1.25;}
+  .domain-status{
+    font-size:11px; padding:3px 8px; white-space:nowrap; border:1px solid; flex-shrink:0;
+  }
+  .domain-status.filled{color:var(--verified); border-color:var(--verified);}
+  .domain-status.pending{color:#8A8E63; border-color:#C9CBAE;}
+
+  .domain-card p.dc-desc{font-size:13px; color:var(--ink-soft); margin-top:10px; flex-grow:1;}
+  .domain-card .dc-open{
+    font-size:13px; margin-top:14px; text-decoration:none; color:var(--ink);
+    border-bottom:1px solid var(--ink); align-self:flex-start; cursor:pointer; background:none; border-top:none; border-left:none; border-right:none; padding:0 0 1px;
+    font-family:'Inter',sans-serif; position:relative;
+  }
+  /* Expand the tap/click target to 44px without changing the visible text-link look */
+  .domain-card .dc-open::after{
+    content:''; position:absolute; left:0; right:0; top:-14px; bottom:-14px;
+  }
+
+  /* ---------- KEY FIGURES (open domain) ---------- */
+  .figures-panel{display:none;}
+  .figures-panel.open{display:block; margin-top:36px;}
+  .figure-card{
+    background:var(--paper-card); border:1px solid var(--line); padding:18px 20px;
+    display:grid; grid-template-columns:1fr auto; gap:12px; align-items:start; margin-bottom:12px;
+  }
+  .figure-main .fc-value{font-family:'Fraunces',serif; font-weight:600; font-size:26px;}
+  .figure-main .fc-label{font-size:13.5px; color:var(--ink-soft); margin-top:4px;}
+  .figure-main .fc-source{font-size:12px; color:var(--muted-text); margin-top:8px;}
+  .figure-main .fc-source a{text-decoration:underline; text-decoration-color:var(--line);}
+  .fc-badge{font-size:11px; padding:4px 9px; border:1px solid; white-space:nowrap;}
+  .fc-badge.verified{color:var(--verified); border-color:var(--verified);}
+  .fc-badge.stale{color:var(--gold-text); border-color:var(--gold);}
+  .fc-badge.contested{color:var(--alert-text); border-color:var(--alert); background:#FBEEE7;}
+  .fc-edit-btn{
+    grid-column:1/-1; justify-self:start; font-size:12px; background:none; border:none;
+    color:var(--ink-soft); text-decoration:underline; cursor:pointer; padding:0; font-family:'Inter',sans-serif;
+  }
+  .fc-edit-form{grid-column:1/-1; display:none; margin-top:10px; border-top:1px solid var(--line); padding-top:12px;}
+  .fc-edit-form.open{display:grid; gap:8px; grid-template-columns:1fr 1fr;}
+  .fc-edit-form label{font-size:11.5px; color:var(--ink-soft); display:block; margin-bottom:3px;}
+  .fc-edit-form input, .fc-edit-form select{
+    width:100%; font-family:'Inter',sans-serif; font-size:13px; padding:7px 8px;
+    border:1px solid var(--line); background:#fff; color:var(--ink);
+  }
+  .fc-edit-form .full{grid-column:1/-1;}
+  .fc-edit-form .actions{grid-column:1/-1; display:flex; gap:10px; margin-top:2px;}
+  .btn{
+    font-family:'Inter',sans-serif; font-size:13px; padding:8px 16px; border:1.5px solid var(--ink);
+    background:var(--ink); color:var(--paper); cursor:pointer; min-height:44px;
+  }
+  .btn.secondary{background:transparent; color:var(--ink);}
+  .btn:hover{opacity:0.85;}
+
+  .add-figure-btn{
+    font-size:13px; padding:9px 16px; border:1.5px dashed var(--ink-soft); background:none;
+    color:var(--ink-soft); cursor:pointer; font-family:'Inter',sans-serif; margin-top:4px;
+  }
+  .add-figure-btn:hover{border-style:solid; color:var(--ink);}
+
+  /* ---------- CONTESTED SPOTLIGHT ---------- */
+  .contested-box{
+    background:#FBEEE7; border:1.5px solid var(--alert); padding:24px 26px;
+  }
+  .contested-box h3{font-family:'Fraunces',serif; font-size:19px; color:var(--alert-text); margin-bottom:10px;}
+  .contested-box p{font-size:14px; color:var(--ink); max-width:70ch;}
+  .contested-box p + p{margin-top:10px;}
+
+  /* ---------- FOI LIST ---------- */
+  .foi-list{list-style:none; counter-reset:foi;}
+  .foi-list li{
+    counter-increment:foi; padding:14px 0; border-top:1px solid var(--line); display:flex; gap:16px;
+  }
+  .foi-list li:before{
+    content:counter(foi); font-family:'Fraunces',serif; font-size:20px; color:var(--gold-text); flex-shrink:0; width:28px;
+  }
+  .foi-list li span{font-size:14px; color:var(--ink-soft);}
+
+  /* ---------- COMMUNITY VOICES STUB ---------- */
+  .community-box{
+    background:var(--ink); color:var(--paper); padding:40px 36px; display:grid;
+    grid-template-columns:1fr auto; gap:24px; align-items:center;
+  }
+  @media (max-width:700px){ .community-box{grid-template-columns:1fr;} }
+  .community-box h3{font-family:'Fraunces',serif; font-size:24px; margin-bottom:10px;}
+  .community-box p{font-size:14px; color:#C7CAE4; max-width:56ch;}
+  .community-box .tag{
+    font-size:11.5px; color:var(--gold-text); border:1px solid var(--gold); padding:5px 12px; white-space:nowrap; justify-self:start;
+  }
+
+  /* ---------- FOOTER ---------- */
+  footer{padding:32px 0 48px; font-size:12.5px; color:var(--muted-text);}
+  footer a{text-decoration:underline;}
+
+  .toast{
+    position:fixed; bottom:24px; right:24px; background:var(--ink); color:var(--paper);
+    padding:12px 20px; font-size:13.5px; border-left:4px solid var(--verified);
+    transform:translateY(120%); transition:transform .25s ease; z-index:50;
+  }
+  .toast.show{transform:translateY(0);}
+  .toast.error{border-left-color:var(--alert);}
+</style>
+</head>
+<body>
+
+<a href="#main" class="skip-link">Skip to main content</a>
+
+<header>
+  <div class="wrap">
+    <div class="brand">
+      <span class="brand-mark">BSL &amp; Deaf Health Watch</span>
+      <span class="brand-sub">An evidence dossier — maintained by the team</span>
+    </div>
+    <nav class="top-nav" aria-label="Dossier sections">
+      <a href="#rights">Know your rights</a>
+      <a href="#audiences">For charities & businesses</a>
+      <a href="#policymedia">For policymakers & media</a>
+      <a href="#domains">Evidence by domain</a>
+      <a href="#contested">Contested figures</a>
+      <a href="#foi">FOI targets</a>
+      <a href="#community">Community voices</a>
+    </nav>
+  </div>
+</header>
+
+<div class="sync-strip">
+  <div class="wrap">
+    <span id="sync-status" role="status">Loading shared data…</span>
+    <span>Edits save to your own browser only — see note in footer</span>
+  </div>
+</div>
+
+<main id="main">
+
+<section class="search-section" id="dossier-search" aria-labelledby="search-heading">
+  <div class="wrap">
+    <h2 class="sr-only" id="search-heading">Search this dossier</h2>
+    <form id="search-form" role="search" aria-label="Search this dossier" autocomplete="off">
+      <label for="search-input" class="search-label">Search rights, evidence figures, contested figures, FOI targets and audience points in this dossier</label>
+      <div class="search-row">
+        <input type="search" id="search-input" name="q" placeholder="Search this dossier — e.g. &quot;interpreter&quot;, &quot;RADF&quot;, &quot;Corner House&quot;">
+        <button type="submit" class="btn">Search</button>
+      </div>
+    </form>
+    <div id="search-status" role="status" aria-live="polite" class="search-status"></div>
+    <ul id="search-results" class="search-results" aria-label="Search results"></ul>
+  </div>
+</section>
+
+<section class="hero" aria-labelledby="hero-heading">
+  <div class="wrap hero-grid">
+    <div>
+      <p class="hero-eyebrow">Headline finding, RNID &amp; SignHealth, <em>Still Ignored: The Fight for Accessible Healthcare</em>, April 2025</p>
+      <h1 id="hero-heading" class="hero-stat">67<span class="unit">%</span><span class="sr-only"> of BSL users report being denied professional interpretation by the NHS</span></h1>
+      <p class="hero-label" aria-hidden="true">of BSL users report being denied professional interpretation by the NHS.</p>
+      <p class="hero-source">Source: <a href="https://signhealth.org.uk/resources/still-ignored-the-fight-for-accessible-healthcare/" target="_blank" rel="noopener">signhealth.org.uk — Still Ignored (2025)</a>, n=1,100+ respondents</p>
+    </div>
+    <div class="hero-side">
+      <p><strong>This site exists to make that number impossible to ignore.</strong> Every figure here carries a source, a date, and an editor — so agencies and NHS bodies can't dismiss it as anecdote, and neither can we.</p>
+      <p>Gaps are shown, not hidden. Where a domain hasn't been researched yet, it says so — that's itself a map of where scrutiny is missing.</p>
+    </div>
+  </div>
+</section>
+
+<section class="rights-section" id="rights" aria-labelledby="rights-heading">
+  <div class="wrap">
+    <div class="section-head">
+      <div>
+        <h2 class="section-title" id="rights-heading">Know your rights</h2>
+        <p class="section-desc">Plain-language explanations of rights that already exist in UK law — written for Deaf and DeafBlind people first, not for professionals.</p>
+      </div>
+    </div>
+    <div class="rights-disclaimer">
+      <strong>This is not legal advice.</strong> It explains what the law says in plain terms, based on the sourced evidence in this dossier. If your rights aren't being met and you want to take action, contact an advocacy organisation (see below) or a solicitor who specialises in disability discrimination.
+    </div>
+    <div class="rights-grid" id="rights-grid"></div>
+    <button class="add-right-btn" id="add-right">+ Add a right (team only)</button>
+    <p class="rights-contacts">Need support now? <a href="https://rnid.org.uk" target="_blank" rel="noopener">RNID</a> · <a href="https://signhealth.org.uk" target="_blank" rel="noopener">SignHealth</a> · <a href="https://bda.org.uk" target="_blank" rel="noopener">British Deaf Association</a></p>
+  </div>
+</section>
+
+<section class="section" id="domains" aria-labelledby="domains-heading">
+  <div class="wrap">
+    <div class="section-head">
+      <div>
+        <h2 class="section-title" id="domains-heading">Evidence by domain</h2>
+        <p class="section-desc">Twelve domains shaping Deaf and DeafBlind BSL users' access to health, welfare, law, and public money in the UK. Click a domain to see its figures, or add one your team has verified.</p>
+      </div>
+    </div>
+
+    <div class="cluster-tabs" id="cluster-tabs" role="group" aria-label="Filter domains by category">
+      <button class="cluster-tab active" data-filter="all" aria-pressed="true">All domains</button>
+      <button class="cluster-tab" data-filter="health" aria-pressed="false">Health &amp; communication</button>
+      <button class="cluster-tab" data-filter="welfare" aria-pressed="false">Welfare &amp; employment</button>
+      <button class="cluster-tab" data-filter="law" aria-pressed="false">Law &amp; rights</button>
+      <button class="cluster-tab" data-filter="money" aria-pressed="false">Money &amp; accountability</button>
+      <button class="cluster-tab" data-filter="education" aria-pressed="false">Education</button>
+    </div>
+
+    <div class="domain-grid" id="domain-grid"></div>
+
+    <div class="figures-panel" id="figures-panel" role="region" aria-label="Domain figures">
+      <div class="section-head">
+        <div>
+          <h2 class="section-title" id="fp-title" style="font-size:24px;"></h2>
+          <p class="section-desc" id="fp-desc"></p>
+        </div>
+        <button class="btn secondary" id="fp-close">Close</button>
+      </div>
+      <div id="fp-figures"></div>
+      <button class="add-figure-btn" id="fp-add">+ Add a verified figure</button>
+    </div>
+  </div>
+</section>
+
+<section class="section" id="contested" aria-labelledby="contested-heading">
+  <div class="wrap">
+    <div class="section-head">
+      <div>
+        <h2 class="section-title" id="contested-heading">Contested &amp; unstable figures</h2>
+        <p class="section-desc">Where a source disputes itself, or a figure is actively changing, it goes here first — flagged, not silently corrected. Resolved cases stay visible so the process itself is auditable.</p>
+      </div>
+    </div>
+    <div class="contested-box" style="border-color:var(--verified); background:#EAF3ED;">
+      <h3 style="color:var(--verified);">RESOLVED — RADF full conformance deadline is 30 September 2026</h3>
+      <p><strong>Directly verified against two independent NHS England primary sources on 4 September 2026:</strong> the DAPB4019 standards summary page states "Full conformance dates: 30 September 2026." The full 44-page Implementation Guidance document (Amd 41/2025) was read in full — its Section 12 timescale table states "Date of full conformance: full implementation of all aspects of the Standard is required. By 30 Sept 2026." No 2027 date of any kind appears in either document.</p>
+      <p>A cross-check via SuperGrok independently claimed a split date — 31 March 2027 for health, 31 October 2027 for social care — citing the same Amd 41/2025 documents as its source. That claim could not be reproduced when the actual documents were read directly. <strong>Lesson for the team: an AI cross-check citing a real document is not the same as that document actually containing the claim.</strong> Always open the cited page.</p>
+      <p style="font-size:12.5px; color:#4A5568; margin-top:4px;">The underlying admin-log flux (a product-owner request to change the date on 13 Aug 2026, reverted 3 Sept 2026) is real and shows the date has been under internal discussion — but the currently confirmed, in-force date is 30 September 2026.</p>
+    </div>
+    <div class="contested-box" style="margin-top:16px;">
+      <h3>The £80–100m NHS cost figure is a charity estimate, not an independent costing</h3>
+      <p>This figure's origin is now traced precisely: SignHealth inflation-adjusted its own 2014 <em>Sick Of It</em> report figure (£30m) to arrive at "£80–100 million every year" as a present-day estimate — its own campaign page states this explicitly. The UK government's own <em>Locked Out</em> report (Nov 2025) then cites this SignHealth estimate directly in a footnote, presenting it as the cost "to HM Treasury."</p>
+      <p>This is not dishonest on SignHealth's part — the methodology is stated openly. But no independent NHS or Treasury costing of Deaf healthcare accessibility failures appears to exist anywhere. A government report is repeating a charity's a decade-old estimate, inflation-adjusted, as if it were measured. That gap — not the figure itself — is the story.</p>
+    </div>
+    <div class="contested-box" style="margin-top:16px;">
+      <h3>The vanishing 73,000: how many Deaf BSL users are there in England?</h3>
+      <p>The figure of 73,000 Deaf BSL users in England was used as a headline number throughout this project's earlier NHS interpreter-provision research (originating in RNID/SignHealth's <em>Still Ignored</em>, April 2025) — but a direct check of RNID's own current prevalence page finds no trace of it. Instead RNID's own material gives three different figures depending on definition: 22,000 (2021 Census, main-language, England &amp; Wales), ~25,000 (RNID's own UK-wide main-language estimate), and 151,000 (BDA's wider figure, of which 87,000 are described as "deaf"). A fourth figure, ~87,000 (England &amp; Wales), appears in a separate SWL-specific Healthwatch report. RNID itself states plainly there is "no consensus" on the total.</p>
+      <p>The 73,000 figure has been retired from this dossier's NHS interpreter-provision domain. Any public-facing use of a BSL-user population figure should name its source and definition every time, rather than presenting a single number as settled.</p>
+    </div>
+    <div class="contested-box" style="margin-top:16px;">
+      <h3>SWLSTG Corner House: the UK's only national Deaf CAMHS inpatient unit has closed (1 July 2026)</h3>
+      <p>An earlier version of this dossier flagged an unresolved age-range discrepancy for Corner House (11&ndash;17 per the trust's current page vs 6&ndash;18 per a 2021 trust video). Follow-up research (6 September 2026) resolved this as a genuine historical service change, not a citation error: the pre-2022 configuration served ages 8&ndash;18 (independently confirmed via The Limping Chicken, 21 Dec 2022), the service then closed for review and reopened 1 June 2023 with a narrower 11&ndash;17, 24/5 model &mdash; and it is this reopened version that most of this project's research describes.</p>
+      <p>More significantly, the same research found that the inpatient unit has since closed again &mdash; this time permanently. SWLSTG's own news page (1 July 2026) states the inpatient service has closed, with its funding redirected to four new regional specialist community/outreach teams (South East, Central, North, South West), following an NHS England review conducted with Deaf young people, families, clinicians, and community representatives. Stated rationale: inpatient referrals had remained very low against roughly 200 referrals/year to the specialist community team, and the change follows the NHS 10 Year Plan's shift toward community-based care. Do not describe Corner House as a currently-operating inpatient service in any future use of this material.</p>
+    </div>
+    <div class="contested-box" style="margin-top:16px;">
+      <h3>The grassroots-voice gap: does an independent Deaf voice on NHS access exist, and if not, why not?</h3>
+      <p>Two full rounds of research, including live social-media search, found the same pattern: charity, campaign, and institutional voices are well represented online, but individual Deaf BSL users' own first-hand accounts of NHS access — especially anything SWL-specific — are essentially absent. This is not simply a search failure. Three independent UK sources (the BSL Advisory Board's <em>Locked Out</em> report, a GOV.UK accessibility co-design study, and a financial-services regulator's own guidance) each independently confirm that BSL is a distinct visual-spatial language, not signed English — meaning that composing a fluent written-English complaint is a genuine second-language task for BSL-dominant people, not a natural extension of how they communicate.</p>
+      <p>A grassroots BSL voice does exist, but on video platforms (YouTube, Facebook) and is almost entirely charity-produced rather than independently authored; no genuinely independent, SWL-local BSL grassroots account discussing NHS access was found anywhere. The practical implication has shifted from "search harder" to "this evidence base may need to be actively created" — for example via an organised, consent-based BSL-language community event with recorded video output, following the model of a Healthwatch Lancashire event that led to an ongoing local ICB relationship.</p>
+    </div>
+    <div class="contested-box" style="margin-top:16px;">
+      <h3>PSR is now a confirmed funding route for Deaf/hearing-sector VCSE organisations — but only for two organisations, and unevenly</h3>
+      <p>The NHS Provider Selection Regime has now been directly confirmed as having funded VCSE organisations three times: SignHealth twice (Derby &amp; Derbyshire ICB, £491,036/year for BSL-specific Talking Therapies; and South East London ICB, an urgent-circumstances stopgap award) and RNID once (Somerset NHS Foundation Trust, £46,000 for general hearing-aid aftercare — not BSL-specific). No equivalent PSR award was found for BDA, Action Deafness, Deafblind UK, or RAD in this research.</p>
+      <p>This nuances the "PSR is a working route" finding: PSR works, but for a narrow set of organisations, and the BSL-specific clinical-therapy niche within it currently belongs to SignHealth alone.</p>
+    </div>
+    <div class="contested-box" style="margin-top:16px; border-color:var(--verified); background:#EAF3ED;">
+      <h3 style="color:var(--verified);">RESOLVED — the 19-vs-8 Deafblind interpreter count was a timeline, not a contradiction</h3>
+      <p><strong>Directly resolved via NRCPD's live registration-figures table (checked 5 September 2026):</strong> the figures of 19 and 8 Registered Interpreters for Deafblind People (RIDB) are both real — they are snapshots of the same national register at different dates, not two competing claims. The register showed roughly 12 nationally around 2022; from 12 February 2025 (when NRCPD confirmed the figure to journalist Liam O'Dell amid a petition by Sarah Reed) through the government's 23 June 2026 funding announcement, the figure cited was 8 — used explicitly as that announcement's "before" baseline, with a target of 68 ("more than eightfold") funded by a £15,000 grant for competency-assessment weekends. As of 5 September 2026, the live NRCPD table shows 19, as those assessment weekends add successful candidates to the register.</p>
+      <p><strong>The number that actually matters for South West/South East London planning is neither 19 nor 8:</strong> only 4 of the 19 current RIDBs nationally sit in the combined London + South East regions, and just 1 in London itself. That is the correct local-capacity baseline. It also newly surfaced that DA Languages and LanguageLine — the two agencies already confirmed holding South London GP/hospital interpreting contracts — do not hold their own Deafblind interpreting bench, and instead subcontract that work to Deafblind Enablement, meaning DBE's own thin national capacity is the real ceiling on any Deafblind booking under those contracts, regardless of which prime the booking nominally runs through.</p>
+      <p style="font-size:12.5px; color:#4A5568; margin-top:4px;">See the DeafBlind-Specific Provision domain above for the full breakdown, the BSL Advisory Board's "Locked Out" findings and commissioning recommendations, and what remains genuinely unpublished (RIDB fulfilment rates, occupancy, and how many of the 19 actually take NHS work).</p>
+    </div>
+  </div>
+</section>
+
+<section class="section" id="foi" aria-labelledby="foi-heading">
+  <div class="wrap">
+    <div class="section-head">
+      <div>
+        <h2 class="section-title" id="foi-heading">FOI targets arising</h2>
+        <p class="section-desc">Feeds directly into the team's FOI companion log — check WhatDoTheyKnow first, and the Section 12 cost limit (£450 / 18 hours), before submitting.</p>
+      </div>
+    </div>
+    <ul class="foi-list" id="foi-list"></ul>
+  </div>
+</section>
+
+<section class="section" id="audiences" aria-labelledby="audiences-heading">
+  <div class="wrap">
+    <div class="section-head">
+      <div>
+        <h2 class="section-title" id="audiences-heading">For charities &amp; businesses</h2>
+        <p class="section-desc">The same evidence, reframed for two audiences who can each act on it differently — charities can use it to strengthen their own case, businesses can use it to meet their obligations well rather than badly.</p>
+      </div>
+    </div>
+    <div class="audience-tabs" id="audience-tabs" role="tablist" aria-label="Audience">
+      <button class="audience-tab active" data-audience="charities" role="tab" aria-selected="true" aria-controls="panel-charities" id="tab-charities">For charities &amp; funders</button>
+      <button class="audience-tab" data-audience="business" role="tab" aria-selected="false" aria-controls="panel-business" id="tab-business">For employers &amp; businesses</button>
+    </div>
+    <div class="audience-panel active" id="panel-charities" role="tabpanel" aria-labelledby="tab-charities">
+      <div class="audience-grid" id="audience-grid-charities"></div>
+    </div>
+    <div class="audience-panel" id="panel-business" role="tabpanel" aria-labelledby="tab-business" hidden>
+      <div class="audience-grid" id="audience-grid-business"></div>
+    </div>
+    <button class="add-audience-btn" id="add-audience">+ Add a point (team only)</button>
+  </div>
+</section>
+
+<section class="section" id="policymedia" aria-labelledby="policymedia-heading">
+  <div class="wrap">
+    <div class="section-head">
+      <div>
+        <h2 class="section-title" id="policymedia-heading">For policymakers &amp; media</h2>
+        <p class="section-desc">Levers for people who can change policy, and sourced, quotable hooks for people who can put this in front of the public.</p>
+      </div>
+    </div>
+    <div class="audience-tabs" id="policymedia-tabs" role="tablist" aria-label="Audience">
+      <button class="audience-tab active" data-audience="policymakers" role="tab" aria-selected="true" aria-controls="panel-policymakers" id="tab-policymakers">For policymakers</button>
+      <button class="audience-tab" data-audience="media" role="tab" aria-selected="false" aria-controls="panel-media" id="tab-media">For media &amp; journalists</button>
+    </div>
+    <div class="audience-panel active" id="panel-policymakers" role="tabpanel" aria-labelledby="tab-policymakers">
+      <div class="audience-grid" id="audience-grid-policymakers"></div>
+    </div>
+    <div class="audience-panel" id="panel-media" role="tabpanel" aria-labelledby="tab-media" hidden>
+      <div class="audience-grid" id="audience-grid-media"></div>
+    </div>
+    <button class="add-audience-btn" id="add-policymedia">+ Add a point (team only)</button>
+  </div>
+</section>
+
+<section class="section" id="community" aria-labelledby="community-heading" style="border-bottom:none;">
+  <div class="wrap">
+    <div class="community-box">
+      <div>
+        <h2 id="community-heading" style="font-family:'Fraunces',serif; font-size:24px;">Community voices</h2>
+        <p>An anonymous survey for Deaf and DeafBlind people to report their own NHS and public service experiences, feeding straight into the infographics above. Not live yet — we're building the anonymity protections properly first, so small-sample results can't be traced back to an individual respondent.</p>
+      </div>
+      <span class="tag">In development</span>
+    </div>
+  </div>
+</section>
+</main>
+
+<footer>
+  <div class="wrap">
+    <p><strong>How this works:</strong> this is a standalone file — edits you make are saved in your own browser only (via local storage), not shared live with teammates. To publish a change for everyone, edit the source data in this file and re-share the updated file (e.g. via the team's shared repo). There is no login or access control built in; treat this file itself as team-internal until you decide how you're distributing it.</p>
+    <p style="margin-top:8px;">Methodology: verified figures are re-checked on the cadence stated per domain; anything unverified for 90+ days is flagged stale automatically. Part of the GeometricMind / Deaf Network Health Group project.</p>
+  </div>
+</footer>
+
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+<script>
+// ---------------- DATA MODEL ----------------
+const CLUSTERS = {
+  health: {label:'Health & communication', color:'var(--cluster-health)'},
+  welfare: {label:'Welfare & employment', color:'var(--cluster-welfare)'},
+  law: {label:'Law & rights', color:'var(--cluster-law)'},
+  money: {label:'Money & accountability', color:'var(--cluster-money)'},
+  education: {label:'Education', color:'var(--cluster-education)'}
+};
+
+const DEFAULT_DOMAINS = [
+  { id:'nhs-interpreter', cluster:'health', title:'NHS Interpreter Provision & BSL Health Access',
+    desc:'Legal duty, funding, workforce supply, and outcomes for BSL interpretation in NHS settings.', status:'filled',
+    figures:[
+      {label:'BSL users denied professional interpretation', value:'67%', source:'Still Ignored research report, n=1,100+', sourceUrl:'https://signhealth.org.uk/resources/still-ignored-the-fight-for-accessible-healthcare/', lastVerified:'2026-09-04', status:'verified'},
+      {label:'Deaf people who avoid A&E due to access fears', value:'1 in 10', source:'Still Ignored, RNID/SignHealth', sourceUrl:'https://signhealth.org.uk/resources/still-ignored-the-fight-for-accessible-healthcare/', lastVerified:'2026-09-04', status:'verified'},
+      {label:'Aware the Accessible Information Standard exists', value:'21%', source:'Still Ignored research report', sourceUrl:'https://signhealth.org.uk/resources/still-ignored-the-fight-for-accessible-healthcare/', lastVerified:'2026-09-04', status:'verified'},
+      {label:'GPs who do not proactively contact accessibly', value:'59–61%', source:'Still Ignored research report', sourceUrl:'https://signhealth.org.uk/resources/still-ignored-the-fight-for-accessible-healthcare/', lastVerified:'2026-09-04', status:'verified'},
+      {label:'RADF full conformance deadline (health & social care)', value:'30 Sept 2026', source:'NHS England Digital, DAPB4019 — confirmed against BOTH the standards summary page AND the full 44-page Implementation Guidance (Amd 41/2025), Section 12', sourceUrl:'https://digital.nhs.uk/data-and-information/information-standards/governance/latest-activity/standards-and-collections/dapb4019-reasonable-adjustment-digital-flag', lastVerified:'2026-09-04', status:'verified'},
+      {label:'Est. annual NHS cost of accessibility gaps (SignHealth estimate, not an independent NHS costing)', value:'£80–100m', source:'SignHealth’s own inflation-adjusted uplift of its 2014 Sick Of It report (£30m); repeated as a footnoted citation in the government’s Locked Out report, Nov 2025 — origin now confirmed, but it remains an advocacy estimate, not an NHS/Treasury costing', sourceUrl:'https://signhealth.org.uk/with-deaf-people/campaigns/still-sick-of-it/', lastVerified:'2026-09-04', status:'verified'},
+      {label:'Deaf BSL users in England — no agreed figure', value:'22,000 (2021 Census, main language) / ~25,000 (RNID UK-wide estimate) / ~87,000 (Healthwatch SWL report) / 151,000 (BDA, wider figure, of whom 87,000 are “deaf”)', source:'RNID’s own prevalence page states there is “no consensus” — the previously-used 73,000 figure does not appear in any current RNID source and should be retired', sourceUrl:'https://rnid.org.uk/get-involved/research-and-policy/facts-and-figures/prevalence-of-british-sign-language/', lastVerified:'2026-09-05', status:'contested'},
+      {label:'RNID FOI: NHS staff untrained on the Accessible Information Standard', value:'92%', source:'RNID FOI investigation, published 27 Jan 2026 — 10 trusts reported 0% completion; only 11 trusts above 50%; only 24% of trusts consistently meet communication needs', sourceUrl:'https://rnid.org.uk/2026/01/major-nhs-training-gap-is-putting-millions-of-deaf-people-at-risk/', lastVerified:'2026-09-05', status:'verified'},
+      {label:'SWL GP BSL interpretation requests, Oct 2024–Jun 2025 (full six-borough breakdown)', value:'878 total: Wandsworth 466, Croydon 185, Sutton 72, Merton 68, Kingston 61, Richmond 26', source:'Healthwatch South West London / Healthwatch Croydon, ICB-facing report (a date-range typo in the source PDF — “October 2025 to June 2025” — has been corrected here to the correct Oct 2024–Jun 2025 period, cross-checked against the DA Languages contract start date)', sourceUrl:'https://www.healthwatchcroydon.co.uk/sites/healthwatchcroydon.co.uk/files/SWL%20BSL%20Report-ICB.pdf', lastVerified:'2026-09-05', status:'verified'},
+      {label:'SWL GP BSL interpreting provider switch', value:'DA Languages replaced Language Line from 1 Oct 2024 across all six SWL boroughs (subcontracting to Sign Solutions), funded via the SWL Innovation ICP Priorities Fund', source:'Healthwatch South West London / Healthwatch Richmond', sourceUrl:'https://www.healthwatchrichmond.co.uk/news/2025-04-15/new-bsl-interpreting-services-gp-practices-south-west-london', lastVerified:'2026-09-05', status:'verified'},
+      {label:'Healthwatch SWL patient/carer survey response rate', value:'Zero responses — independently re-verified word-for-word on a second fetch: “We did not have any responses to the patient and carer survey”', source:'Healthwatch South West London GP practice staff guidance report', sourceUrl:'https://nds.healthwatch.co.uk/sites/default/files/reports_library/20260324_HW_SWL%20BSL%20final%20report_GP%20practice%20staff%20guidance.pdf', lastVerified:'2026-09-05', status:'verified'},
+      {label:'SWLSTG Corner House — national Deaf CAMHS inpatient service tier (CLOSED 1 Jul 2026)', value:'Was Tier 4 (highly specialised, nationally commissioned), based at Springfield Hospital. Inpatient unit closed permanently 1 July 2026; funding redirected to four new regional specialist community teams (South East, Central, North, South West)', source:'SWLSTG’s own site (deaf-children page; 1 Jul 2026 news update)', sourceUrl:'https://swlstg.nhs.uk/deaf-children', lastVerified:'2026-09-06', status:'verified'},
+      {label:'SWLSTG Corner House age range — resolved', value:'8–18 pre-2022 (independently confirmed, The Limping Chicken, 21 Dec 2022) → closed for review → reopened 1 Jun 2023 as 11–17, 24/5 model → closed permanently 1 Jul 2026. Both age ranges were genuine, from different points in the service’s history — not a citation error', source:'SWLSTG service page, SWLSTG news archive, The Limping Chicken', sourceUrl:'https://swlstg.nhs.uk/service-detail/service/corner-house-national-deaf-inpatient-service-for-children-and-young-people-8', lastVerified:'2026-09-06', status:'verified'},
+      {label:'PSR award: RNID / Somerset hearing-aid aftercare (2nd confirmed PSR award to a hearing-sector charity)', value:'£46,000, 12 months from 13 Jan 2025', source:'Find a Tender — Somerset NHS Foundation Trust award notice, via PSR Most Suitable Provider route (general hearing-loss service, not BSL-specific)', sourceUrl:'', lastVerified:'2026-09-05', status:'verified'},
+      {label:'SignHealth’s PSR-awarded NHS BSL Talking Therapy contracts', value:'Two: NHS Derby & Derbyshire ICB (£491,036/year, 1 Apr 2026–31 Mar 2029) and NHS South East London ICB (1 Aug 2025–31 Jan 2026, extended to 31 Mar 2026)', source:'Find a Tender award notices — the BSL-specific clinical-therapy niche within PSR currently belongs to SignHealth alone', sourceUrl:'', lastVerified:'2026-09-05', status:'verified'},
+      {label:'VCSE Health and Wellbeing Alliance — Deaf-sector membership', value:'Sense only (via its Complex Needs Consortium), of 18 member organisations/consortia — RNID, SignHealth, BDA, Action Deafness, Deafblind UK and RAD are not members', source:'NHS England, VCSE Health and Wellbeing Alliance page', sourceUrl:'https://www.england.nhs.uk/hwalliance/', lastVerified:'2026-09-05', status:'verified'},
+      {label:'SignHealth open letter to the Health Secretary', value:'49 named co-signatories + SignHealth = 50; RNID and Sense confirmed ABSENT as signatories', source:'SignHealth, ‘50 deaf charities sign open letter to Wes Streeting’; DHSC responded 18 Nov 2025 without accepting or declining the requested meeting', sourceUrl:'https://signhealth.org.uk/announcement/50-deaf-charities-sign-open-letter-to-wes-streeting/', lastVerified:'2026-09-05', status:'verified'},
+      {label:'Cabinet Office VCSE procurement spend targets exclude the NHS', value:'PPN 001 (12 Feb 2025) requires 1 Apr 2026 VCSE spend targets for central government departments/NDPBs but explicitly excludes NHS trusts and foundation trusts', source:'Cabinet Office, Procurement Policy Note 001', sourceUrl:'https://www.gov.uk/government/publications/ppn-001-sme-and-vcse-procurement-spend-targets/procurement-policy-note-001-sme-and-vcse-procurement-spend-targets-html', lastVerified:'2026-09-05', status:'verified'},
+      {label:'Deaf health priority-setting study (Leeds)', value:'Deaf participants (n=38) ranked NHS process improvements (28%), staff Deaf-awareness training (25%) and interpreter access (17%) as top priorities in a mock £1m resource-allocation exercise', source:'Selby, Jones, Radford & Hind, BMC Health Services Research 26:131, Dec 2025', sourceUrl:'https://link.springer.com/article/10.1186/s12913-025-13935-8', lastVerified:'2026-09-05', status:'verified'},
+      {label:'Camden Council 2026–2030 procurement strategy — Deaf-led BSL commissioning (LEAD, not yet independently verified)', value:'Reportedly the first local policy commitment anywhere in this project to Deaf-led BSL-specific commissioning, via a separate ~£100,000/48-month Light Touch Regime procurement', source:'Flagged from a single AI research pass, not yet opened against a primary Camden Council document — highest-priority item for the next verification round', sourceUrl:'', lastVerified:'2026-09-05', status:'contested'},
+      {label:'Grassroots BSL voice on NHS access — gap is linguistic/structural, not just low engagement', value:'BSL confirmed a distinct language from English (not signed English) by three independent UK sources; a charity-produced BSL voice exists on video platforms, but no independent SWL-local grassroots BSL voice on NHS access was found anywhere', source:'BSL Advisory Board’s Locked Out report; a GOV.UK accessibility co-design study; a financial-services regulator’s guidance', sourceUrl:'https://www.gov.uk/government/publications/bsl-user-experience-of-health-and-social-care-in-uk', lastVerified:'2026-09-05', status:'verified'}
+    ]},
+  { id:'mental-health', cluster:'health', title:'Mental Health Services & Deaf/DeafBlind Access', desc:'BSMHD and Deaf-specific mental health provision.', status:'filled', figures:[
+      {label:'SWLSTG Corner House — national Tier 4 Deaf CAMHS inpatient service (CLOSED)', value:'Was ages ‘11–17’ per the 2023–2026 configuration, based at Springfield Hospital, up to six beds (corroborated via a third source) — inpatient unit closed permanently 1 July 2026', source:'SWLSTG’s own site; The Limping Chicken, 21 Dec 2022; SWLSTG 1 Jul 2026 news update', sourceUrl:'https://swlstg.nhs.uk/deaf-children', lastVerified:'2026-09-06', status:'verified'},
+      {label:'Corner House age range — resolved, and the unit has since closed', value:'The 11–17 vs 6–18 discrepancy reflects two real configurations at different times (see the resolved figure above), not a source error. Occupancy/waiting-time questions for the inpatient unit are now moot — it closed permanently 1 July 2026', source:'SWLSTG news archive', sourceUrl:'', lastVerified:'2026-09-06', status:'verified'},
+      {label:'SignHealth national NHS Talking Therapies contract', value:'Ended 31 March 2025; service now seeks ICB-by-ICB funding; new referrals after 24 Feb 2025 depend on local commissioner agreement', source:'SignHealth Psychological Therapy Service page', sourceUrl:'https://signhealth.org.uk/with-deaf-people/psychological-therapy/therapy-service/', lastVerified:'2026-09-05', status:'verified'},
+      {label:'Interpreters willing to accept mental health work', value:'7.65%', source:'BSL Advisory Board, Locked Out (Nov 2025), not yet independently re-opened by this project', sourceUrl:'https://www.gov.uk/government/publications/bsl-user-experience-of-health-and-social-care-in-uk', lastVerified:'2026-09-05', status:'contested'},
+      {label:'BSL users and mental health prevalence (widely repeated, original study not traced)', value:'“Almost twice as likely” to report mental health issues (40% vs 25%); twice the length of inpatient admission when admitted', source:'Locked Out, itself citing SignHealth — a citation of a citation; treat as advocacy estimate pending the original source', sourceUrl:'https://www.gov.uk/government/publications/bsl-user-experience-of-health-and-social-care-in-uk', lastVerified:'2026-09-05', status:'contested'}
+  ]},
+  { id:'deafblind-provision', cluster:'health', title:'DeafBlind-Specific Provision', desc:'Guide-communicators, intervenors, and dedicated DeafBlind services.', status:'filled', figures:[
+      {label:'Deafblind population, UK (Sense estimate)', value:'450,000+ (2022 est.), projected 610,000+ by 2035', source:'Sense, ‘Deafblindness statistics in the UK’, methodology: Operational Research Society (2017) + Centre for Disability Research (2010) prevalence rates applied to ONS population projections', sourceUrl:'https://www.sense.org.uk/about-us/research/deafblindness-statistics-in-the-uk/', lastVerified:'2026-09-05', status:'verified'},
+      {label:'Deafblind UK Impact Report 2024–25 — reach', value:'4,346 members supported; 9,312 helpline calls (“approximately one intervention every 15 minutes”); 1,905 professionals trained; 473 volunteers', source:'Deafblind UK Impact Report 2024-25, published Aug 2025', sourceUrl:'https://deafblind.org.uk/wp-content/uploads/2025/08/IMPACT-REPORT-Deafblind-UK-Annual-Impact-Report-2025-4.pdf', lastVerified:'2026-09-05', status:'verified'},
+      {label:'RESOLVED — the 19-vs-8 Registered Interpreter for Deafblind People (RIDB) discrepancy', value:'Both figures are real; they are snapshots of the same NRCPD register at different dates, not competing claims. Timeline: ~12 nationally (~2022) → 8 (cited from 12 Feb 2025 through the 23 Jun 2026 GOV.UK funding announcement, used as that announcement’s baseline) → 19 on the live NRCPD table as of 5 Sep 2026, rising as government-funded competency-assessment weekends add successful candidates to the register.', source:'NRCPD live registration-figures table (5 Sep 2026); Liam O’Dell reporting on the Sarah Reed petition (12 Feb 2025); BSL Advisory Board/DHSC ‘Locked Out’ (27 Nov 2025); GOV.UK announcement (23 Jun 2026)', sourceUrl:'https://www.gov.uk/government/news/support-for-the-deafblind-community-grows-with-new-funding-to-assess-specialist-interpreters-back-by-the-uk-government', lastVerified:'2026-09-05', status:'verified'},
+      {label:'RIDB regional breakdown — the number that actually matters for South West/South East London', value:'Of 19 RIDBs nationally: London 1, South East 3 (combined London+SE = 4), West Midlands 4, North West 3, Scotland 3, East of England 2, North East 1, Wales 1, Northern Ireland 1, South West/East Midlands/Yorkshire &amp; Humber 0. Region is self-declared home base, not confirmed work availability, but London=1 remains the correct conservative local-supply planning figure — not the reassuring-looking national total of 19.', source:'NRCPD live registration-figures table, checked 5 Sep 2026', sourceUrl:'https://www.nrcpd.org.uk/', lastVerified:'2026-09-05', status:'verified'},
+      {label:'Funding to grow the Deafblind interpreter pool from 8 to 68 — progress update', value:'£15,000 (Jun 2026), delivered via Signature and NRCPD, funds competency-assessment weekends adding successful candidates to the existing register — not 60 new training places. Progress so far: 8 → 19 nationally as of 5 Sep 2026. Whether 68 is reached, and how many of those would take on NHS work (in London specifically or otherwise), remains unpublished.', source:'GOV.UK announcement (23 Jun 2026); NRCPD live table (5 Sep 2026)', sourceUrl:'https://www.gov.uk/government/news/support-for-the-deafblind-community-grows-with-new-funding-to-assess-specialist-interpreters-back-by-the-uk-government', lastVerified:'2026-09-05', status:'verified'},
+      {label:'Deafblind population definitions are not interchangeable', value:'Sense’s ~451,211 (2022 est., dual sight/hearing loss, weighted toward older adults, projected 610,000+ by 2035) is a broad prevalence estimate. The government’s separate ~12,000 ‘Deafblind people with communication needs’ figure (used in the 23 Jun 2026 funding announcement) is a much narrower operational denominator. Citing one when the other is meant undermines any funding or policy case.', source:'Sense published prevalence figures; BSL Advisory Board ‘Locked Out’; GOV.UK, 23 Jun 2026', sourceUrl:'', lastVerified:'2026-09-05', status:'verified'},
+      {label:'Communicator-guides are a separate, unregistered profession — not a substitute for RIDB clinical interpreting', value:'Communicator-guides (CGs) do not appear on NRCPD at all; NRCPD told Liam O’Dell (Feb 2025) that adding a CG registration category ‘will take careful consideration and planning’ — it has not appeared as a live category. Community Care Inform (24 Jan 2024) states plainly that CGs ‘cannot be used for critical service interventions as they are not suitably qualified or insured for this purpose.’ NHS clinical interpreting still requires an RIDB or an RSLI working in the adapted mode. Sense and Sight for Surrey both supply CGs on this social-care support model.', source:'Liam O’Dell reporting (12 Feb 2025); Community Care Inform (24 Jan 2024)', sourceUrl:'', lastVerified:'2026-09-05', status:'verified'},
+      {label:'DA Languages and LanguageLine subcontract Deafblind interpreting to Deafblind Enablement — a single specialist pipe, not a competing local market', value:'Neither DA Languages nor LanguageLine — the two agencies already confirmed holding South West and South East London GP/hospital interpreting contracts — appears to hold its own RIDB bench. Deafblind Enablement’s own site confirms it takes deafblind subcontract work from both. This means any deafblind booking under a South London NHS interpreting contract is gated by Deafblind Enablement’s own national capacity (part of the same 4-in-London+SE figure above), not by anything the named prime contractor can itself flex. No South London hospital contract for Deafblind Enablement was found directly, though the BSL Advisory Board’s ‘Locked Out’ annex cites Moorfields Eye Hospital as good practice for commissioning ‘a deafblind specialist agency for interpreting’ without naming it — very likely the same relationship, given Deafblind Enablement’s own Moorfields claim.', source:'Deafblind Enablement’s own service page; BSL Advisory Board/DHSC ‘Locked Out’ annex (27 Nov 2025)', sourceUrl:'', lastVerified:'2026-09-05', status:'verified'},
+      {label:'Deafblind Enablement launched a Professional Register for Deafblind Specialists', value:'Launched 29 June 2026, covering communicator-guides, interpreter-guides and specialist assessors, with a free first-year subscription. No published registrant count yet as of this check.', source:'Deafblind Enablement’s own site', sourceUrl:'', lastVerified:'2026-09-05', status:'verified'},
+      {label:'BSL Advisory Board: ‘a national crisis in provision for deafblind people’', value:'‘Locked Out’ (27 Nov 2025) states plainly: ‘There is a national crisis in provision for deafblind people.’ Lived-experience quote: ‘It is almost impossible to get a tactile interpreter. Sometimes a regular interpreter will turn up and then they will leave when they see I need hands-on. It’s also hard to arrange a communicator guide to get me to the doctor in the first place.’ And: ‘When patients ask to use alternative agencies with more suitable specialist deafblind interpreters, their requests are denied or delayed.’ Recommends commissioning specialist Deafblind agencies rather than routing through spoken-language primes, a 98% fulfilment target, and response-time asks (A&amp;E within 1 hour, same-day ward within 4 hours, routine confirmation within 2 working days) — these are asks, not measured current performance. Also recommends regulating communicator-guides, whose training takes ~7 years for a non-signer and who are often paid near minimum wage, with a transitional period ‘to avoid worsening the current communicator-guide workforce shortage.’', source:'BSL Advisory Board/DHSC, ‘Locked Out’ and the companion ‘18 areas for action’, 27 Nov 2025', sourceUrl:'', lastVerified:'2026-09-05', status:'verified'},
+      {label:'No published wait-time or fulfilment data exists for Deafblind interpreting specifically, isolated from general BSL', value:'Confirmed gap: no national or London RIDB request-volume series; no fulfilment % for Deafblind vs BSL on any ICB or trust contract; no median booking lead time for tactile/hands-on/manual interpreting; no occupancy/utilisation data for the 19 RIDBs; no published figure for how many of the 19 actually take NHS work. The SWL 878 figure elsewhere in this dossier is GP BSL requests only, Oct 2024–Jun 2025 — it does not include Deafblind requests. RNID/SignHealth’s 2025 survey (7% always get a communication professional; 63% rarely/never) is hearing-loss/BSL, not Deafblind-specific, and should not be cited for Deafblind capacity.', source:'Cross-referenced against NHS England statistics publications, SWL/SEL ICB pages, and RNID/SignHealth’s 2025 survey — deep research pass, Sept 2026', sourceUrl:'', lastVerified:'2026-09-05', status:'verified'}
+  ]},
+  { id:'devices-technology', cluster:'health', title:'Devices & Technology, Including AI', desc:'Hearing aids, cochlear implants, AI sign-language translation, and assistive/alerting tech.', status:'filled', figures:[
+      {label:'AI signing avatars cannot match culturally appropriate human interpretation', value:'WFD/WASLI position', source:'World Federation of the Deaf & World Association of Sign Language Interpreters, joint statement', sourceUrl:'', lastVerified:'2026-09-04', status:'verified'},
+      {label:'Public funding for SignGPT (BSL↔English AI translation, 5-year project)', value:'£8.4 million', source:'Universities of Surrey, Oxford & UCL DCAL, reported via liamodell.com', sourceUrl:'', lastVerified:'2026-09-04', status:'verified'},
+      {label:'Grassroots Deaf community dialogue on AI BSL ethics before this project', value:'None found to date', source:'RNID, announcing its own Sciencewise-backed project', sourceUrl:'', lastVerified:'2026-09-04', status:'verified'},
+      {label:'People waiting 6+ weeks for an NHS audiology assessment', value:'38.2% (Mar 2025), up from 37.8% (Mar 2024)', source:'NHS England, Diagnostic Waiting Times and Activity Statistical Report, March 2025 — Accredited Official Statistics, verified directly against Table 2', sourceUrl:'https://www.england.nhs.uk/statistics/wp-content/uploads/sites/2/2025/05/DWTA-March-2025-report_SW40K.pdf', lastVerified:'2026-09-04', status:'verified'},
+      {label:'UK national DeafBlind equipment distribution scheme', value:'No UK equivalent found (US-only scheme exists)', source:'Gap identified this session — do not cite US FCC programme as UK-applicable', sourceUrl:'', lastVerified:'2026-09-04', status:'contested'},
+      {label:'Adult cochlear implant referral rate (not yet independently verified)', value:'35.7% audiometrically eligible but only 9.7% referred for assessment', source:'INTEGRATE study, PLOS Medicine (n=6,171) — primary paper not yet independently opened by this project', sourceUrl:'', lastVerified:'2026-09-05', status:'contested'},
+      {label:'No official NHS cochlear implant waiting-time series exists', value:'Confirmed gap', source:'DHSC written parliamentary answer, PQ UIN 91346, 24 Nov 2025 (reported via cross-check, not yet independently opened)', sourceUrl:'', lastVerified:'2026-09-05', status:'contested'}
+  ]},
+  { id:'pip-dla', cluster:'welfare', title:'DWP: PIP & DLA', desc:'Assessment process, award rates, appeals, and Deaf-specific issues.', status:'filled', figures:[
+      {label:'No DWP/HMCTS data breaks out PIP outcomes by deafness or BSL use', value:'Confirmed gap — no published award-rate, under-award, or appeal/tribunal outcome data exists disaggregated by deafness or BSL use', source:'Project research pass, cross-referencing GOV.UK PIP statistics', sourceUrl:'', lastVerified:'2026-09-05', status:'contested'},
+      {label:'No statutory guarantee of a BSL interpreter at a PIP assessment', value:'Available only via an Equality Act 2010 reasonable-adjustment request; Capita HAAS runs a free video relay service via SignVideo for telephone assessments', source:'NDCS PIP advice; Capita HAAS BSL page', sourceUrl:'https://www.haas.capita.co.uk/en/pip/bsl', lastVerified:'2026-09-05', status:'verified'},
+      {label:'Timms Review of PIP — sensory impairment assessment', value:'Interim report (Jul 2026) flags problems in how sensory impairments are captured in the PIP functional assessment; final review due autumn 2026, no design changes before then', source:'GOV.UK, Timms Review of PIP — interim report', sourceUrl:'https://www.gov.uk/government/publications/timms-review-of-personal-independence-payment-interim-report/the-timms-review-of-personal-independence-payment-interim-report', lastVerified:'2026-09-05', status:'verified'},
+      {label:'PIP rates from April 2026', value:'Daily living enhanced rate £114.60/week; mobility enhanced rate £80.00/week', source:'DWP', sourceUrl:'', lastVerified:'2026-09-05', status:'verified'},
+      {label:'PIP assessments audio-recorded by default', value:'Standard (opt-out) from end of June 2026, for face-to-face and telephone assessments', source:'Timms Review interim report', sourceUrl:'https://www.gov.uk/government/publications/timms-review-of-personal-independence-payment-interim-report/the-timms-review-of-personal-independence-payment-interim-report', lastVerified:'2026-09-05', status:'verified'},
+      {label:'DLA does not automatically convert to PIP at 16', value:'Confirmed — DLA child helpline offers textphone, Relay UK and BSL video relay (InterpretersLive!)', source:'NDCS DLA advice', sourceUrl:'', lastVerified:'2026-09-05', status:'verified'}
+  ]},
+  { id:'access-to-work', cluster:'welfare', title:'Access to Work', desc:'Funding caps, delays, interpreter budgets, and employer awareness.', status:'filled', figures:[
+      {label:'AtW processing time vs. the 25-day target', value:'109 working days average (NAO, Feb 2026); 100.5 days Apr 2025–Jan 2026 (Commons Library)', source:'National Audit Office, The Access to Work scheme', sourceUrl:'https://www.nao.org.uk/wp-content/uploads/2026/02/the-access-to-work-scheme.pdf', lastVerified:'2026-09-05', status:'verified'},
+      {label:'Annual AtW funding cap per claimant (frozen 2024–2027)', value:'£69,260/year (NAO/Commons Library) vs £69,620 cited by RNID for 2025-26 — discrepancy not yet resolved against DWP’s own primary factsheet', source:'NAO summary; Commons Library SN06666; RNID/DeafATW', sourceUrl:'https://commonslibrary.parliament.uk/research-briefings/sn06666/', lastVerified:'2026-09-05', status:'contested'},
+      {label:'AtW spend on deaf/hard-of-hearing customers', value:'£90m in 2024-25 — 28% of total AtW provision spend, the largest single primary-condition category', source:'National Audit Office, The Access to Work scheme', sourceUrl:'https://www.nao.org.uk/wp-content/uploads/2026/02/the-access-to-work-scheme.pdf', lastVerified:'2026-09-05', status:'verified'},
+      {label:'AtW support-worker spend (interpreters + job aides, not BSL-disaggregated)', value:'£227m in 2024-25, +125% real terms since 2018-19', source:'NAO press release', sourceUrl:'https://www.nao.org.uk/press-releases/processing-delays-and-backlogs-in-access-to-work-affect-job-security-and-employer-finances/', lastVerified:'2026-09-05', status:'verified'},
+      {label:'AtW application backlog', value:'62,100 awaiting decision at 31 Mar 2025 (up from 21,700 at 31 Mar 2022); ~60,000 still awaiting as of May 2026', source:'NAO; DWP press release', sourceUrl:'https://www.gov.uk/government/news/huge-recruitment-boost-to-tackle-backlog-in-vital-disability-work-scheme', lastVerified:'2026-09-05', status:'verified'},
+      {label:'BSL users’ experience of AtW delays', value:'37% waited 4+ months; 13% waited 10+ months; 49% said their award was affected by the funding cap', source:'RNID & DeafATW 2026 survey (n=267–358)', sourceUrl:'https://rnid.org.uk/wp-content/uploads/2026/04/RNID-Access-To-Work-Experiences-of-deaf-and-deafblind-people-and-people-with-hearing-loss-2026.pdf', lastVerified:'2026-09-05', status:'verified'},
+      {label:'Employer awareness of Access to Work', value:'21% aware in 2024, down from 26% in 2022 — 76% not aware', source:'DWP Employer Survey 2024 (IFF Research, n=2,670)', sourceUrl:'https://www.gov.uk/government/publications/dwp-employer-survey-2024/dwp-employer-survey-2024', lastVerified:'2026-09-05', status:'verified'},
+      {label:'BSL interpreter payments made through AtW', value:'3,210 customers received a BSL interpreter support-worker payment in 2024-25 (16% of support-worker payment customers); 1,830 had a BSL element approved', source:'DWP Access to Work statistics to March 2025', sourceUrl:'https://www.gov.uk/government/statistics/access-to-work-statistics-april-2007-to-march-2025/access-to-work-statistics-april-2007-to-march-2025', lastVerified:'2026-09-05', status:'verified'},
+      {label:'Cost of getting it wrong: Rimmer v SSWP', value:'£49,880 total award after a Jobcentre denied BSL provision for 6 years, plus mandatory deaf-awareness training ordered', source:'Employment Tribunal judgment 1802885/2022 & 1800113/2023', sourceUrl:'https://assets.publishing.service.gov.uk/media/6644c1774f29e1d07fadc86f/Mr_P_Rimmer_v_The_Secretary_of_State_for_Work_and_Pensions_-_1802885.2022___1800113.2023_-_Judgment.pdf', lastVerified:'2026-09-05', status:'verified'}
+  ]},
+  { id:'neurodivergence', cluster:'welfare', title:'Neurodivergence Overlap', desc:'DeafDisabled and Deaf+ people with dual or multiple support needs.', status:'filled', figures:[
+      {label:'No UK prevalence figure for neurodivergent Deaf BSL users', value:'Confirmed gap — closest available proxy is CRIDE’s non-equivalent ‘additional needs’ measure, the thinnest-researched domain in this project', source:'CRIDE 2025 UK-wide summary (BATOD)', sourceUrl:'https://www.batod.org.uk/wp-content/uploads/2026/01/CRIDE-2025-UK-wide-summary-FINAL.pdf', lastVerified:'2026-09-05', status:'contested'},
+      {label:'Deaf children with any additional need (not autism/neurodivergence-specific)', value:'12,844 — 24% of 53,225 deaf children under 20 in the UK', source:'CRIDE 2025 UK-wide summary (BATOD)', sourceUrl:'https://www.batod.org.uk/wp-content/uploads/2026/01/CRIDE-2025-UK-wide-summary-FINAL.pdf', lastVerified:'2026-09-05', status:'verified'},
+      {label:'Inaccessible neurodivergence assessment pathways for Deaf people', value:'Documented lack of BSL-informed neuropsychological assessment tools for autism/ADHD/dementia pathways', source:'BSL Advisory Board, Locked Out', sourceUrl:'https://www.gov.uk/government/publications/bsl-user-experience-of-health-and-social-care-in-uk', lastVerified:'2026-09-05', status:'verified'}
+  ]},
+  { id:'legislation', cluster:'law', title:'Legislation', desc:'BSL Act 2022, Equality Act 2010, Human Rights Act, Care Act 2014.', status:'filled', figures:[
+      {label:'BSL Act 2022 creates no enforceable individual service right', value:'A recognition-plus-reporting/guidance statute only (ss.1-4) — individually enforceable rights to services remain in the Equality Act 2010', source:'British Sign Language Act 2022', sourceUrl:'https://www.legislation.gov.uk/ukpga/2022/34', lastVerified:'2026-09-05', status:'verified'},
+      {label:'BSL Act 2022 reporting duty excludes individual public communications', value:'Section 2 covers only listed UK government departments’ own public communications (announcements, plans, press/social/web) — explicitly excludes communications with individual members of the public', source:'British Sign Language Act 2022, s.2', sourceUrl:'https://www.legislation.gov.uk/ukpga/2022/34', lastVerified:'2026-09-05', status:'verified'},
+      {label:'BSL Act 2022 does not extend to Northern Ireland', value:'Section 4: extends to England, Wales and Scotland only', source:'British Sign Language Act 2022, s.4', sourceUrl:'https://www.legislation.gov.uk/ukpga/2022/34', lastVerified:'2026-09-05', status:'verified'},
+      {label:'Fourth BSL Act statutory report', value:'Covers May 2025–Apr 2026, published 15 Jul 2026 — 198 BSL content pieces (+41% YoY, +161% since 2022); RNID named DHSC (with Education) as a department showing declining BSL communications output', source:'GOV.UK, BSL fourth report', sourceUrl:'https://www.gov.uk/government/publications/british-sign-language-bsl-fourth-report-may-2025-to-april-2026', lastVerified:'2026-09-05', status:'verified'},
+      {label:'BSL (Wales) Bill passed by the Senedd', value:'11 Mar 2026 — a Wales-only instrument, separate from the UK-wide 2022 Act; substantive content vs. Scotland’s Act not yet compared in detail', source:'Senedd (Welsh Parliament)', sourceUrl:'', lastVerified:'2026-09-05', status:'verified'},
+      {label:'BSL (Scotland) Act 2015 is materially stronger than the UK-wide 2022 Act', value:'Requires national and listed-authority BSL plans — a genuinely more substantive duty than the 2022 Act’s reporting/guidance model', source:'Commons Library CDP-2025-0061', sourceUrl:'https://commonslibrary.parliament.uk/research-briefings/cdp-2025-0061/', lastVerified:'2026-09-05', status:'verified'}
+  ]},
+  { id:'interpreter-regulation', cluster:'law', title:'Interpreter Regulation & Agencies', desc:'NRCPD, RBSLI, VRI, and procurement models.', status:'filled', figures:[
+      {label:'NRCPD registered BSL interpreters', value:'1,632 Registered Sign Language Interpreters, plus 242 regulated trainees (2,055 professionals across all categories)', source:'NRCPD registration figures', sourceUrl:'https://nrcpd.org.uk/registration-figures', lastVerified:'2026-09-05', status:'verified'},
+      {label:'Interpreter-to-Deaf-BSL-user ratio', value:'Roughly 1:60 (approx. 1,500 registered interpreters vs. approx. 87,000 deaf BSL users)', source:'RNID prevalence data, cited via Holyrood reporting', sourceUrl:'https://rnid.org.uk/what-we-do/data-and-evidence/bsl-prevalence/', lastVerified:'2026-09-05', status:'verified'},
+      {label:'Scotland’s interpreter register (SRLPDC)', value:'61 registered BSL/English interpreters at 31 Mar 2025, 8 trainees, 2 Deafblind manual interpreters, 1 guide communicator', source:'SRLPDC Annual Accounts 2024-25', sourceUrl:'https://thescottishregister.co.uk/wp-content/uploads/2025/09/SIGNED-SRLPDC-Annual-Accounts-2024-25.pdf', lastVerified:'2026-09-05', status:'verified'},
+      {label:'Wales interpreter numbers', value:'54 registered BSL interpreters', source:'Senedd committee evidence', sourceUrl:'', lastVerified:'2026-09-05', status:'verified'},
+      {label:'Only a fraction of interpreters accept healthcare/mental-health work', value:'20.6% accept healthcare work; 7.65% accept mental health work', source:'BSL Advisory Board, Locked Out', sourceUrl:'https://www.gov.uk/government/publications/bsl-user-experience-of-health-and-social-care-in-uk', lastVerified:'2026-09-05', status:'verified'},
+      {label:'RBSLI has no published registrant headcount', value:'Accepted alongside NRCPD/SRLPDC on some public procurement frameworks, but no headcount is published anywhere', source:'RBSLI site / NEPO528 framework', sourceUrl:'https://www.nepo.org/solutions/professional-services/british-sign-language', lastVerified:'2026-09-05', status:'contested'},
+      {label:'Locked Out recommends statutory NRCPD-only procurement rules', value:'Recommends statutory guidelines requiring NRCPD-registered interpreters and ending use of children/family members as interpreters — a recommendation, not current law', source:'BSL Advisory Board, Locked Out', sourceUrl:'https://www.gov.uk/government/publications/bsl-user-experience-of-health-and-social-care-in-uk', lastVerified:'2026-09-05', status:'verified'}
+  ]},
+  { id:'bsl-history', cluster:'law', title:'History of BSL & Deaf Community in the UK', desc:'Linguistic recognition, education, and the legacy of oralism.', status:'filled', figures:[
+      {label:'First free Deaf school in Britain', value:'1792 — London Asylum for the Deaf and Dumb', source:'UCL DCAL / Deaf Mosaic histories', sourceUrl:'', lastVerified:'2026-09-05', status:'verified'},
+      {label:'1880 Milan Congress suppresses sign language in education', value:'Second International Congress on Education of the Deaf declares oralism superior, effectively suppressing sign language in education internationally', source:'UCL BSL Timeline', sourceUrl:'', lastVerified:'2026-09-05', status:'verified'},
+      {label:'British Deaf Association founded', value:'1890, as the British Deaf and Dumb Association, in direct response to Milan-era oralist policy', source:'UCL BSL Timeline', sourceUrl:'', lastVerified:'2026-09-05', status:'verified'},
+      {label:'1985 Deaf walkout at ICED Manchester', value:'Deaf delegates walk out and hold an ‘Alternative Conference’ — treated as the birth of the modern BSL recognition campaign', source:'UCL BSL Timeline', sourceUrl:'', lastVerified:'2026-09-05', status:'verified'},
+      {label:'UK government recognition of BSL (non-statutory)', value:'18 Mar 2003 — recognised as ‘a language in its own right’, with funding for a discrete programme of initiatives, but no legal status attached', source:'Commons Library CDP-2025-0061', sourceUrl:'https://commonslibrary.parliament.uk/research-briefings/cdp-2025-0061/', lastVerified:'2026-09-05', status:'verified'},
+      {label:'2010 ICED Vancouver formally rejects the 1880 Milan resolutions', value:'130 years after Milan', source:'UCL BSL Timeline', sourceUrl:'', lastVerified:'2026-09-05', status:'verified'},
+      {label:'BSL Act 2022 receives Royal Assent', value:'28 Apr 2022 — statutory recognition for England, Wales and Scotland', source:'legislation.gov.uk', sourceUrl:'https://www.legislation.gov.uk/ukpga/2022/34', lastVerified:'2026-09-05', status:'verified'},
+      {label:'The oralism-to-outcomes causal link is community framing, not an independently audited study', value:'The claim that oralism-era education policy directly explains today’s health/justice/welfare gaps is the Deaf community’s and BSL Advisory Board’s own historiography', source:'Domain research note, citing Locked Out', sourceUrl:'', lastVerified:'2026-09-05', status:'contested'}
+  ]},
+  { id:'victims-prisoners', cluster:'law', title:'Victims & Prisoners', desc:'Deaf/DeafBlind access to justice — as victims/witnesses and as prisoners.', status:'filled', figures:[
+      {label:'Courts are the only justice setting with a guaranteed qualified interpreter', value:'Courts only', source:'Rob Butler MP, Commons Justice Committee, via Inside Time', sourceUrl:'https://insidetime.org/newsround/plight-of-deaf-prisoners-raised-in-parliament/', lastVerified:'2026-09-04', status:'verified'},
+      {label:'Crime victims (general population) aware of the Victims\' Code', value:'19%', source:'Victims\' Commissioner survey, n=3,048, via POST Parliament', sourceUrl:'https://post.parliament.uk/victims-access-to-justice-and-support/', lastVerified:'2026-09-04', status:'verified'},
+      {label:'Deaf prisoner denied BSL interpreter incl. for cancer diagnosis (HMP Lewes) — legal claim settled', value:'1 confirmed case', source:'Leigh Day, MoJ/Practice Plus settlement', sourceUrl:'https://www.leighday.co.uk/news/news/2024-news/profoundly-deaf-prisoner-was-denied-sign-language-interpreter/', lastVerified:'2026-09-04', status:'verified'},
+      {label:'National count of Deaf/DeafBlind prisoners in England & Wales', value:'No published figure found', source:'Gap identified this session — FOI target logged', sourceUrl:'', lastVerified:'2026-09-04', status:'contested'},
+      {label:'Disability Liaison Officers trained in BSL (of 30 sampled)', value:'16 (2009 data)', source:'BDA, Throw Away the Key? (2016 report, citing 2009 figures — stale)', sourceUrl:'https://bda.org.uk/wp-content/uploads/2017/03/BDA-Deaf-Prisoners-Report-2016.pdf', lastVerified:'2026-06-01', status:'stale'},
+      {label:'HMPPS still does not disaggregate disability data for prisoners', value:'Offender Equalities Annual Report 2024-25 (27 Nov 2025) states disability data ‘continues to be limited’ — published analysis is confined mainly to sex, age, ethnicity and religion', source:'HMPPS Offender Equalities Annual Report 2024-25 (via cross-check, not yet independently opened)', sourceUrl:'', lastVerified:'2026-09-05', status:'contested'},
+      {label:'Historic, non-official Deaf prisoner estimates', value:'BDA 2016: ~400 prisoners had disclosed hearing loss/deafness (BDA itself doubted accuracy); 2000: 56 Deaf prisoners identified; 2014 NOMS: of ~1,000 prisoners recorded ‘deaf’, ~92% were actually hard of hearing, not BSL-using Deaf', source:'British Deaf Association, Throw Away the Key?', sourceUrl:'', lastVerified:'2026-09-05', status:'contested'},
+      {label:'Victims and Prisoners Act 2024 — ‘victim’ status does not require reporting', value:'s.1(1)-(2) does not require the crime to have been reported to police or a conviction secured', source:'Victims and Prisoners Act 2024 (c.21)', sourceUrl:'', lastVerified:'2026-09-05', status:'verified'}
+  ]},
+  { id:'charities', cluster:'money', title:'Charities & Third Sector', desc:'RNID, SignHealth, BDA, Action Deafness — remit, funding, overlap.', status:'filled', figures:[
+      {label:'RNID — income and government funding', value:'Income £14.239m, expenditure £13.000m (YE 31 Mar 2025); government contracts £74k + grants £700k = £774k (5.4% of income)', source:'Charity Commission (207720) / RNID annual report 2024/25', sourceUrl:'https://register-of-charities.charitycommission.gov.uk/en/charity-search/-/charity-details/207720/full-print', lastVerified:'2026-09-05', status:'verified'},
+      {label:'SignHealth — income and government funding', value:'Income £9.736m, expenditure £10.397m (a deficit, YE 31 Mar 2025); government contracts £6.875m across 94 contracts + grants £1.224m = £8.099m (83% of income)', source:'Charity Commission (1011056)', sourceUrl:'https://register-of-charities.charitycommission.gov.uk/en/charity-search/-/charity-details/1011056', lastVerified:'2026-09-05', status:'verified'},
+      {label:'British Deaf Association — income and government funding', value:'Income £2.478m, expenditure £2.174m (YE 31 Mar 2025, smallest of the four named charities); government contracts £29k + grants £361k = £390k (16% of income); 24 staff', source:'Charity Commission (1031687)', sourceUrl:'https://register-of-charities.charitycommission.gov.uk/en/charity-search/-/charity-details/1031687/charity-overview', lastVerified:'2026-09-05', status:'verified'},
+      {label:'Action Deafness — income, government funding, and 2026 merger', value:'Income £3.757m (YE 30 Sep 2024); government contracts £1.537m across 23 contracts (41% of income); merged with deafPLUS effective 16 Apr 2026, keeping its own name/governance/CEO', source:'Charity Commission (1163758/5047432); Action Deafness merger announcement', sourceUrl:'https://register-of-charities.charitycommission.gov.uk/en/charity-search/-/charity-details/5047432/full-print', lastVerified:'2026-09-05', status:'verified'},
+      {label:'Combined Deaf-sector government income vs. a comparator charity', value:'RNID+SignHealth+BDA+Action Deafness combined government income ≈ £10.8m — roughly 7–8x smaller than the National Autistic Society’s £80.70m (453 contracts/grants, 79% of its £102.02m income)', source:'Charity Commission entries (207720, 1011056, 1031687, 5047432, 269425) — a named-charity scale comparison only, never evidence of an official cross-condition budget allocation', sourceUrl:'https://register-of-charities.charitycommission.gov.uk/en/charity-search/-/charity-details/269425/full-print', lastVerified:'2026-09-05', status:'verified'},
+      {label:'No official Deaf-specific third-sector funding total exists anywhere', value:'PESA and DHSC accounts do not publish a Deaf-charity programme total; Arts Council England “does not collect data specifically on deaf-led organisations”', source:'UK Parliament written PQ UIN 85965', sourceUrl:'https://questions-statements.parliament.uk/written-questions/detail/2025-10-28/85965', lastVerified:'2026-09-05', status:'verified'},
+      {label:'Funding Justice: disabled-people’s organisations receive a small share of disability-sector government funding', value:'2022-23: £460m to 9 large non-DPO-led disability charities vs £12.5m to 90 DPOs — a £37:£1 ratio; always carry the 2022-23, all-disability, non-Deaf-specific caveat', source:'Disability Rights UK, Funding Justice campaign', sourceUrl:'https://www.disabilityrightsuk.org/funding-justice', lastVerified:'2026-09-05', status:'contested'},
+      {label:'Deaf Action Edinburgh — live service-withdrawal case study (Scotland, not England)', value:'City of Edinburgh Council withdrew three specialist Deaf-led services over 18 months (Deaf Social Worker, Sept 2024; Specialist Equipment Service, Mar 2025; Community Care Assistant Service, Nov 2025)', source:'Deaf Action’s own campaign page; Civil Society reporting', sourceUrl:'', lastVerified:'2026-09-05', status:'verified'}
+  ]},
+  { id:'public-spending', cluster:'money', title:'Public Spending & Contracts', desc:'Interpreting agency spend, ICB commissioning, procurement models.', status:'filled', figures:[
+      {label:'NHS SBS interpreting framework with a dedicated BSL lot', value:'£73 million framework (SBS10519), including dedicated Lot 2 British Sign Language; 34 suppliers; awarded Nov 2025, term to Nov 2027', source:'Contracts Finder / Find a Tender', sourceUrl:'https://www.contractsfinder.service.gov.uk/Notice/27d7858f-bc28-41b3-a595-955b4c48403c', lastVerified:'2026-09-05', status:'verified'},
+      {label:'NHS PiP Language Services framework', value:'£400 million ceiling across spoken and non-spoken lots — BSL sits in Lots 5a/5b, a minority component of a mostly spoken-language vehicle', source:'Contracts Finder award notice via bidstats', sourceUrl:'https://bidstats.uk/tenders/2024/W08/817103042', lastVerified:'2026-09-05', status:'verified'},
+      {label:'No national BSL-only public spend total exists anywhere', value:'Confirmed gap — every figure found is a multi-language framework ceiling or a single supplier’s multi-language award, never an isolated BSL total', source:'Project research pass, cross-referencing Contracts Finder/Find a Tender', sourceUrl:'', lastVerified:'2026-09-05', status:'contested'},
+      {label:'DA Languages as a recurring public-sector supplier (all multi-language, no BSL-specific share published)', value:'£540,000 UKHSA award (3 yrs); ~£1.6m Leicestershire Police; £765,697 Portsmouth/IoW NHS; £3.5m award (May 2026–Apr 2029)', source:'bidstats / Contracts Finder', sourceUrl:'', lastVerified:'2026-09-05', status:'verified'}
+  ]},
+  { id:'waste-vs-grassroots', cluster:'money', title:'Waste vs. Grassroots Delivery', desc:'Where taxpayer money is lost to overhead/agencies vs. reaching frontline services.', status:'filled', figures:[
+      {label:'No dedicated NAO/PAC audit of BSL interpreting agency margins exists', value:'Confirmed gap — the closest proxy is the NAO/PAC review of Access to Work, which examines processing delays, not agency margins or misappropriation', source:'Project research pass, cross-referencing NAO/PAC reports', sourceUrl:'', lastVerified:'2026-09-05', status:'contested'},
+      {label:'The £80–100m “cost of inaction” figure is a charity estimate, not an independent costing', value:'Traced to SignHealth’s own inflation-adjusted uplift of a 2014 £30m estimate; repeated in the government’s Locked Out report as if it were a measured NHS/Treasury cost', source:'BSL Advisory Board, Locked Out, repeating a SignHealth estimate', sourceUrl:'https://www.gov.uk/government/publications/bsl-user-experience-of-health-and-social-care-in-uk', lastVerified:'2026-09-05', status:'contested'},
+      {label:'No BSL-only spend baseline exists to measure “waste” against', value:'Without an isolated BSL-only spend figure (see Public Spending & Contracts), there is no denominator to calculate what share of spend reaches frontline delivery vs. overhead', source:'Project research note', sourceUrl:'', lastVerified:'2026-09-05', status:'contested'}
+  ]},
+  { id:'education', cluster:'education', title:'Education, Early Years to Higher Education', desc:'Teacher of the Deaf workforce, BSL GCSE, SEND/EHCP system, and Disabled Students’ Allowance.', status:'filled', figures:[
+      {label:'Teacher of the Deaf workforce decline since 2011', value:'-21%', source:'NDCS, direct campaign statement (fetched and confirmed directly)', sourceUrl:'https://www.ndcs.org.uk/about-us/campaigns/our-campaigns/our-concerns-about-decreasing-number-teachers-deaf', lastVerified:'2026-09-04', status:'verified'},
+      {label:'2026 Apprenticeship Levy change kills planned Teacher of the Deaf training route', value:'Confirmed policy change', source:'NDCS, citing government answers to MPs’ Parliamentary Questions', sourceUrl:'https://www.ndcs.org.uk/about-us/campaigns/our-campaigns/our-concerns-about-decreasing-number-teachers-deaf', lastVerified:'2026-09-04', status:'verified'},
+      {label:'Deaf children/young people using sign language in education', value:'~10%', source:'NDCS / BDA, repeated across campaign material', sourceUrl:'', lastVerified:'2026-09-04', status:'verified'},
+      {label:'BSL GCSE confirmed first-teaching date', value:'Unresolved and worse than previously tracked — 2018 commitment, 2025 target, BDA-predicted 2027 slip, Ofqual reportedly cited 2029 for first certification, Ofqual finalised assessment rules 14 Nov 2025 — but all four exam boards (AQA, Pearson, Eduqas, Cambridge OCR) then ruled out developing the qualification (10–12 Dec 2025). Signature is now attempting to become the awarding organisation itself from scratch, aiming for first teaching by 2030 (16 Mar 2026), contingent on Ofqual recognition it does not yet have. Quarterly re-check (7 Sept 2026): no public progress since March — Signature’s own news feed has nothing on this since, and the most recent press (15 May 2026) restates the March position without an update. 2030 remains the current aim, unconfirmed either way.', source:'BDA via Liam O’Dell reporting, Apr/May 2025; SchoolsWeek, 14 Nov 2025; Liam O’Dell, 12 Dec 2025, 16 Mar 2026 and 15 May 2026', sourceUrl:'https://liamodell.com/2026/03/16/british-sign-language-bsl-gcse-signature-ofqual-department-for-education-dfe/', lastVerified:'2026-09-07', status:'contested'},
+      {label:'Disabled Students’ Allowance maximum (Wales, 2026–27 — NOT England’s figure)', value:'£34,671/year', source:'Student Finance Wales — England’s current maximum still not confirmed from a primary source', sourceUrl:'', lastVerified:'2026-09-04', status:'contested'},
+      {label:'Qualified Teacher of the Deaf posts lost in England over a decade', value:'One in five', source:'CRIDE report, via CYP Now reporting', sourceUrl:'', lastVerified:'2026-09-05', status:'contested'},
+      {label:'NDCS case study: DSA process failure for a BSL-using student', value:'Offered only a remote needs assessment when a face-to-face assessment was required — a process failure, not an underfunding failure', source:'NDCS, Disabled Students’ Allowance (DSA): England', sourceUrl:'', lastVerified:'2026-09-05', status:'verified'}
+  ]},
+  { id:'video-relay-telecoms', cluster:'health', title:'Video Relay Service & Telecoms Equity (Home/Office/Travel)', desc:'Why Deaf BSL users cannot dial any number the way hearing people can — the per-organisation VRS contract model, third-party refusal, and the home/office/travel access gap.', status:'filled', figures:[
+      {label:'Ofcom rejected a universal ("unrestricted") VRS mandate on cost grounds', value:'Estimated annual cost £41.6–£113.4 million; proposed a "restricted basis" VRS instead', source:'Ofcom, Review of Relay Services consultation, para 1.17–1.18', sourceUrl:'https://www.ofcom.org.uk/siteassets/resources/documents/consultations/uncategorised/8169-review-relay-services/summary/relay_services.pdf?v=321400', lastVerified:'2026-09-06', status:'verified'},
+      {label:'Only text relay carries a statutory universal-service obligation — video relay has no equivalent', value:'Universal Service Condition 4 (BT) and General Condition 15 (all providers) cover text relay (Relay UK) only', source:'Ofcom General Conditions of Entitlement; Ofcom text relay guide', sourceUrl:'https://www.ofcom.org.uk/phones-and-broadband/accessibility/general-conditions-of-entitlement', lastVerified:'2026-09-06', status:'verified'},
+      {label:'Ofcom fined BT for late text-relay delivery, showing GC15 has real teeth for text — nothing equivalent covers video', value:'£800,000 fine, Case CW/01129, breach period Apr–Sep 2014', source:'Ofcom enforcement decision', sourceUrl:'https://www.ofcom.org.uk/phones-and-broadband/accessibility/cw_01129', lastVerified:'2026-09-06', status:'verified'},
+      {label:'999 BSL is mandated for emergency calls only — no obligation extends to general/non-emergency calls', value:'Confirmed directly in Ofcom’s own Emergency Video Relay statement', source:'Ofcom, Emergency Video Relay statement, 22 Jun 2021; live from 17 Jun 2022', sourceUrl:'https://www.ofcom.org.uk/siteassets/resources/documents/consultations/category-2-6-weeks/213725-emergency-video-relay/associated-documents/statement-emergency-video-relay.pdf?v=326561', lastVerified:'2026-09-06', status:'verified'},
+      {label:'999 BSL call volume — fully reconciled 6 Sept 2026', value:'Four genuine, non-contradictory figures across different periods: ~17,000 (year 1, 2022/23); ~23,000 (service-year 2, Jul 2023-Jun 2024); ~20,000 (calendar 2024, Ofcom\'s own figure); ~18,000 (service-year 3, 2024/25, a confirmed 22% decrease on year 2). The widely-cited ~24,000 figure is a confirmed press misstatement (no primary source supports it) and should never be cited', source:'Ofcom, Ex post evaluation of the emergency video relay regulation, 30 May 2025; Sorenson/SLI Annual Report 2024-2025, 25 Jul 2025', sourceUrl:'https://sorenson.co.uk/blog/2025/07/25/999-bsl-annual-report-2024-2025/', lastVerified:'2026-09-06', status:'verified'},
+      {label:'999 BSL is entirely data/connectivity-dependent, unlike a standard 999 voice call', value:'Requires "a good internet connection to either WiFi or a 3G/4G/5G connection" — the technical precondition for the home/office/travel access gap', source:'999 BSL FAQ', sourceUrl:'https://999bsl.co.uk/faqs/', lastVerified:'2026-09-06', status:'verified'},
+      {label:'Nuisance calls degrade emergency VRS capacity', value:'One caller made 150+ calls in a short window; 400+ nuisance calls in a single month (Mar 2024), tying up interpreters and delaying genuine emergencies', source:'Sorenson/SLI Annual Report; Liam O’Dell reporting', sourceUrl:'https://sorenson.co.uk/wp-content/uploads/2025/07/SLi-Emergency-VRS-999-BSL-Annual-Report-july-2025-v1.0.2.pdf', lastVerified:'2026-09-06', status:'verified'},
+      {label:'DVLA VRS contract — the cleanest single procurement-grade proof of the per-organisation funding model', value:'£30,000 for 12 months (24 Apr 2024–23 Apr 2025), awarded to D A Languages Ltd, continuing the "Interpreters Live!" platform', source:'Contracts Finder notice, published 13 May 2024', sourceUrl:'https://www.contractsfinder.service.gov.uk/notice/dcb6f606-e689-439c-8e70-cf6499ca054f', lastVerified:'2026-09-06', status:'verified'},
+      {label:'Motability’s VRS is scoped to Motability enquiries only — not general-purpose relay', value:'Application status, lease matters, and complaints only, via Sign Solutions’ InterpretersLive!', source:'Motability’s own site', sourceUrl:'https://www.motability.co.uk/get-support/bsl-video-relay-service', lastVerified:'2026-09-06', status:'verified'},
+      {label:'DWP VRS covers all its own service lines but is DWP-internal only, not a route to any UK number', value:'12,536 total VRS calls in the 12 months to Nov 2020 (PIP 25%, Access to Work 22%, Universal Credit 16%, ESA 14%)', source:'Disability Rights UK; BDA; EHRC legal-agreement page', sourceUrl:'https://www.disabilityrightsuk.org/news/2020/november/video-relay-service-now-available-across-all-dwp-service-lines', lastVerified:'2026-09-06', status:'verified'},
+      {label:'No ring-fenced national VRS budget exists — BSL VRS is folded into a general interpreting-services framework', value:'Crown Commercial Service RM6302 (7 May 2025–6 May 2028, 31 suppliers, 5 lots) places VRS in Lot 4 "Visual Interpreting Services" alongside face-to-face interpreting; no VRS-specific spend published', source:'GCA/CCS agreement page', sourceUrl:'https://www.gca.gov.uk/agreements/RM6302', lastVerified:'2026-09-06', status:'verified'},
+      {label:'SignHealth’s BSL Health Access proved a genuinely universal VRS model was operationally possible — then NHS funding was withdrawn', value:'Launched Mar 2020 with £800,000 of SignHealth’s own reserves; 25,000+ conversations handled (61% GP, 18% hospital); closed at midnight 31 Mar 2021 when NHS England funding ended', source:'SignHealth press release; Civil Society; The Limping Chicken', sourceUrl:'https://signhealth.org.uk/press-release/no-money-bsl-health-access-is-closing/', lastVerified:'2026-09-06', status:'verified'},
+      {label:'Scotland runs a genuine any-number national VRS — confirmed 6 Sept 2026, the clearest UK-internal proof a broader model is achievable', value:'Contact Scotland BSL\'s own FAQ confirms any-UK-number scope (\'family, friends, businesses, or services anywhere in the UK\'), not a public-service directory. Operating in some form since 2015 (extended pilot), 24/7 any-number/\'anyone, anytime\' access confirmed from 2019. \'3,000-4,000 calls/month\' remains unconfirmed (Lead-only). England has NHS 111 + 999 BSL only, Wales has 999 BSL only', source:'contactscotland-bsl.org; BSL Advisory Board, Locked Out; Scottish Government pilot review, Mar 2016; Scottish Legal Aid Board, Jun 2019', sourceUrl:'https://contactscotland-bsl.org/faqs/', lastVerified:'2026-09-06', status:'verified'},
+      {label:'The BSL Advisory Board’s central recommendation is a national 24/7 VRS for England and Wales — a government-published concession the current model is inadequate', value:'Not yet accepted or rejected by government as of this research pass', source:'GOV.UK, Locked Out, 27 Nov 2025', sourceUrl:'https://www.gov.uk/government/publications/bsl-user-experience-of-health-and-social-care-in-uk', lastVerified:'2026-09-06', status:'verified'},
+      {label:'BDA articulated this exact thesis 15 years ago — nothing fundamentally has changed', value:'Early Day Motion 1438 (9 Feb 2011, 104 signatures) called for "an open, competitive market for video relay services" giving telecoms access "equivalent to the way hearing people use the telephone every day"', source:'UK Parliament EDM tracker', sourceUrl:'https://edm.parliament.uk/early-day-motion/42467/access-to-telecommunications-for-deaf-people', lastVerified:'2026-09-06', status:'verified'},
+      {label:'No confirmed UK case of a bank, DVLA, HMRC, or insurer refusing a VRS/interpreter-relayed call on identity-verification or fraud grounds', value:'The closest documented precedent is Irish (Kalinova v. Permanent TSB, ruled indirect disability discrimination, €8,500 awarded, 2022) and an EU-wide finding (Romania/Croatia) — neither is a UK case; do not generalise to "UK banks do this" without a UK-specific source', source:'Irish Times reporting the WRC decision, 5 Jul 2022; European Union of the Deaf EAA implementation report, ~Jun 2025', sourceUrl:'https://www.irishtimes.com/business/work/2022/07/05/deaf-customer-wins-case-over-banks-refusal-to-deal-with-sign-language-interpreter-by-phone/', lastVerified:'2026-09-06', status:'contested'},
+      {label:'No UK-specific evidence found of workplace IT/firewall policies blocking VRS apps at work', value:'Only a US product (Sorenson "at Work") confirms this is a recognised friction category elsewhere — genuine gap in the UK evidence base, not a confirmed non-problem', source:'Project research pass, cross-referencing UK and US VRS-industry sources', sourceUrl:'', lastVerified:'2026-09-06', status:'contested'},
+      {label:'No UK-specific evidence found of VRS or 999 BSL failing specifically due to travel or mobile roaming', value:'Only the underlying technical dependency (999 BSL requires WiFi or mobile data) is confirmed; no documented travel-specific failure incident was found', source:'Project research pass', sourceUrl:'', lastVerified:'2026-09-06', status:'contested'},
+      {label:'No published, comprehensive directory exists of which UK organisations currently offer VRS access at all', value:'SignVideo’s "SignDirectory" and a separate signing-banks list are both partial and unaudited — the absence of a registry is itself evidence there is no universal entitlement, only piecemeal opt-in contracts', source:'Project research pass, cross-referencing SignVideo and provider directories', sourceUrl:'', lastVerified:'2026-09-06', status:'contested'},
+      {label:'US comparator: VRS is funded as a universal, any-number relay service via a national fund, not per-organisation contracts', value:'FCC interstate TRS Fund net funding requirement: $1,479,568,862 for FY2025–26', source:'Rolka Loube (FCC TRS Fund administrator), order dated 7 Jul 2025', sourceUrl:'https://rolkaloube.com/programs/federal-itrs/news/fcc-releases-2025-26-trs-fund-contribution-factors-order', lastVerified:'2026-09-06', status:'verified'},
+      {label:'GDPR does NOT give organisations a legal basis to refuse an interpreter/VRS-relayed call — confirmed by two regulators', value:'ICO’s informal 2018 position (via Ofcom’s text relay guide, corrected citation): "GDPR does not prevent individuals from contacting organisations using services such as textphone, NGT or even using a sign language interpreter... The matter at hand is not one of consent, but that the organisation should have appropriate security in place." Independently corroborated by Ireland’s DPC (21 May 2021): "the GDPR and Data Protection Act 2018 do not prevent or prohibit the use of a sign language interpreter..."', source:'Ofcom text relay guide; Data Protection Commission (Ireland), 21 May 2021', sourceUrl:'https://www.ofcom.org.uk/phones-and-broadband/accessibility/text-relay-guide', lastVerified:'2026-09-06', status:'verified'},
+      {label:'Irish DPC: an organisation cited "GDPR and data protection concerns" to refuse a Deaf customer’s sign-language interpreter — and was told this was unlawful', value:'Case Study 2, DPC blog 21 May 2021: organisation refused to deal with the interpreter citing GDPR; DPC ruled data protection law "should not be used as a barrier by a service provider to prevent accessibility to services and to discriminate against people on the basis of their disability." Ireland, not UK — no equivalent UK case found despite a dedicated search pass', source:'Data Protection Commission (Ireland), 21 May 2021', sourceUrl:'https://www.dataprotection.ie/en/dpc-guidance/blogs/can-i-talk-account-holder-contacting-organisations-behalf-someone-else', lastVerified:'2026-09-06', status:'contested'},
+      {label:'The real, documented GDPR barrier in this domain is booking-data non-sharing between interpreting agencies, not call refusal', value:'BSL Advisory Board’s Locked Out report (Section 4.4): "The introduction of GDPR has created new barriers. Both services and interpreting agencies often do not share data that would improve accessibility and safety... interpreters cannot make informed decisions about whether they are appropriate for the booking." Corroborated by a 2019 NUBSLI complaint that LanguageLine withheld client names citing GDPR compliance (not independently re-opened this pass)', source:'GOV.UK, BSL Advisory Board, Locked Out, 27 Nov 2025', sourceUrl:'https://www.gov.uk/government/publications/bsl-user-experience-of-health-and-social-care-in-uk', lastVerified:'2026-09-06', status:'verified'},
+      {label:'The ICO’s original 2018 letter has not been independently opened as a primary document', value:'Its existence, recipient and date (2 Oct 2018, to a body writing on behalf of the UK Council on Deafness) are confirmed via a WhatDoTheyKnow FOI trail, but the exact wording in circulation traces to Ofcom’s paraphrase, not a first-hand read of the letter itself — flagged as an FOI target to obtain the original text', source:'WhatDoTheyKnow FOI request "Advice given about interpreter and relay compatibility with GDPR", response 6 Dec 2018', sourceUrl:'https://www.whatdotheyknow.com/request/advice_given_about_interpreter_a', lastVerified:'2026-09-06', status:'contested'}
+  ,
+      {label:'NHS\'s own guidance distinguishes "Deaf" (health data) from "requires a BSL interpreter" (the need to record instead)', value:'"It is these needs and how they best can be met (not the underlying disability itself) that should be recorded... Recording that a person is \'deaf\', for example, does not explain whether they are able to read written English, if they use British Sign Language (BSL) or are a lipreader and/or hearing aid user."', source:'NHS England, Accessible Information Standard implementation guidance, 30 Jun 2025 (updated 21 Jul 2025)', sourceUrl:'https://www.england.nhs.uk/long-read/accessible-information-standard-implementation-guidance/', lastVerified:'2026-09-06', status:'verified'},
+      {label:'ICO confirms disability is health data, and inference alone can trigger special-category status', value:'Health data includes "any information on injury, disease, disability or disease risk"; inferred data becomes special category if an organisation intends to infer a special-category fact OR treats someone differently based on the inference', source:'ICO, What is special category data?, last updated 9 Apr 2024', sourceUrl:'https://ico.org.uk/for-organisations/uk-gdpr-guidance-and-resources/lawful-basis/special-category-data/what-is-special-category-data', lastVerified:'2026-09-06', status:'verified'},
+      {label:'NHS\'s two flagship access-data standards use two different, unreconciled consent models', value:'AIS implementation guidance: shared/integrated records should carry AIS data "with consent". RADF (DAPB4019) action checklist: the national flag is shared under "implied consent", with objection rights but no opt-in. No NHS document reconciles the two.', source:'NHS England AIS implementation guidance; NHS England RADF action checklist', sourceUrl:'https://www.england.nhs.uk/long-read/the-reasonable-adjustment-digital-flag-action-checklist-what-you-need-to-do-to-achieve-compliance/', lastVerified:'2026-09-06', status:'contested'},
+      {label:'Financial regulators had to formally state that GDPR is not a valid excuse for under-recording disability/vulnerability data', value:'FCA and ICO joint statement (27 Mar 2026, updated 20 Jul 2026): UK GDPR "do[es] not prevent organisations from sharing or using personal information where it is appropriate and necessary to protect individuals or provide them with the support they need" — issued because firms were treating data protection law as a reason not to collect or share it', source:'FCA and ICO, joint statement on vulnerability data', sourceUrl:'https://www.fca.org.uk/publications/corporate-documents/joint-fca-and-ico-statement-regulatory-expectations-regarding-firms', lastVerified:'2026-09-06', status:'verified'},
+      {label:'The "have to re-explain your needs every time" problem is real and quantified — but charities attribute it to AIS non-implementation, not GDPR', value:'70% of deaf/hearing-loss respondents had never been asked about their information or communication needs; 77% said staff had never or rarely been made aware of their needs before the appointment', source:'RNID and SignHealth, Still Ignored: the fight for accessible healthcare (England), 2025', sourceUrl:'https://rnid.org.uk/wp-content/uploads/2025/06/Still-ignored-the-fight-for-accessible-healthcare-2025.pdf', lastVerified:'2026-09-06', status:'verified'},
+      {label:'Where GDPR genuinely is named as the reason data isn\'t shared: interpreter booking logistics, not patient records', value:'LanguageLine "withhold[s] client names when confirming bookings with freelance interpreters, citing GDPR compliance" — corroborates the Locked Out finding on agencies not sharing booking metadata', source:'NUBSLI, 18 Jun 2019', sourceUrl:'https://www.nubsli.com/nub-posts/providing-a-clients-name-upon-confirmation-of-a-booking-gdpr-breach/', lastVerified:'2026-09-06', status:'verified'}
+    ,
+      {label:'Confirmed by dedicated search: there is no UK equivalent of Kalinova v. Permanent TSB anywhere in FOS, EHRC, tribunal, or court records', value:'Two independent searches (6 Sept 2026) covering Financial Ombudsman Service decisions, EHRC investigations, UK tribunal/court records, and UK news found no published UK case of a bank, insurer, or government department refusing to continue a call because a professional BSL interpreter or VRS operator was on the line', source:'Dedicated search pass, 6 Sept 2026, independently re-verified by a second search', sourceUrl:'', lastVerified:'2026-09-06', status:'verified'},
+      {label:'Four specific FOS decisions checked and confirmed real, but none match the Kalinova pattern', value:'DRN-3004665 (Barclays, mortgage adjustments, no interpreter at branch), DRN-4479353 (TSB, relay operator accepted but callback demanded), DRN-4286617 (NatWest, Relay UK call length complaint), DRN-4976403 (HSBC, bank pushed a third-party mandate itself) — each independently opened and confirmed real', source:'Financial Ombudsman Service published decisions', sourceUrl:'https://www.financial-ombudsman.org.uk/decision/DRN-3004665.pdf', lastVerified:'2026-09-06', status:'verified'},
+      {label:'Closest UK outcome, McKendry v. Danske Bank (2019), involves a family relay, not a professional interpreter — a meaningfully different mechanism from Kalinova', value:'£2,000 Equality Commission NI settlement, no admission of liability, 2 May 2019 — a brother acted as a live relay on speakerphone during a fraud-verification call; the bank refused to proceed with this arrangement. Confirmed via two independent news sources. Not a professional BSL interpreter/VRS case, and under separate Northern Ireland legislation from Great Britain\'s Equality Act 2010', source:'Equality Commission for Northern Ireland; Belfast News Letter; Irish News, 2 May 2019', sourceUrl:'', lastVerified:'2026-09-06', status:'contested'},
+      {label:'EHRC\'s own 2014 guidance states the legal theory that would support a UK claim, but no enforcement action applying it to a BSL/VRS case was found', value:'"A bank has a policy not to accept calls from customers through a third party. This could amount to indirect discrimination against a disabled person with a learning disability who may use a support worker to call the bank... This is also likely to be a reasonable adjustment." (date corrected: April 2014, not 2015 as first reported). Example given is a support worker, not a BSL/VRS interpreter', source:'EHRC, Equality law: a guide for businesses, Apr 2014', sourceUrl:'', lastVerified:'2026-09-06', status:'verified'}
+    ,
+      {label:'The enabling clause resolved: Communications Act 2003 s.51(2)(c) is the exact statutory power Ofcom uses to mandate disability-specific telecoms conditions', value:'s.45 gives Ofcom power to set conditions; s.51(1)(a) allows conditions protecting end-users; s.51(2)(c) specifically allows conditions requiring provision of services to disabled end-users. Both quoted subsections independently verified verbatim on legislation.gov.uk', source:'Communications Act 2003, ss.45 and 51', sourceUrl:'https://www.legislation.gov.uk/ukpga/2003/21/section/51', lastVerified:'2026-09-06', status:'verified'},
+      {label:'Ofcom has already used s.51(2)(c) to mandate emergency VRS — proving the same power could extend to everyday VRS without new legislation', value:'Ofcom\'s own Ex post evaluation of the emergency video relay regulation (30 May 2025) states its powers "derive from the Communications Act 2003... Under section 51(1)(a)... This includes a broad power under section 51(2)(c) to set conditions specifically for services provided to disabled end-users"', source:'Ofcom, Ex post evaluation of the emergency video relay regulation, 30 May 2025', sourceUrl:'', lastVerified:'2026-09-06', status:'verified'},
+      {label:'Grok\'s citation for when s.51(2)(c) was inserted was wrong — corrected via independent verification', value:'Grok attributed the insertion to SI 2020/1419 (EECC/EU Exit onshoring); legislation.gov.uk\'s own amendment annotations show it was actually inserted by SI 2011/1210 (The Electronic Communications and Wireless Telegraphy Regulations 2011, in force 26 May 2011). SI 2020/1419 amended other parts of s.51, not (2)(c). The legal substance (s.51(2)(c) is the disabled-end-users power) is correct; only the insertion date/instrument was wrong', source:'legislation.gov.uk amendment annotations for Communications Act 2003 s.51', sourceUrl:'https://www.legislation.gov.uk/ukpga/2003/21/section/51', lastVerified:'2026-09-06', status:'verified'},
+      {label:'Text relay\'s move from a BT-only obligation to an industry-wide one was forced by a 2011 CJEU ruling, not a video-relay-specific limit', value:'The Number (UK) Ltd v Ofcom (CJEU C-16/10, 17 Feb 2011) held that a Universal Service Condition can only require the designated provider (BT) to supply a retail service to its own customers, not a wholesale obligation to other providers\' customers — this is why Ofcom revoked USC4 (BT-only) and moved text relay to General Condition 15 (all providers) in its 17 Oct 2012 statement', source:'CJEU Case C-16/10; Ofcom statement, 17 Oct 2012 (para 3.28)', sourceUrl:'', lastVerified:'2026-09-06', status:'verified'},
+      {label:'The 2011-12 decision against unrestricted VRS was a cost and proportionality judgment, independently re-confirmed via a second verification route', value:'£41.6m/yr (medium-demand) and £113.4m/yr (high-demand) cost estimates, and the conclusion that "a requirement to provide an unrestricted VR service would not be appropriate at this time", both independently re-verified verbatim against the primary Ofcom consultation PDF — corroborating this domain\'s original Key Figures entry via a separate verification pass', source:'Ofcom, Review of Relay Services consultation, 2011', sourceUrl:'https://www.ofcom.org.uk/siteassets/resources/documents/consultations/uncategorised/8169-review-relay-services/summary/relay_services.pdf?v=321400', lastVerified:'2026-09-06', status:'verified'}
+    ,
+      {label:'UK VRS providers publish detailed corporate firewall guidance, proving the workplace-blocking risk is real enough to document — but no UK incident of it actually happening was found', value:'999 BSL (updated 28 Feb 2025) and SignVideo (effective 27 Feb 2025) both publish IT-admin firewall port allow-lists for their apps to work on corporate networks. Two independent search passes found no UK employment survey, tribunal case, or news report of an employer\'s firewall actually blocking a VRS app', source:'999 BSL and SignVideo corporate firewall pages', sourceUrl:'https://999bsl.co.uk/firewall/', lastVerified:'2026-09-06', status:'verified'},
+      {label:'Ofcom and 999 BSL officially acknowledge travel/roaming edge cases (cross-border, hotel/train wifi) — but no UK incident of an actual travel-related VRS failure was found', value:'Ofcom\'s emergency VRS FAQ confirms cross-border calls only connect to UK 999 control rooms, and that Ofcom cannot control hotel/train wifi registration requirements (though emergency VRS is zero-rated as a mobile-data fallback). No UK news report, provider statement, or social-media thread was found describing an actual travel-related VRS failure', source:'Ofcom, Emergency video relay: how it will work FAQ, dated 6 Mar 2024', sourceUrl:'https://www.ofcom.org.uk/phones-telecoms-and-internet/information-for-industry/telecoms-industry-guidance/how-will-emergency-video-relay-work', lastVerified:'2026-09-06', status:'verified'}
+    ,
+      {label:'D A Languages and Sign Solutions, confirmed sister companies under a common holding company (Valorem Group Ltd) since December 2022', value:'D A Languages Ltd (company 06207784, Manchester) and Sign Solutions (SLIA) Ltd (company 04802772, Redditch) both list Valorem Group Limited (company 11260547) as their controlling person with significant control; both companies share two directors (Matthew James Taylor, Matthew John Gallacher), appointed to Sign Solutions immediately after Valorem\'s 16 Dec 2022 acquisition. All three Companies House records independently re-fetched and confirmed', source:'Companies House (companies 06207784, 04802772, 11260547)', sourceUrl:'https://find-and-update.company-information.service.gov.uk/company/06207784', lastVerified:'2026-09-06', status:'verified'},
+      {label:'The InterpretersLive! platform (used in the DVLA VRS contract) is owned by Sign Solutions; D A Languages is the sister company that holds the public contract', value:'DVLA\'s own Contracts Finder notice states: "The current Video Relay Service is with DA Languages who provide us with Sign Solutions \'Interpreters Live!\' service" — confirming the procurement-level relationship between the two sister companies', source:'Contracts Finder, DVLA VRS notice dcb6f606-e689-439c-8e70-cf6499ca054f', sourceUrl:'https://www.contractsfinder.service.gov.uk/notice/dcb6f606-e689-439c-8e70-cf6499ca054f', lastVerified:'2026-09-06', status:'verified'}
+    ,
+      {label:'Contact Scotland BSL\'s operator changed to Sign Solutions on 1 December 2025 (GBP 3,000,000 contract) — the same corporate group that includes D A Languages, England\'s DVLA VRS contractor', value:'Find a Tender notice 058414-2025 (EIHR-Contact Scotland BSL) confirms Sign Solutions as the awarded operator, GBP 3,000,000 excl. VAT, go-live 1 December 2025. Independently corroborated by Orkney Council and a Health and Social Care Alliance Scotland blog. Since Sign Solutions and D A Languages are confirmed sister companies under Valorem Group Ltd, one corporate group now has a footprint across both the Scottish any-number model and the English per-organisation model this domain compares', source:'Find a Tender award notice 058414-2025; Orkney Council; Alliance Scotland', sourceUrl:'https://www.find-tender.service.gov.uk/Notice/058414-2025', lastVerified:'2026-09-06', status:'verified'},
+      {label:'Contact Scotland BSL\'s launch-date history resolved via a second verification pass, after an apparent contradiction between two sources', value:'2012: NHS 24-only pilot (confirmed via a Scottish Government review). March 2015: pilot extended to Scottish public bodies generally (confirmed via the same review and independently by Orkney Council). 2019: 24/7 any-number \'anyone, anytime\' access confirmed via a Scottish Legal Aid Board news item. A claimed \'5 October 2016 official launch\' could not be independently verified and is Lead-only', source:'Scottish Government pilot-extension review, Mar 2016; Orkney Council; Scottish Legal Aid Board, Jun 2019', sourceUrl:'', lastVerified:'2026-09-06', status:'contested'}
+    ,
+{label:'Face-to-face BSL interpreting costs £158.60-£390.40 per booking (Bristol City Council) or £225-£375/day (NUBSLI regional median) — but the two commercial rate cards independently checked (Pearson BSL, Martin Fox-Roberts) price VRS and face-to-face identically, so VRS\'s real cost advantage is avoiding the 2-3 hour minimum-booking floor, not a lower per-hour rate',value:'Bristol City Council tariff v7 (Apr 2025): BSL short duration GBP 158.60, half day GBP 195.20, full day GBP 390.40. NUBSLI regional median (Apr 2026): day rate GBP 225-375, half-day GBP 115-190 depending on region/qualification, non-binding guidance. Martin Fox-Roberts\' published rate card states explicitly: fees are \'applicable for both Face to Face and Remote working\' — i.e. no VRS discount exists at the agency level.',status:'verified',source:'Bristol City Council charging policy; NUBSLI interpreter fees guidance; Pearson BSL; Martin Fox-Roberts',date:'Apr 2025 / Apr 2026'},
+{label:'A likely-fabricated FOI citation was caught and corrected this pass: \'Ashford and St Peter\'s NHS FT FOI 11663\' does not exist; a real substitute (FOI 8567) was independently located in its place',value:'No trace of request 11663 found on WhatDoTheyKnow or the trust\'s own disclosure log; the trust\'s real FOI numbering in-period runs 6753/6828 (2019) to ~9115 (2024), making 11663 implausible. The real substitute, FOI 8567 (2022), shows face-to-face interpreting cost GBP 203,198.77 + GBP 22,608.58 (two agencies, two years); BSL GBP 120/GBP 360 (standard/24hr); total spend GBP 320,782.42 — with the trust withholding per-unit rates under FOIA s.43 (commercial prejudice).',status:'verified',source:'WhatDoTheyKnow; Ashford and St Peter\'s NHS FT FOI disclosure log',date:'2022 (independently located Sept 2026)'},
+{label:'No UK public-sector document compares face-to-face vs VRS spend for the same population — and there is a structural reason why: 84% of NHS organisations cannot even separate interpreting spend by delivery method in their own finance systems',value:'Nottinghamshire ICB\'s 2022 review of interpreting services explicitly excludes BSL from its scope entirely. Inbox Translation\'s NHS-wide FOI survey (2019/20 data, ~GBP 8.6m estimated BSL spend of a ~GBP 66m total) found 84% of NHS bodies could not separate interpreting spend by delivery method in their own accounts.',status:'verified',source:'Nottinghamshire ICB interpreting services review, 2022; Inbox Translation NHS-wide survey',date:'2022'},
+{label:'The \'VRS is more cost-scalable than face-to-face\' claim has never been sourced with figures by Ofcom, government, the NHS, or any Deaf-sector charity, including the BSL Advisory Board\'s own Locked Out report',value:'Locked Out states only a general claim (\'Cost savings can come from better use of technology, which improves the efficiency of the booking process, saves staff time and reduces cancellations and missed appointments\') with no VRS-vs-face-to-face figures attached. The report separately estimates the system-wide cost of excluding Deaf people from health/care access at GBP 80-100 million/year — a cost-of-exclusion figure, distinct from and not to be conflated with the Ofcom GBP 41.6m-113.4m/year cost-of-provision estimate elsewhere in this domain.',status:'verified',source:'GOV.UK, BSL Advisory Board, Locked Out',date:'27 Nov 2025'},
+{label:'Access to Work (AtW) is this domain\'s largest confirmed BSL-interpreting spend by far: GBP 90.3 million (28% of total element expenditure) on Deaf/HoH customers and 3,210 BSL interpreter payment customers, FY2024/25 — dwarfing DVLA\'s GBP 30,000 and SignHealth\'s GBP 800,000',value:'GOV.UK official AtW statistics (published 14 Oct 2025, revised 29 Jan 2026): 56,000 people approved AtW support; 74,190 customers paid; total spend GBP 320.7 million. BSL Interpreter payments: 3,210 customers (16% of Support Worker payment customers, +1% YoY). Deaf/HoH customers overall: 4,980 (8% of element recipients), GBP 90.3 million spend (28% of total element expenditure).',status:'verified',source:'GOV.UK, Access to Work statistics: April 2007 to March 2025',date:'14 Oct 2025, revised 29 Jan 2026'},
+{label:'AtW\'s specific hourly-rate and VRS/VRI monthly-bundle pricing table could not be independently corroborated anywhere and is held back from this dossier as unverified, despite being reported with unusually precise figures',value:'A claimed table (BSL interpreter GBP 26-47/hour national, GBP 30-52 London; remote BSL bundles GBP 105-1,480/month for 60-1,125 minutes) could not be located in the AtW Staff Guide via repeated fetches, and no independent corroboration exists anywhere online. A 2014 DWP FOI response states plainly \'there are no defined or prescriptive rates, in guidance documents\' — raising real doubt this table exists in the claimed form. Do not cite these specific figures until independently confirmed.',status:'contested',source:'GOV.UK Access to Work staff guide (claimed); independent verification found no corroboration',date:'flagged Sept 2026'},
+{label:'A different, genuinely DWP-sourced hourly-rate figure exists — lower than, and structurally different from, the uncorroborated table above',value:'A parallel WhatDoTheyKnow FOI thread surfaces DWP\'s own stated position directly: "there are no defined or prescriptive rates, in guidance documents" — followed by a figure DWP itself volunteered as a working expectation: "For fully qualified interpreters, we would currently expect maximum hourly rates of GBP 45 in London, and GBP 35 elsewhere." This is real and citable, but self-described by DWP as an informal working expectation, not a published rate card — cite it as such, never as an official published AtW rate. It contradicts rather than confirms the uncorroborated table above (which claimed GBP 30-52 London / GBP 26-47 national).',status:'contested',source:'WhatDoTheyKnow FOI thread (atw_rates_for_booking_interprete), DWP\'s own response',date:'flagged Sept 2026'},
+{label:'AtW\'s annual award cap has been frozen at GBP 69,260 since 2024/25 and remains frozen through 2026/27, even as the scheme\'s processing backlog has grown sharply',value:'GOV.UK\'s current cap table lists GBP 69,260 for 2024/25, 2025/26, and 2026/27 alike. House of Commons Library briefing SN06666 (26 Jun 2026): \'The cap of GBP 69,260 has not increased from 2024/25 to 2026/27.\' Meanwhile NAO reports applications awaiting decision rose from 21,700 (Mar 2022) to 62,100 (Mar 2025), and average processing time rose from 28 to 109 working days.',status:'verified',source:'GOV.UK; House of Commons Library SN06666; National Audit Office',date:'26 Jun 2026 / 29 Jan 2026'},
+{label:'New finding: 37% of Access to Work BSL users had their award changed at renewal despite their needs remaining the same, and half of those received no written explanation',value:'RNID/DeafATW survey (n=358, fieldwork Dec 2025-Jan 2026): \'Over one third (37%) of BSL users had their award changed at renewal despite their needs remaining the same,\' with 50% of those receiving no written explanation for the change. This finding was independently located during verification and was not part of the original research pass.',status:'verified',source:'RNID / DeafATW, Access to Work: Experiences of deaf and deafblind people and people with hearing loss',date:'Apr 2026'},
+{label:'999 BSL: of the ~20,000 calls received in 2024, only 8,281 actually connected to emergency services — the correct figure for \'lives/incidents reached\' claims',value:'Ofcom\'s own evaluation states directly: \'In 2024, there were 8,281 calls connected by 999 BSL to the emergency services,\' as a subset of \'999 BSL received around 20,000 calls in 2024.\' The difference reflects nuisance and non-connecting calls, already documented elsewhere in this domain\'s call-volume reconciliation.',status:'verified',source:'Ofcom, Ex post evaluation of the emergency video relay regulation',date:'30 May 2025'},
+{label:'Contact Scotland BSL was operated by Sign Language Interactions (SLI)/Sorenson before Sign Solutions took over on 1 December 2025 — meaning both of this domain\'s two tracked corporate groups have each, at different times, run Scotland\'s national VRS',value:'Confirmed via three independent primary sources: the Scottish Government\'s own BSL National Plan progress report (\'The service is provided by Sign Language Interactions (SLI) on behalf of the Scottish Government\'); SLI\'s own website; and a further SLI news post. The exact start date of SLI\'s tenure is unconfirmed — evidence shows the service existing with rising call volumes from around January 2020, not a confirmed 2021 start. SignVideo (NHS 111 BSL\'s operator) merged with SLI on 10 Jan 2020, and both rebranded to \'Sorenson\' on 9 Nov 2022 — meaning Sorenson/SLI and Valorem Group/Sign Solutions/D A Languages are, between them, the operators of every major UK VRS contract this dossier has examined.',status:'verified',source:'Scottish Government BSL National Plan progress report; Sign Language Interactions\' own site',date:'confirmed Sept 2026'},
+{label:'Whether Wales has any dedicated NHS 111 BSL video relay service at all is now an open question — a claimed Wales-specific service could not be found',value:'A claimed Wales-specific 08:00-midnight SignVideo service for NHS 111 could not be found anywhere. NHS 111 Wales\'s own page describes only Relay UK (text relay), with no mention of BSL video relay or SignVideo at all. This may indicate Wales currently has no dedicated NHS 111 BSL video relay service, which would itself be a notable finding worth confirming directly.',status:'contested',source:'NHS 111 Wales textphone users page (negative finding)',date:'checked Sept 2026'},
+{label:'Contact Scotland BSL usage: 60% of respondents to the Scottish Government\'s own BSL National Plan consultation said they never use the service (50% of BSL users, 70% of non-BSL users)',value:'Scottish Government, BSL National Plan 2023-2029 consultation analysis: \'The majority of respondents to the consultation (60%) answered that they never use the Contact Scotland BSL service.\' This corrects an unsourced \'40% of a BDA event never used it\' claim, which could not be found in any document — the real, quotable figure is 60%, from a different, already-cited document.',status:'verified',source:'Scottish Government, BSL National Plan 2023-2029 consultation analysis',date:'confirmed Sept 2026'},
+{label:'Convo/SignLive Ltd is a confirmed third UK commercial VRS group — structured entirely differently from the other two (direct bilateral partner deals, not framework contracts)',value:'SignLive Ltd (Companies House SC476935, trading as Convo) ownership chain confirmed via PSC filings: Convo International Holdings, Inc. (Texas, US) -> Convo Global Ltd (SC674525) -> SignLive Ltd. Confirmed absent from Crown Commercial Service RM6302 Lot 4\'s current 10-supplier list and from NHS SBS SBS10519\'s entire 34-supplier framework -- not just the BSL/video lots originally checked. Instead operates via direct bilateral partner deals: a systematic sweep (7 Sept 2026) took the confirmed public-sector footprint from eleven to nineteen organisations -- adding Wandsworth, Richmond upon Thames and Croydon (three South West London boroughs, this project\'s own core geography, previously unlogged), Lambeth, Wolverhampton and Warwickshire councils; Leeds Teaching Hospitals NHS Trust and Velindre University NHS Trust (Wales); and SP Energy Networks (electricity, via secondary corroboration -- its own original page is now dead). A further, categorically different private-sector footprint was also found: Stellantis (BSL access at almost 850 UK dealership sites), Royal London, and Jet2 -- retail/commercial deals, not statutory-body contact channels, so counted separately rather than merged into the public-sector total. A follow-up check directly against Convo\'s own UK site (convo.io/uk) resolved a single-source press claim naming Greater Anglia and Southeastern as rail-sector Convo partners as a settled negative -- Convo\'s own homepage lists no rail or bus operator among its headline partners, and a targeted search found no independent corroboration -- while surfacing a genuine new find in the process: Heathrow Airport, with its own published case study (pre-arrival BSL support via the Convo Now app, plus in-airport QR codes at key locations), a second confirmed transport-sector partner alongside West Yorkshire Combined Authority (bus vs. air travel). Sheffield\'s Online BSL Services has been live since Apr 2024; Walsall\'s directory listing gives the first concrete Convo/SignLive consumer price found in this domain (resident cost £105-£409, unit unconfirmed). \'Two commercial groups\' (Sorenson/SLI and Valorem Group/Sign Solutions) remains accurate specifically for framework-listed/nationally-commissioned UK VRS; Convo/SignLive is a confirmed third, differently-structured commercial presence entirely outside those frameworks, with a public-sector footprint now spanning at least six sectors and a separate, larger private-sector presence.',status:'verified',source:'Companies House SC476935/SC674525 PSC filings; CCS RM6302 Lot 4 supplier page; NHS SBS SBS10519 framework page; Convo UK homepage (convo.io/uk); VERIFICATION_STATUS.md Sections 36, 38, 49 and 50',date:'independently verified 7 Sept 2026'},
+{label:'SignLive Ltd\'s registered office is Clyde Offices, Glasgow -- a commonly-cited "272 Bath Street" address is wrong for SignLive (it is actually Convo Global Ltd\'s older 2020-era PSC filing address, not fabricated, just misattributed)',value:'Companies House and SignLive\'s own 2024 statutory accounts both give the registered office as Clyde Offices, 2nd Floor, West George Street, Glasgow, G2 1BP. 272 Bath Street, Glasgow is a real address, but belongs to a 2020-era Convo Global Ltd PSC filing, not to SignLive Ltd -- do not cite 272 Bath Street for SignLive going forward.',status:'verified',source:'Companies House SC476935; SignLive Ltd statutory accounts, 31 Dec 2024 (opened directly, not via secondary extraction)',date:'independently verified 6 Sept 2026'},
+{label:'SignLive Ltd\'s 2024 accounts: no turnover disclosed (lawful s.444(1) small-company exemption, not an unreported figure), cash at bank GBP 635,306, 21 employees (2023: 18), net assets GBP 4,579,671 (2023: GBP 3,525,529), and a new finding -- GBP 3,313,843 owed to SignLive by group undertakings, interest-free, repayable on demand',value:'All figures confirmed by opening the primary 2024 accounts PDF directly at Companies House, not via a secondary extraction site (Endole). The accounts also separately name Jarrod Musano personally as the company\'s ultimate controlling party.',status:'verified',source:'SignLive Ltd statutory accounts, year ended 31 Dec 2024, Companies House',date:'independently verified 6 Sept 2026'},
+{label:'A genuine unresolved discrepancy, not an error: SignLive\'s Companies House PSC filing names Convo International Holdings, Inc. as ultimate parent, while SignLive\'s own 2024 accounts (Note 9) instead name a different entity, Convo Communications LLC (Austin, TX)',value:'Follow-up verification (6 Sept 2026) confirmed both are real, distinct, separately-registered entities, not a typo or rename. Convo International Holdings, Inc. carries Texas registration 0803707625, disclosed directly by Companies House\'s own PSC filing for Convo Global Limited, at the same Austin address (3815 S Capital of Texas Hwy Ste 350, Austin, TX 78704) SignLive\'s 2024 accounts give for Convo Communications LLC\'s registered office. Convo Communications LLC independently exists as a real operating company with its own EIN (26-4751776), a Dun & Bradstreet profile, a Bloomberg page, and is the entity named throughout Convo\'s US consumer-facing legal pages. Most plausible reading, not confirmed by any single document: Convo Communications LLC is the original US operating company; Convo International Holdings, Inc. is a separate holding vehicle at the same address created to hold Convo\'s international subsidiaries. A Texas Secretary of State/Comptroller direct lookup by registration number would settle this conclusively but requires an interactive form submission not completed this pass.',status:'contested',source:'Companies House PSC filings (SignLive Ltd, Convo Global Ltd); SignLive Ltd 2024 statutory accounts Note 9; EIN lookup aggregator; Dun & Bradstreet; Bloomberg; convo.io/us/legal',date:'follow-up verification 6 Sept 2026'},
+{label:'Walsall Council\'s own service directory lists a concrete Convo/SignLive consumer price -- GBP 105-409 -- the first concrete Convo/SignLive price found in this domain\'s research, correcting an earlier "no rate card found" claim',value:'Walsall Council\'s own service directory entry for "SignLive Ltd -- BSL Interpreting" states "Cost to resident: prices range from GBP 105 to GBP 409." Unit (per call/session/month/package) and current accuracy are unconfirmed -- treat as Lead-only, but this replaces the earlier "no rate card found" claim, which was itself wrong (the rate card existed, it just hadn\'t been found yet).',status:'contested',source:'Walsall Council service directory',date:'independently verified 6 Sept 2026'},
+{label:'Sheffield City Council\'s GBP 35,000 "Online BSL Services" contract with Convo (partnership confirmed via the council\'s own site, live from Apr 2024) could not be located as a citable procurement notice on any major UK public procurement platform, after an exhaustive follow-up search -- the likeliest explanation is a genuine sub-threshold direct award, not a citation failure',value:'All four major UK public procurement notice platforms have now been checked directly: Contracts Finder, Find a Tender, Bidstats, and -- after a dedicated follow-up pass -- Sheffield\'s own YORtender regional portal. No notice matching the SignLive/BSL contract, buyer, or value was found on any of them. A contract at GBP 35,000 sits below most councils\' internal thresholds for mandatory public advertisement (commonly GBP 25,000-50,000), so its absence from every searched platform is the expected outcome for a direct/quotation-based award of this size, not evidence against the figure\'s accuracy. What is independently confirmed: Sheffield\'s own council website describes the Convo partnership in detail (live Apr 2024, Community Directory access, First Point physical access point, a QR rollout planned by September 2026). Closing this fully needs an FOI request to Sheffield City Council, not further platform searching.',status:'contested',source:'Sheffield City Council website; Contracts Finder; Find a Tender; Bidstats; YORtender (yortender.eu-supply.com) -- all checked directly, 6 Sept 2026',date:'follow-up verification 6 Sept 2026'}]}
+
+];
+
+const DEFAULT_FOI = [
+  'DHSC / NHS England — request whether any independent NHS or Treasury costing of Deaf healthcare accessibility failures has ever been commissioned, given the widely-cited £80–100m figure traces back to a charity’s own inflation-adjusted estimate, not a measured NHS cost.',
+  'SWL ICB constituent Trusts — annual spend on BSL/Deaf interpreting, named provider(s), and whether contracts are VCSE or commercial.',
+  'SWL ICB / Trusts — number of Accessible Information Standard compliance audits conducted in the last 24 months, and results.',
+  'DA Languages contract holder — contract value, rate card, and interpreter-facing pay vs. billed rate.',
+  'SWL ICB Trusts — BSL interpreter booking cancellation/no-show rates and average lead time, if held.',
+  'HMPPS — whether any plan exists to begin recording Deaf/DeafBlind/BSL-user status for prisoners, given the Offender Equalities Annual Report 2024–25 states disability data “continues to be limited.”',
+  'DHSC / NHS England — whether Section 256 (NHS Act 2006) has ever specifically funded a Deaf/deafblind-led VCSE organisation, now that the Provider Selection Regime is confirmed as a working (if narrow) route via two SignHealth awards and one RNID award.',
+  'NHS England (VCSE Health and Wellbeing Alliance secretariat) — why no Deaf/deafblind/hearing-loss-specific organisation has ever been admitted as a full member or consortium partner.',
+  'SWLSTG (South East region) and Somerset NHS FT (South West) — referral and waiting-time data for their specialist community Deaf CAMHS teams, two of the four regions (alongside Central and North) that replaced Corner House’s inpatient unit from July 2026; the inpatient-era age-range discrepancy itself is now resolved (see the domain file). Partial data has since emerged: the North region (Leeds and York Partnership NHS FT) published waiting times of 18 months (Manchester), 12 months (Newcastle) and 14 months (York) as of 13 Aug 2026 — not confirmed Deaf-specific rather than general CAMHS queue; Central (Black Country Healthcare NHS FT) publishes no waiting-time data.',
+  'Each of the six SWL boroughs — current adult sensory-impairment/Deaf/deafblind register headcounts (none currently publishes one).',
+  'London Borough of Camden — confirmation of the reported 2026-2030 procurement strategy’s Deaf-led BSL-specific Light Touch Regime procurement (currently an unverified lead, highest priority to confirm).',
+  'SEL ICB — the specific board-pack enclosure (“Interpreting Service procurement,” Enclosure 7) confirming its ~£700k interpreting envelope and 2023/24 activity figures.',
+  'NCL ICB / RAD — a manual (non-automated) retrieval of FOI.25.NCL 092 to confirm RAD’s prior £48,948.10 BSL interpreting contract figure and dates.',
+  'DWP — direct resolution of the Access to Work annual funding cap discrepancy (£69,260 vs £69,620 for 2025-26) against DWP’s own primary factsheet.',
+  'DWP — a breakdown of the £227m Access to Work support-worker spend (2024-25) separating BSL interpreters from other job aides.',
+  'NHS Supply Chain / NHS PiP framework holders — call-off data to isolate BSL-only spend from bundled multi-language interpreting frameworks, the single most valuable missing figure across public spending, Access to Work, and waste-vs-grassroots.',
+  'Department for Education / Ofqual — the current status of Signature’s application for Ofqual recognition as a BSL GCSE awarding organisation (sought from Jan 2026), and whether its 2030 first-teaching aim still stands, now that all four incumbent exam boards have declined to develop the qualification.',
+  'Student Finance England — the current Disabled Students’ Allowance maximum for England (Wales’s £34,671/year figure is confirmed; England’s is not).',
+  'NRCPD — how many of the current 19 Registered Interpreters for Deafblind People (RIDB) actually accept NHS work, and whether the 4 sitting in London/South East regions are available for London bookings specifically, not just home-registered there.',
+  'Bexley, Bromley and Greenwich Place primary care teams — confirmed absence of any named BSL/Deafblind GP interpreting provider for these three boroughs (the SEL Primary Care Interpreting Service explicitly excludes them); ask directly what arrangement, if any, exists.',
+  'Deafblind Enablement — direct confirmation of the DA Languages and LanguageLine subcontract relationship, typical turnaround time for a Deafblind booking, and whether any South London hospital (following the Moorfields precedent) could be added.',
+  'Guy’s & St Thomas’, Lewisham & Greenwich, Croydon Health Services, Epsom & St Helier and Oxleas NHS Trusts — name the interpreting agency actually delivering the BSL access each trust advertises on its own site without naming a supplier.',
+  'King’s College Hospital NHS Foundation Trust — status and expected re-tender date for the £1.2m interpreting contract (explicitly including BSL, covering Denmark Hill, PRUH and Queen Mary’s Sidcup) cancelled 6 August 2026.',
+  'NHS South East London ICB — award status of the successor BSL Talking Therapies contract (2+1 years, envelope up to £330,000, tendered from 1 July 2026) that would continue SignHealth’s current SEL-wide service — the only confirmed BSL health service reaching Bexley, Bromley and Greenwich, via therapy rather than a general interpreting desk.',
+  'DWP — isolate VRS-specific spend within the Access to Work support-worker budget (currently only a bundled £227m 2024-25 total exists, not broken out by VRS vs other support-worker costs).',
+  'Ofcom — request any internal analysis, since the 2011 Review of Relay Services consultation, of the cost of extending VRS to a universal (any-number) service, given the BSL Advisory Board’s 2025 recommendation for a national 24/7 VRS — has the 2011 £41.6–£113.4m estimate ever been revisited?',
+  'NHS England — the specific decision record and rationale for withdrawing BSL Health Access funding on 31 March 2021, given the service’s 25,000+ conversation volume and its status as the only genuinely universal (non-per-organisation) VRS the NHS has run.',
+  'Financial Ombudsman Service / FCA — any published complaint outcomes involving a bank or financial firm declining to proceed with a customer interaction because it was relayed via a third-party BSL interpreter/VRS, to test whether the Kalinova-style refusal pattern has a UK precedent.',
+  'Crown Commercial Service — total spend to date under RM6302 Lot 4 (“Visual Interpreting Services”), broken out by VRS vs face-to-face interpreting, and by BSL vs other sign languages.',
+  'DVLA — whether the £30,000/12-month VRS contract has been renewed, retendered, or its value changed since April 2025.',
+  'Resolved 6 Sept 2026: Contact Scotland BSL is confirmed as a genuine any-number VRS via its own FAQ page, not a public-service directory. See the domain file for the full finding, including a resolved launch-date question and the operator-change finding (Sign Solutions from 1 Dec 2025).',
+  'ICO — direct request for a copy of its 2 October 2018 letter to the UK Council on Deafness, to obtain and quote the original GDPR/relay-service guidance first-hand rather than relying on Ofcom’s paraphrase and a WhatDoTheyKnow FOI trail.',
+  'NHS England / a sample of NHS interpreting agencies — whether booking-data non-sharing (the GDPR-attributed barrier documented in Locked Out and a 2019 NUBSLI/LanguageLine complaint) has been addressed since 2019, or whether interpreters are still not told a service user’s name/setting before accepting a booking.'
+,
+  'NHS England (national data/IG team) — ask directly whether the AIS implementation guidance\'s "with consent" language and the RADF action checklist\'s "implied consent" language have ever been formally reconciled, and which standard governs when the two conflict.',
+  'ICO — ask directly whether a "requires a BSL interpreter" flag (as distinct from a "Deaf" or disability diagnosis label) is, in the ICO\'s view, special-category data under Article 9 — closing the open legal question this domain currently cannot resolve from published guidance alone.'
+,
+  'Financial Ombudsman Service — ask directly (via their enquiries process, since FOS is not subject to FOIA) whether they hold any unpublished complaint data matching the "refused to continue a call because an interpreter/VRS operator was on the line" pattern, since only published decisions were searched in this pass.',
+  'EHRC (GB) — ask whether the "no third-party calls policy can be indirect discrimination" paragraph in its 2014 business guidance has ever been applied to a bank enforcement matter involving a BSL interpreter or VRS operator specifically, as opposed to a support worker (the example given in the guidance itself).'
+,
+  'DCMS — ask directly whether extending General Condition C5 from emergency-only to everyday/any-number VRS has been discussed with Ofcom since Locked Out (27 Nov 2025) recommended a national 24/7 VRS, and whether this has been framed as a GC-modification or as requiring new primary legislation.'
+,
+  'Scottish Government / Sign Solutions — request a current Contact Scotland BSL KPI report giving actual monthly/annual call volumes (to confirm or correct the unsourced "3,000-4,000 calls/month" figure), and the exact wording of the service\'s international/work-related call exclusion.'
+,
+'NHS England / a sample of NHS trusts — ask whether any national or regional guidance requires (or is planned to require) finance systems to record interpreting spend by delivery method (VRS vs face-to-face vs telephone), given that 84% of NHS organisations currently cannot separate this in their own accounts.',
+'Crown Commercial Service — ask whether RM6302 Lot 4 (\'Visual Interpreting Services\') suppliers must submit delivery-mode-disaggregated pricing or spend data, and whether this is being considered for the next framework refresh.',
+'BSL Advisory Board / DHSC — ask whether the Locked Out report\'s GBP 80-100 million/year cost-of-exclusion estimate has a published methodology note, and whether it has ever been set directly against the Ofcom GBP 41.6m-113.4m/year provision-cost estimate.',
+'DWP / Access to Work — request a direct copy of the current Support Worker/BSL interpreter hourly rate bands and VRS/VRI monthly-bundle pricing, if any such published table genuinely exists, given that independent verification could not locate it despite exhaustive search.',
+'NHS Wales / NHS 111 Wales — ask directly whether any dedicated BSL video relay service exists for NHS 111 in Wales, given that no evidence of one could be found.',
+'DWP / Access to Work — ask directly whether AtW has ever considered funding employer-side IT/network changes (firewall allow-listing, VPN exceptions) needed to run a VRS app on a work device, since AtW funds interpreting minutes but nothing in its published guidance addresses this technical access barrier.',
+'Scottish Government / SLI — ask directly for the exact start date of SLI\'s operatorship of Contact Scotland BSL, to close the one remaining date gap in this domain\'s now-resolved Contact Scotland operator history.'];
+
+const DEFAULT_RIGHTS = [
+  { id:'reasonable-adjustments-health', title:'You have the right to reasonable adjustments in healthcare',
+    plain:'By law, the NHS and social care services must remove barriers that stop you accessing care — this can include booking a BSL interpreter for your appointment. Being told to lip-read or write notes instead is not enough on its own.',
+    action:'Ask for a BSL interpreter to be booked before your appointment, in writing if possible. If refused, this may be unlawful discrimination.',
+    basis:'Equality Act 2010', strength:'strong', sourceUrl:'' },
+  { id:'ais-record', title:'You have the right to have your communication needs recorded',
+    plain:'The NHS is supposed to record your communication needs once and share them across services, so you do not have to explain yourself every time. In practice, staff awareness of this is very low.',
+    action:'State your communication need every time, and ask the service to confirm in writing that it has been recorded under the Accessible Information Standard.',
+    basis:'Accessible Information Standard (NHS)', strength:'limited', sourceUrl:'' },
+  { id:'court-interpreter', title:'You have the right to a qualified interpreter in court',
+    plain:'Courts are currently the one part of the justice system where a qualified BSL interpreter is guaranteed. This right is not guaranteed in police custody or prison.',
+    action:'If you are involved in a court case, ask your solicitor or the court directly to confirm interpreter booking in advance.',
+    basis:'Established court practice, confirmed in Parliament', strength:'strong', sourceUrl:'' },
+  { id:'custody-adjustments', title:'You have the right to reasonable adjustments in police custody and prison',
+    plain:'The same Equality Act duty applies in custody, but provision is inconsistent and not guaranteed the way it is in court. A Deaf prisoner denied an interpreter — including for a cancer diagnosis — won a legal claim over this in 2024.',
+    action:'If you or someone you know is in custody and not getting communication support, this can be formally challenged — contact an advocacy organisation for help.',
+    basis:'Equality Act 2010', strength:'limited', sourceUrl:'' },
+  { id:'bsl-act-recognition', title:'BSL is legally recognised as a language of the UK',
+    plain:'The BSL Act 2022 formally recognises British Sign Language as a language in its own right. Important: this recognition does not by itself force any specific service to give you an interpreter — it is a statement of status, not a guaranteed individual service right.',
+    action:'Use the Equality Act 2010 (not the BSL Act alone) as your legal basis when requesting an interpreter from a specific service.',
+    basis:'BSL Act 2022', strength:'limited', sourceUrl:'' },
+  { id:'victims-code', title:'You have rights as a victim of crime — even if you never reported it',
+    plain:'Under the law, you count as a victim of crime whether or not you told the police, and whether or not there was ever an investigation. The Victims\' Code sets out how you should be treated and kept informed.',
+    action:'You can ask a victim support service for help even without a police report. Ask them to confirm they can communicate with you in BSL.',
+    basis:'Victims and Prisoners Act 2024', strength:'strong', sourceUrl:'' }
+];
+
+
+const DEFAULT_AUDIENCE = {
+  charities: [
+    { id:'shared-evidence-base', title:'Use this evidence base in your own funding bids',
+      plain:'Every figure here traces back to a named, dated source — RNID/SignHealth\u2019s Still Ignored report, NHS England\u2019s own standards pages, legislation.gov.uk. That means it\u2019s ready to cite directly in a grant application or policy submission without you having to re-verify it yourself.',
+      action:'Contact the team to request the source list for any figure relevant to your bid.',
+      source:'Compiled from Still Ignored (RNID/SignHealth, 2025) and primary government sources', strength:'strong' },
+    { id:'coordination-not-duplication', title:'Coordinate FOI requests instead of duplicating them',
+      plain:'Several charities are likely asking NHS bodies and ICBs similar questions independently. This dossier\u2019s FOI target list is visible to any partner organisation, so requests can be split up rather than repeated.',
+      action:'Check the FOI Targets section before submitting a new request \u2014 it may already be logged, or a partner org may already be running it.',
+      source:'Project FOI workflow', strength:'strong' },
+    { id:'contested-figures-transparency', title:'We flag contested figures instead of quietly picking a side',
+      plain:'Where NHS England\u2019s own published deadline has changed twice in three weeks, or a figure in general circulation doesn\u2019t match the primary source, this dossier says so openly rather than choosing the version that sounds best.',
+      action:'If your organisation holds a different, sourced figure for something flagged as contested here, get in touch \u2014 we want the most accurate number, not the most convenient one.',
+      source:'Contested Figures section, this dossier', strength:'strong' }
+  ],
+  business: [
+    { id:'equality-act-duty', title:'You have a legal duty to make reasonable adjustments',
+      plain:'The Equality Act 2010 requires employers to make reasonable adjustments for Deaf employees and job applicants \u2014 this covers interviews, meetings, and day-to-day communication, not just physical access.',
+      action:'Review your recruitment and internal communication processes for BSL/caption access before a candidate or employee has to ask.',
+      source:'Equality Act 2010', strength:'strong' },
+    { id:'access-to-work-funds-it', title:'Access to Work can cover most or all of the cost',
+      plain:'Access to Work (run by the DWP) can fund BSL interpreters, video relay services, notetakers, and alerting equipment for Deaf employees \u2014 for new employees and self-employed people, it can cover up to 100% of approved costs.',
+      action:'The employee applies directly at gov.uk/access-to-work \u2014 employers cannot apply on their behalf, but can support the process.',
+      source:'DWP Access to Work scheme, via RNID and NDCS guidance', strength:'strong' },
+    { id:'untapped-talent', title:'You\u2019re likely missing out on skilled candidates',
+      plain:'Estimates of the Deaf BSL-using population in England range from 22,000 (2021 Census, main language) to ~87,000 depending on definition \u2014 RNID itself says there is no settled figure. Whatever the true number, many face barriers to employment that have nothing to do with their skills \u2014 purely communication access. Businesses that get this right access a talent pool competitors are overlooking.',
+      action:'Make your accessibility provisions visible in job listings, not just available on request.',
+      source:'RNID prevalence data (no consensus figure); Still Ignored, RNID/SignHealth, 2025', strength:'limited' },
+    { id:'getting-it-wrong-has-a-cost', title:'Getting this wrong has real legal and reputational cost',
+      plain:'A Deaf man in custody who was denied a BSL interpreter \u2014 including during a cancer diagnosis \u2014 won a settled legal claim against the public bodies responsible. The same Equality Act duty that applied there applies to any employer or service provider.',
+      action:'Treat interpreter/communication provision as a compliance requirement to plan for, not a request to handle reactively.',
+      source:'Leigh Day, reported legal settlement, 2024', strength:'strong' }
+  ],
+  policymakers: [
+    { id:'radf-resolved-lesson', title:'A single official page can quietly change and revert a national deadline',
+      plain:'NHS England\u2019s own DAPB4019 standards page showed a conformance-date change requested on 13 August 2026, then reverted on 3 September 2026 \u2014 visible only in an admin log most people would never check. The confirmed date is 30 September 2026, verified directly against the full 44-page Implementation Guidance.',
+      action:'Table a written question to DHSC/NHS England asking for public, dated confirmation of RADF conformance status by sector \u2014 relying on a webpage admin log is not an adequate accountability mechanism for a statutory deadline.',
+      source:'NHS England Digital, DAPB4019 (verified directly, 4 Sept 2026)', strength:'strong' },
+    { id:'unaudited-cost-figure', title:'A widely repeated NHS cost figure has never been independently audited',
+      plain:'The £80\u2013100m/year figure for the cost of inaccessible NHS care to Deaf people originates from a charity\u2019s own inflation-adjusted estimate (SignHealth, uplifting a 2014 figure), and has since been repeated in a government report\u2019s footnote as if it were a measured cost.',
+      action:'Request DHSC or NHS England commission an independent costing exercise \u2014 policy decisions are being informed by a decade-old advocacy estimate, not audited data.',
+      source:'SignHealth Still Sick Of It campaign page; GOV.UK Locked Out report, Nov 2025', strength:'strong' },
+    { id:'no-prisoner-data', title:'There is no official count of Deaf or DeafBlind prisoners in England and Wales',
+      plain:'HMPPS\u2019s own Offender Equalities Annual Report 2024\u201325 states that disability data \u201ccontinues to be limited,\u201d with published analysis confined mainly to sex, age, ethnicity, and religion. This gap has been publicly documented since at least 2016.',
+      action:'A written parliamentary question can request HMPPS begin recording and publishing communication-need data, including BSL use, for the prison population.',
+      source:'HMPPS Offender Equalities Annual Report 2024\u201325, 27 Nov 2025', strength:'strong' },
+    { id:'evidence-ready-for-committee', title:'This evidence base is ready for select committee submissions',
+      plain:'Every figure in this dossier traces to a named, dated, primary or officially-recognised source \u2014 including two UK government reports (Locked Out, Nov 2025) and Accredited Official Statistics (NHS England diagnostics data).',
+      action:'Contact the team for a sourced briefing pack tailored to a specific committee inquiry or debate.',
+      source:'This dossier\u2019s evidence-by-domain section', strength:'strong' }
+  ],
+  media: [
+    { id:'quotable-cost-gap', title:'Quotable: a government report repeats a charity\u2019s decade-old estimate as NHS cost data',
+      plain:'The £80\u2013100m figure for the annual cost of inaccessible NHS care to Deaf people, cited in the government\u2019s own Locked Out report (Nov 2025), traces directly back to SignHealth\u2019s own inflation-adjusted uplift of a 2014 estimate \u2014 not an independent NHS or Treasury costing. No such independent costing appears to exist.',
+      action:'Full citation trail and both source documents available on request.',
+      source:'SignHealth Still Sick Of It; GOV.UK Locked Out report, Nov 2025', strength:'strong' },
+    { id:'quotable-deadline-flux', title:'Quotable: NHS England quietly changed and reverted a national accessibility deadline',
+      plain:'NHS England\u2019s own DAPB4019 standards page admin log shows a request to change the Reasonable Adjustment Digital Flag\u2019s conformance deadline on 13 August 2026, reverted three weeks later on 3 September 2026 \u2014 visible only to anyone who reads the page\u2019s edit history.',
+      action:'Exact URLs, screenshots, and timestamps available on request.',
+      source:'NHS England Digital, DAPB4019 (verified directly, 4 Sept 2026)', strength:'strong' },
+    { id:'human-story-hmp-lewes', title:'Named case: a Deaf prisoner denied an interpreter during a cancer diagnosis',
+      plain:'A Deaf man remanded to HMP Lewes in 2021 was not provided a BSL interpreter \u2014 including for prison healthcare appointments during a cancer diagnosis \u2014 despite prison staff\u2019s legal duty to do so. He later won a settled legal claim against the Ministry of Justice and the prison\u2019s healthcare provider.',
+      action:'Full case background available; the team can also connect journalists with relevant advocacy organisations for further case studies.',
+      source:'Leigh Day, reported legal settlement, 2024', strength:'strong' },
+    { id:'media-contact', title:'This team is available as a source',
+      plain:'Every figure in this dossier is sourced and dated, and the team actively cross-checks contested claims against primary documents rather than repeating secondary reporting.',
+      action:'Contact the team directly for interviews, data verification, or further case studies.',
+      source:'This dossier', strength:'strong' }
+  ]
+};
+
+
+let domainsData = [];
+let audienceData = {charities:[], business:[], policymakers:[], media:[]};
+let rightsData = [];
+let currentFilter = 'all';
+let openDomainId = null;
+
+// ---------------- STORAGE ----------------
+// This dossier is a standalone HTML file — it has no server and no shared
+// backend, so "sync" here means "saved in this browser". Edits made on one
+// device/browser do NOT appear for teammates opening their own copy of the
+// file; each person's edits persist locally for them only. If the team
+// wants true shared live-editing, that needs a small backend (e.g. a
+// Google Sheet, Airtable, or a tiny hosted API) wired in here later.
+const LS_PREFIX = 'bsl-dossier:';
+window.storage = {
+  async get(key){
+    const raw = localStorage.getItem(LS_PREFIX + key);
+    if(raw === null){
+      const err = new Error('Not found: ' + key);
+      err.code = 'NOT_FOUND';
+      throw err;
+    }
+    return {value: raw};
+  },
+  async set(key, value){
+    localStorage.setItem(LS_PREFIX + key, value);
+    return true;
+  }
+};
+
+async function loadData(){
+  try{
+    const res = await window.storage.get('domains', true);
+    domainsData = JSON.parse(res.value);
+    // Migration: add any domains defined in code that aren't in saved data yet,
+    // without touching or reordering anything the team has already edited.
+    const existingIds = new Set(domainsData.map(d => d.id));
+    const newOnes = DEFAULT_DOMAINS.filter(d => !existingIds.has(d.id));
+    if(newOnes.length > 0){
+      domainsData = domainsData.concat(newOnes);
+      await window.storage.set('domains', JSON.stringify(domainsData), true);
+    }
+    document.getElementById('sync-status').textContent = 'Loaded — edits save to this browser only';
+  }catch(e){
+    domainsData = DEFAULT_DOMAINS;
+    try{
+      await window.storage.set('domains', JSON.stringify(domainsData), true);
+      document.getElementById('sync-status').textContent = 'Loaded — edits save to this browser only (initialised)';
+    }catch(e2){
+      document.getElementById('sync-status').textContent = 'Could not load saved data — changes will not save';
+    }
+  }
+  try{
+    await window.storage.set('foi-list', JSON.stringify(DEFAULT_FOI), true);
+  }catch(e){}
+  renderFoi(DEFAULT_FOI);
+  try{
+    const rightsRes = await window.storage.get('rights', true);
+    rightsData = JSON.parse(rightsRes.value);
+    const existingRightIds = new Set(rightsData.map(r => r.id));
+    const newRights = DEFAULT_RIGHTS.filter(r => !existingRightIds.has(r.id));
+    if(newRights.length > 0){
+      rightsData = rightsData.concat(newRights);
+      await window.storage.set('rights', JSON.stringify(rightsData), true);
+    }
+  }catch(e){
+    rightsData = DEFAULT_RIGHTS;
+    try{ await window.storage.set('rights', JSON.stringify(rightsData), true); }catch(e2){}
+  }
+  try{
+    const audRes = await window.storage.get('audience', true);
+    audienceData = JSON.parse(audRes.value);
+    ['charities','business','policymakers','media'].forEach(seg => {
+      const existingIds = new Set((audienceData[seg]||[]).map(a => a.id));
+      const newOnes = DEFAULT_AUDIENCE[seg].filter(a => !existingIds.has(a.id));
+      if(newOnes.length > 0){
+        audienceData[seg] = (audienceData[seg]||[]).concat(newOnes);
+      }
+    });
+    await window.storage.set('audience', JSON.stringify(audienceData), true);
+  }catch(e){
+    audienceData = DEFAULT_AUDIENCE;
+    try{ await window.storage.set('audience', JSON.stringify(audienceData), true); }catch(e2){}
+  }
+  renderAudience();
+  renderRights();
+  renderDomainGrid();
+}
+
+async function saveAudience(){
+  try{
+    await window.storage.set('audience', JSON.stringify(audienceData), true);
+    showToast('Saved — visible to your whole team');
+  }catch(e){
+    showToast('Could not save — check connection', true);
+  }
+}
+
+function renderAudienceSegment(seg){
+  const el = document.getElementById('audience-grid-' + seg);
+  const items = audienceData[seg] || [];
+  el.innerHTML = items.map((a, i) => `
+    <div class="audience-card">
+      <h4>${escapeHtml(a.title)}</h4>
+      <p class="a-plain">${escapeHtml(a.plain)}</p>
+      <p class="a-action"><strong>Do this:</strong> ${escapeHtml(a.action)}</p>
+      <p class="a-source">Source: ${escapeHtml(a.source)}</p>
+      <button class="a-edit-btn" data-seg="${seg}" data-idx="${i}">Edit (team only)</button>
+      <div class="a-edit-form" id="aud-edit-${seg}-${i}">
+        <div class="full"><label>Title</label><input type="text" id="af-title-${seg}-${i}" value="${escapeAttr(a.title)}"></div>
+        <div class="full"><label>Explanation</label><textarea id="af-plain-${seg}-${i}">${escapeHtml(a.plain)}</textarea></div>
+        <div class="full"><label>Action</label><textarea id="af-action-${seg}-${i}">${escapeHtml(a.action)}</textarea></div>
+        <div class="full"><label>Source</label><input type="text" id="af-source-${seg}-${i}" value="${escapeAttr(a.source)}"></div>
+        <div class="actions">
+          <button class="btn" data-asave="${seg}:${i}">Save</button>
+          <button class="btn secondary" data-acancel="${seg}:${i}">Cancel</button>
+          <button class="btn secondary" data-adelete="${seg}:${i}" style="border-color:var(--alert); color:var(--alert-text);">Delete</button>
+        </div>
+      </div>
+    </div>
+  `).join('');
+
+  el.querySelectorAll('.a-edit-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      document.getElementById('aud-edit-' + btn.dataset.seg + '-' + btn.dataset.idx).classList.toggle('open');
+    });
+  });
+  el.querySelectorAll('[data-acancel]').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const [seg, i] = btn.dataset.acancel.split(':');
+      document.getElementById('aud-edit-' + seg + '-' + i).classList.remove('open');
+    });
+  });
+  el.querySelectorAll('[data-asave]').forEach(btn => {
+    btn.addEventListener('click', async () => {
+      const [seg, i] = btn.dataset.asave.split(':');
+      audienceData[seg][i] = {
+        id: audienceData[seg][i].id,
+        title: document.getElementById('af-title-'+seg+'-'+i).value,
+        plain: document.getElementById('af-plain-'+seg+'-'+i).value,
+        action: document.getElementById('af-action-'+seg+'-'+i).value,
+        source: document.getElementById('af-source-'+seg+'-'+i).value,
+        strength: audienceData[seg][i].strength
+      };
+      await saveAudience();
+      renderAudienceSegment(seg);
+    });
+  });
+  el.querySelectorAll('[data-adelete]').forEach(btn => {
+    btn.addEventListener('click', async () => {
+      const [seg, i] = btn.dataset.adelete.split(':');
+      if(!confirm('Delete this point? This cannot be undone.')) return;
+      audienceData[seg].splice(i, 1);
+      await saveAudience();
+      renderAudienceSegment(seg);
+    });
+  });
+}
+
+function renderAudience(){
+  renderAudienceSegment('charities');
+  renderAudienceSegment('business');
+  renderAudienceSegment('policymakers');
+  renderAudienceSegment('media');
+}
+
+function wireAudienceTabs(containerId){
+  const container = document.getElementById(containerId);
+  container.addEventListener('click', (e) => {
+    if(!e.target.classList.contains('audience-tab')) return;
+    const seg = e.target.dataset.audience;
+    container.querySelectorAll('.audience-tab').forEach(b => {
+      b.classList.remove('active');
+      b.setAttribute('aria-selected','false');
+    });
+    e.target.classList.add('active');
+    e.target.setAttribute('aria-selected','true');
+    container.querySelectorAll('.audience-tab').forEach(b => {
+      const panel = document.getElementById('panel-' + b.dataset.audience);
+      if(panel){ panel.classList.remove('active'); panel.hidden = true; }
+    });
+    const activePanel = document.getElementById('panel-' + seg);
+    activePanel.classList.add('active');
+    activePanel.hidden = false;
+  });
+  // Arrow-key navigation between tabs, per WAI-ARIA tabs pattern
+  container.addEventListener('keydown', (e) => {
+    if(!['ArrowLeft','ArrowRight'].includes(e.key)) return;
+    const tabs = Array.from(container.querySelectorAll('.audience-tab'));
+    const i = tabs.indexOf(document.activeElement);
+    if(i === -1) return;
+    e.preventDefault();
+    const next = tabs[(i + (e.key === 'ArrowRight' ? 1 : -1) + tabs.length) % tabs.length];
+    next.focus();
+    next.click();
+  });
+}
+wireAudienceTabs('audience-tabs');
+wireAudienceTabs('policymedia-tabs');
+
+function wireAddAudienceButton(buttonId, tabsContainerId){
+  document.getElementById(buttonId).addEventListener('click', async () => {
+    const activeTab = document.querySelector('#' + tabsContainerId + ' .audience-tab.active');
+    const seg = activeTab.dataset.audience;
+    audienceData[seg].push({
+      id: 'audience-' + Date.now(),
+      title:'New point', plain:'Explain why this matters to this audience.',
+      action:'Describe the concrete action.', source:'Source name', strength:'limited'
+    });
+    await saveAudience();
+    renderAudienceSegment(seg);
+    const forms = document.querySelectorAll('#panel-' + seg + ' .a-edit-form');
+    forms[forms.length-1].classList.add('open');
+    forms[forms.length-1].scrollIntoView({behavior:'smooth', block:'center'});
+  });
+}
+wireAddAudienceButton('add-audience', 'audience-tabs');
+wireAddAudienceButton('add-policymedia', 'policymedia-tabs');
+
+
+async function saveRights(){
+  try{
+    await window.storage.set('rights', JSON.stringify(rightsData), true);
+    showToast('Saved — visible to your whole team');
+  }catch(e){
+    showToast('Could not save — check connection', true);
+  }
+}
+
+function renderRights(){
+  const el = document.getElementById('rights-grid');
+  el.innerHTML = rightsData.map((r, i) => `
+    <div class="right-card">
+      <h4>${escapeHtml(r.title)}</h4>
+      <p class="r-plain">${escapeHtml(r.plain)}</p>
+      <p class="r-action"><strong>What you can do:</strong> ${escapeHtml(r.action)}</p>
+      <div class="r-meta">
+        <span class="r-basis">Legal basis: ${escapeHtml(r.basis)}</span>
+        <span class="r-strength ${r.strength}">${r.strength === 'strong' ? 'Well established' : 'Limited / developing'}</span>
+      </div>
+      <button class="r-edit-btn" data-idx="${i}">Edit (team only)</button>
+      <div class="r-edit-form" id="right-edit-${i}">
+        <div class="full"><label>Title</label><input type="text" id="rf-title-${i}" value="${escapeAttr(r.title)}"></div>
+        <div class="full"><label>Plain-language explanation</label><textarea id="rf-plain-${i}">${escapeHtml(r.plain)}</textarea></div>
+        <div class="full"><label>What you can do</label><textarea id="rf-action-${i}">${escapeHtml(r.action)}</textarea></div>
+        <div><label>Legal basis</label><input type="text" id="rf-basis-${i}" value="${escapeAttr(r.basis)}"></div>
+        <div><label>Strength</label>
+          <select id="rf-strength-${i}">
+            <option value="strong" ${r.strength==='strong'?'selected':''}>Well established</option>
+            <option value="limited" ${r.strength==='limited'?'selected':''}>Limited / developing</option>
+          </select>
+        </div>
+        <div class="actions">
+          <button class="btn" data-rsave="${i}">Save</button>
+          <button class="btn secondary" data-rcancel="${i}">Cancel</button>
+          <button class="btn secondary" data-rdelete="${i}" style="border-color:var(--alert); color:var(--alert-text);">Delete</button>
+        </div>
+      </div>
+    </div>
+  `).join('');
+
+  el.querySelectorAll('.r-edit-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      document.getElementById('right-edit-' + btn.dataset.idx).classList.toggle('open');
+    });
+  });
+  el.querySelectorAll('[data-rcancel]').forEach(btn => {
+    btn.addEventListener('click', () => {
+      document.getElementById('right-edit-' + btn.dataset.rcancel).classList.remove('open');
+    });
+  });
+  el.querySelectorAll('[data-rsave]').forEach(btn => {
+    btn.addEventListener('click', async () => {
+      const i = btn.dataset.rsave;
+      rightsData[i] = {
+        id: rightsData[i].id,
+        title: document.getElementById('rf-title-'+i).value,
+        plain: document.getElementById('rf-plain-'+i).value,
+        action: document.getElementById('rf-action-'+i).value,
+        basis: document.getElementById('rf-basis-'+i).value,
+        strength: document.getElementById('rf-strength-'+i).value,
+        sourceUrl: rightsData[i].sourceUrl || ''
+      };
+      await saveRights();
+      renderRights();
+    });
+  });
+  el.querySelectorAll('[data-rdelete]').forEach(btn => {
+    btn.addEventListener('click', async () => {
+      const i = btn.dataset.rdelete;
+      if(!confirm('Delete this right? This cannot be undone.')) return;
+      rightsData.splice(i, 1);
+      await saveRights();
+      renderRights();
+    });
+  });
+}
+
+document.getElementById('add-right').addEventListener('click', async () => {
+  rightsData.push({
+    id: 'right-' + Date.now(),
+    title:'New right', plain:'Describe the right in plain language.',
+    action:'Describe what someone can actually do about it.',
+    basis:'Legal basis', strength:'limited', sourceUrl:''
+  });
+  await saveRights();
+  renderRights();
+  const forms = document.querySelectorAll('.r-edit-form');
+  forms[forms.length-1].classList.add('open');
+  forms[forms.length-1].scrollIntoView({behavior:'smooth', block:'center'});
+});
+
+
+async function saveDomains(){
+  try{
+    await window.storage.set('domains', JSON.stringify(domainsData), true);
+    showToast('Saved — visible to your whole team');
+  }catch(e){
+    showToast('Could not save — check connection', true);
+  }
+}
+
+function showToast(msg, isError){
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.className = 'toast show' + (isError ? ' error' : '');
+  setTimeout(()=> t.className = 'toast', 2600);
+}
+
+// ---------------- RENDER: FOI ----------------
+function renderFoi(list){
+  window.__foiList = list;
+  const el = document.getElementById('foi-list');
+  el.innerHTML = list.map(item => `<li><span>${escapeHtml(item)}</span></li>`).join('');
+}
+
+// ---------------- RENDER: DOMAIN GRID ----------------
+function renderDomainGrid(){
+  const grid = document.getElementById('domain-grid');
+  const filtered = currentFilter === 'all' ? domainsData : domainsData.filter(d => d.cluster === currentFilter);
+  grid.innerHTML = filtered.map(d => `
+    <div class="domain-card" data-cluster="${d.cluster}" data-id="${d.id}">
+      <div class="dc-top">
+        <h3>${escapeHtml(d.title)}</h3>
+        <span class="domain-status ${d.status}">${d.status === 'filled' ? d.figures.length + ' figures' : 'Not yet researched'}</span>
+      </div>
+      <p class="dc-desc">${escapeHtml(d.desc)}</p>
+      <button class="dc-open" data-id="${d.id}" aria-expanded="false" aria-controls="figures-panel" aria-label="Open domain: ${escapeAttr(d.title)}">Open domain <span aria-hidden="true">→</span></button>
+    </div>
+  `).join('');
+
+  grid.querySelectorAll('.dc-open').forEach(btn => {
+    btn.addEventListener('click', () => openDomain(btn.dataset.id));
+  });
+}
+
+document.getElementById('cluster-tabs').addEventListener('click', (e) => {
+  if(!e.target.classList.contains('cluster-tab')) return;
+  document.querySelectorAll('.cluster-tab').forEach(b => {
+    b.classList.remove('active');
+    b.setAttribute('aria-pressed','false');
+  });
+  e.target.classList.add('active');
+  e.target.setAttribute('aria-pressed','true');
+  currentFilter = e.target.dataset.filter;
+  renderDomainGrid();
+});
+
+// ---------------- RENDER: DOMAIN DETAIL ----------------
+function daysSince(dateStr){
+  const then = new Date(dateStr);
+  const now = new Date();
+  return Math.floor((now - then) / (1000*60*60*24));
+}
+
+function badgeFor(fig){
+  if(fig.status === 'contested') return {cls:'contested', label:'Contested'};
+  const d = daysSince(fig.lastVerified);
+  if(d > 90) return {cls:'stale', label:'Needs re-check (' + d + 'd)'};
+  return {cls:'verified', label:'Verified'};
+}
+
+let lastFocusedDomainBtn = null;
+
+function openDomain(id, opts){
+  opts = opts || {};
+  const d = domainsData.find(x => x.id === id);
+  if(!d) return;
+  openDomainId = id;
+  if(!opts.fromHashChange){
+    lastFocusedDomainBtn = document.activeElement;
+    if(location.hash !== '#domain-' + id){
+      history.pushState(null, '', '#domain-' + id);
+    }
+  }
+  document.getElementById('fp-title').textContent = d.title;
+  document.getElementById('fp-desc').textContent = d.desc;
+  renderFigures(d);
+  const panel = document.getElementById('figures-panel');
+  panel.classList.add('open');
+  document.querySelectorAll('.dc-open').forEach(b => {
+    b.setAttribute('aria-expanded', b.dataset.id === id ? 'true' : 'false');
+  });
+  panel.scrollIntoView({behavior:'smooth', block:'start'});
+  // Move focus into the panel for keyboard and screen-reader users
+  document.getElementById('fp-title').setAttribute('tabindex','-1');
+  document.getElementById('fp-title').focus();
+}
+
+function closeDomain(opts){
+  opts = opts || {};
+  const panel = document.getElementById('figures-panel');
+  panel.classList.remove('open');
+  document.querySelectorAll('.dc-open').forEach(b => b.setAttribute('aria-expanded','false'));
+  openDomainId = null;
+  if(!opts.fromHashChange && location.hash.startsWith('#domain-')){
+    history.pushState(null, '', location.pathname + location.search + '#domains');
+  }
+  if(lastFocusedDomainBtn){
+    lastFocusedDomainBtn.focus();
+    lastFocusedDomainBtn = null;
+  }
+}
+
+function applyHashRoute(){
+  const hash = location.hash;
+  if(hash.startsWith('#domain-')){
+    const id = hash.slice('#domain-'.length);
+    if(domainsData.some(x => x.id === id)){
+      openDomain(id, {fromHashChange:true});
+    }
+  }
+}
+
+window.addEventListener('hashchange', applyHashRoute);
+document.addEventListener('keydown', (e) => {
+  if(e.key === 'Escape' && document.getElementById('figures-panel').classList.contains('open')){
+    closeDomain();
+  }
+});
+
+function renderFigures(d){
+  const el = document.getElementById('fp-figures');
+  if(d.figures.length === 0){
+    el.innerHTML = `<p style="font-size:14px; color:var(--ink-soft); padding:20px 0;">No figures logged yet for this domain. Add the first one below once your team has a sourced figure.</p>`;
+    return;
+  }
+  el.innerHTML = d.figures.map((f, i) => {
+    const b = badgeFor(f);
+    return `
+    <div class="figure-card">
+      <div class="figure-main">
+        <div class="fc-value">${escapeHtml(f.value)}</div>
+        <div class="fc-label">${escapeHtml(f.label)}</div>
+        <div class="fc-source">${escapeHtml(f.source)}${f.sourceUrl ? ' — <a href="'+f.sourceUrl+'" target="_blank" rel="noopener">source link</a>' : ''} · verified ${escapeHtml(f.lastVerified)}</div>
+      </div>
+      <span class="fc-badge ${b.cls}">${b.label}</span>
+      <button class="fc-edit-btn" data-idx="${i}">Edit this figure</button>
+      <div class="fc-edit-form" id="edit-form-${i}">
+        <div><label>Value</label><input type="text" id="ef-value-${i}" value="${escapeAttr(f.value)}"></div>
+        <div><label>Label</label><input type="text" id="ef-label-${i}" value="${escapeAttr(f.label)}"></div>
+        <div class="full"><label>Source name</label><input type="text" id="ef-source-${i}" value="${escapeAttr(f.source)}"></div>
+        <div class="full"><label>Source URL</label><input type="text" id="ef-url-${i}" value="${escapeAttr(f.sourceUrl)}"></div>
+        <div><label>Last verified</label><input type="date" id="ef-date-${i}" value="${escapeAttr(f.lastVerified)}"></div>
+        <div><label>Status</label>
+          <select id="ef-status-${i}">
+            <option value="verified" ${f.status==='verified'?'selected':''}>Verified</option>
+            <option value="contested" ${f.status==='contested'?'selected':''}>Contested</option>
+          </select>
+        </div>
+        <div class="actions">
+          <button class="btn" data-save="${i}">Save</button>
+          <button class="btn secondary" data-cancel="${i}">Cancel</button>
+          <button class="btn secondary" data-delete="${i}" style="border-color:var(--alert); color:var(--alert-text);">Delete</button>
+        </div>
+      </div>
+    </div>`;
+  }).join('');
+
+  el.querySelectorAll('.fc-edit-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      document.getElementById('edit-form-' + btn.dataset.idx).classList.toggle('open');
+    });
+  });
+  el.querySelectorAll('[data-cancel]').forEach(btn => {
+    btn.addEventListener('click', () => {
+      document.getElementById('edit-form-' + btn.dataset.cancel).classList.remove('open');
+    });
+  });
+  el.querySelectorAll('[data-save]').forEach(btn => {
+    btn.addEventListener('click', async () => {
+      const i = btn.dataset.save;
+      const d = domainsData.find(x => x.id === openDomainId);
+      d.figures[i] = {
+        value: document.getElementById('ef-value-'+i).value,
+        label: document.getElementById('ef-label-'+i).value,
+        source: document.getElementById('ef-source-'+i).value,
+        sourceUrl: document.getElementById('ef-url-'+i).value,
+        lastVerified: document.getElementById('ef-date-'+i).value,
+        status: document.getElementById('ef-status-'+i).value
+      };
+      await saveDomains();
+      renderFigures(d);
+      renderDomainGrid();
+    });
+  });
+  el.querySelectorAll('[data-delete]').forEach(btn => {
+    btn.addEventListener('click', async () => {
+      const i = btn.dataset.delete;
+      const d = domainsData.find(x => x.id === openDomainId);
+      if(!confirm('Delete this figure? This cannot be undone.')) return;
+      d.figures.splice(i, 1);
+      await saveDomains();
+      renderFigures(d);
+      renderDomainGrid();
+    });
+  });
+}
+
+document.getElementById('fp-close').addEventListener('click', () => closeDomain());
+
+document.getElementById('fp-add').addEventListener('click', async () => {
+  const d = domainsData.find(x => x.id === openDomainId);
+  if(!d) return;
+  d.figures.push({
+    value:'New figure', label:'Describe what this measures', source:'Source name',
+    sourceUrl:'', lastVerified: new Date().toISOString().slice(0,10), status:'verified'
+  });
+  if(d.status === 'pending') d.status = 'filled';
+  await saveDomains();
+  renderFigures(d);
+  renderDomainGrid();
+  const forms = document.querySelectorAll('.fc-edit-form');
+  forms[forms.length-1].classList.add('open');
+});
+
+// ---------------- UTIL ----------------
+function escapeHtml(str){
+  const div = document.createElement('div');
+  div.textContent = str == null ? '' : str;
+  return div.innerHTML;
+}
+function escapeAttr(str){
+  return (str == null ? '' : str).replace(/"/g,'&quot;');
+}
+
+// ---------------- SEARCH ----------------
+function buildSearchIndex(){
+  const items = [];
+
+  rightsData.forEach(r => {
+    items.push({
+      kind:'Know your rights', title:r.title,
+      text:[r.plain, r.action, r.basis].filter(Boolean).join(' — '),
+      href:'#rights'
+    });
+  });
+
+  domainsData.forEach(d => {
+    items.push({kind:'Domain', title:d.title, text:d.desc, href:'#domain-' + d.id});
+    (d.figures || []).forEach(f => {
+      items.push({
+        kind:d.title, title:f.value + ' — ' + f.label,
+        text:f.source || '',
+        href:'#domain-' + d.id
+      });
+    });
+  });
+
+  document.querySelectorAll('#contested .contested-box').forEach(box => {
+    const h = box.querySelector('h3');
+    if(!h) return;
+    const paras = Array.from(box.querySelectorAll('p')).map(p => p.textContent).join(' ');
+    items.push({kind:'Contested figure', title:h.textContent, text:paras, href:'#contested'});
+  });
+
+  (window.__foiList || []).forEach(text => {
+    items.push({kind:'FOI target', title:text.length > 70 ? text.slice(0,70) + '…' : text, text, href:'#foi'});
+  });
+
+  const audienceKinds = {
+    charities:'For charities & funders', business:'For employers & businesses',
+    policymakers:'For policymakers', media:'For media & journalists'
+  };
+  Object.keys(audienceKinds).forEach(seg => {
+    (audienceData[seg] || []).forEach(a => {
+      items.push({
+        kind:audienceKinds[seg], title:a.title,
+        text:[a.plain, a.action, a.source].filter(Boolean).join(' — '),
+        href: seg === 'charities' || seg === 'business' ? '#audiences' : '#policymedia'
+      });
+    });
+  });
+
+  return items;
+}
+
+function highlight(text, query){
+  const escaped = query.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+  return escapeHtml(text).replace(new RegExp('(' + escaped + ')', 'ig'), '<mark>$1</mark>');
+}
+
+function runSearch(query){
+  const resultsEl = document.getElementById('search-results');
+  const statusEl = document.getElementById('search-status');
+  query = query.trim();
+  if(query.length < 2){
+    resultsEl.innerHTML = '';
+    statusEl.textContent = query.length === 0 ? '' : 'Keep typing — enter at least 2 characters.';
+    return;
+  }
+  const q = query.toLowerCase();
+  const index = buildSearchIndex();
+  const matches = index.filter(item =>
+    item.title.toLowerCase().includes(q) || item.text.toLowerCase().includes(q)
+  ).slice(0, 40);
+
+  statusEl.textContent = matches.length === 0
+    ? 'No results for "' + query + '".'
+    : matches.length + ' result' + (matches.length === 1 ? '' : 's') + ' for "' + query + '".';
+
+  resultsEl.innerHTML = matches.map(m => {
+    const snippet = m.text.length > 220 ? m.text.slice(0, 220) + '…' : m.text;
+    return `
+      <li>
+        <a class="search-result" href="${m.href}">
+          <div class="sr-kind">${escapeHtml(m.kind)}</div>
+          <div class="sr-title">${highlight(m.title, query)}</div>
+          ${snippet ? `<div class="sr-snippet">${highlight(snippet, query)}</div>` : ''}
+        </a>
+      </li>`;
+  }).join('');
+}
+
+document.getElementById('search-form').addEventListener('submit', (e) => {
+  e.preventDefault();
+  runSearch(document.getElementById('search-input').value);
+});
+document.getElementById('search-input').addEventListener('input', (e) => {
+  runSearch(e.target.value);
+});
+
+loadData().then(applyHashRoute);
+</script>
+
+</body>
+</html>
