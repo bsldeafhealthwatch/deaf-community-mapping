@@ -13,7 +13,7 @@ Working repository for the BSL & Deaf Health Watch evidence dossier and the rese
 
 - **`foi-tracking/`** — FOI request planning and logs. `BSL-FOI-companion-log.xlsx` and `VRS-FOI-companion-log.xlsx` are the working trackers (send-ready, awaiting team review before anything is actually submitted — see each workbook's own instructions tab). `BSL-request-data-gap-tracker.docx` tracks what evidence gaps FOI requests are meant to close.
 
-- **`healthcare-matrix/`, `healthcare-trackers/`, `stakeholder-maps/`** — supporting HTML trackers and maps built earlier in the project (multiple versions kept as the work progressed; the highest version number / most recent file is current).
+- **`healthcare-matrix/`, `healthcare-trackers/`, `stakeholder-maps/`** — supporting HTML trackers and maps built earlier in the project. `stakeholder-maps/deaf-charities-stakeholder-matrix-v6.html` is the current stakeholder matrix (linked from the dossier's nav); superseded earlier versions live in `stakeholder-maps/_archive/`. `deaf-network-mindmap.html` is a separate, still-current visual (a mind map, not a version of the matrix).
 
 - **`prompts/`** — prompt templates used for AI-assisted research (Grok/SuperGrok), kept for reproducibility so any finding can be traced back to how it was originally surfaced before verification.
 
@@ -21,7 +21,7 @@ Working repository for the BSL & Deaf Health Watch evidence dossier and the rese
 
 ## Working conventions already in use
 
-- Files are backed up as `<filename>.bak-<timestamp>` before major edits. These backups are **not** tracked in git (see `.gitignore`) — they're a local safety net, not version history. Git itself is now your version history going forward.
+- Files are backed up as `<filename>.bak-<timestamp>` before major edits. These backups are **not** tracked in git (see `.gitignore`) — they're a local safety net, not version history. Git itself is now your version history going forward. Backups and superseded file versions are kept tidy in a `_archive/` subfolder alongside the files they came from (e.g. `dossier/_archive/`, `stakeholder-maps/_archive/`) rather than left loose — same rule applies going forward.
 - Every figure in the dossier and research framework carries a source, a URL where available, and a last-verified date. Figures unverified for 90+ days are flagged stale in the dossier automatically.
 - Contested or unstable figures are logged openly (`research-framework/` domain files and the dossier's "Contested & unstable figures" section) rather than silently corrected — the correction process itself is meant to be auditable.
 
