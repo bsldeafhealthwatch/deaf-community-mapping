@@ -322,6 +322,9 @@
   .contested-box h3{font-family:'Fraunces',serif; font-size:19px; color:var(--alert-text); margin-bottom:10px;}
   .contested-box p{font-size:14px; color:var(--ink); max-width:70ch;}
   .contested-box p + p{margin-top:10px;}
+  .contested-box.resolved{border-color:var(--verified); background:var(--paper-card);}
+  .contested-box.resolved h3{color:var(--verified);}
+  .contested-box .resolved-meta{font-size:12.5px; color:var(--muted-text); margin-top:4px;}
 
   /* ---------- FOI LIST ---------- */
   .foi-list{list-style:none; counter-reset:foi;}
@@ -582,11 +585,11 @@
         <p class="section-desc">Where a source disputes itself, or a figure is actively changing, it goes here first — flagged, not silently corrected. Resolved cases stay visible so the process itself is auditable.</p>
       </div>
     </div>
-    <div class="contested-box" style="border-color:var(--verified); background:#EAF3ED;">
-      <h3 style="color:var(--verified);">RESOLVED — RADF full conformance deadline is 30 September 2026</h3>
+    <div class="contested-box resolved">
+      <h3>RESOLVED — RADF full conformance deadline is 30 September 2026</h3>
       <p><strong>Directly verified against two independent NHS England primary sources on 4 September 2026:</strong> the DAPB4019 standards summary page states "Full conformance dates: 30 September 2026." The full 44-page Implementation Guidance document (Amd 41/2025) was read in full — its Section 12 timescale table states "Date of full conformance: full implementation of all aspects of the Standard is required. By 30 Sept 2026." No 2027 date of any kind appears in either document.</p>
       <p>A cross-check via SuperGrok independently claimed a split date — 31 March 2027 for health, 31 October 2027 for social care — citing the same Amd 41/2025 documents as its source. That claim could not be reproduced when the actual documents were read directly. <strong>Lesson for the team: an AI cross-check citing a real document is not the same as that document actually containing the claim.</strong> Always open the cited page.</p>
-      <p style="font-size:12.5px; color:#4A5568; margin-top:4px;">The underlying admin-log flux (a product-owner request to change the date on 13 Aug 2026, reverted 3 Sept 2026) is real and shows the date has been under internal discussion — but the currently confirmed, in-force date is 30 September 2026.</p>
+      <p class="resolved-meta">The underlying admin-log flux (a product-owner request to change the date on 13 Aug 2026, reverted 3 Sept 2026) is real and shows the date has been under internal discussion — but the currently confirmed, in-force date is 30 September 2026.</p>
     </div>
     <div class="contested-box" style="margin-top:16px;">
       <h3>The £80–100m NHS cost figure is a charity estimate, not an independent costing</h3>
@@ -613,11 +616,11 @@
       <p>The NHS Provider Selection Regime has now been directly confirmed as having funded VCSE organisations three times: SignHealth twice (Derby &amp; Derbyshire ICB, £491,036/year for BSL-specific Talking Therapies; and South East London ICB, an urgent-circumstances stopgap award) and RNID once (Somerset NHS Foundation Trust, £46,000 for general hearing-aid aftercare — not BSL-specific). No equivalent PSR award was found for BDA, Action Deafness, Deafblind UK, or RAD in this research.</p>
       <p>This nuances the "PSR is a working route" finding: PSR works, but for a narrow set of organisations, and the BSL-specific clinical-therapy niche within it currently belongs to SignHealth alone.</p>
     </div>
-    <div class="contested-box" style="margin-top:16px; border-color:var(--verified); background:#EAF3ED;">
-      <h3 style="color:var(--verified);">RESOLVED — the 19-vs-8 Deafblind interpreter count was a timeline, not a contradiction</h3>
+    <div class="contested-box resolved" style="margin-top:16px;">
+      <h3>RESOLVED — the 19-vs-8 Deafblind interpreter count was a timeline, not a contradiction</h3>
       <p><strong>Directly resolved via NRCPD's live registration-figures table (checked 5 September 2026):</strong> the figures of 19 and 8 Registered Interpreters for Deafblind People (RIDB) are both real — they are snapshots of the same national register at different dates, not two competing claims. The register showed roughly 12 nationally around 2022; from 12 February 2025 (when NRCPD confirmed the figure to journalist Liam O'Dell amid a petition by Sarah Reed) through the government's 23 June 2026 funding announcement, the figure cited was 8 — used explicitly as that announcement's "before" baseline, with a target of 68 ("more than eightfold") funded by a £15,000 grant for competency-assessment weekends. As of 5 September 2026, the live NRCPD table shows 19, as those assessment weekends add successful candidates to the register.</p>
       <p><strong>The number that actually matters for South West/South East London planning is neither 19 nor 8:</strong> only 4 of the 19 current RIDBs nationally sit in the combined London + South East regions, and just 1 in London itself. That is the correct local-capacity baseline. It also newly surfaced that DA Languages and LanguageLine — the two agencies already confirmed holding South London GP/hospital interpreting contracts — do not hold their own Deafblind interpreting bench, and instead subcontract that work to Deafblind Enablement, meaning DBE's own thin national capacity is the real ceiling on any Deafblind booking under those contracts, regardless of which prime the booking nominally runs through.</p>
-      <p style="font-size:12.5px; color:#4A5568; margin-top:4px;">See the DeafBlind-Specific Provision domain above for the full breakdown, the BSL Advisory Board's "Locked Out" findings and commissioning recommendations, and what remains genuinely unpublished (RIDB fulfilment rates, occupancy, and how many of the 19 actually take NHS work).</p>
+      <p class="resolved-meta">See the DeafBlind-Specific Provision domain above for the full breakdown, the BSL Advisory Board's "Locked Out" findings and commissioning recommendations, and what remains genuinely unpublished (RIDB fulfilment rates, occupancy, and how many of the 19 actually take NHS work).</p>
     </div>
   </div>
 </section>
