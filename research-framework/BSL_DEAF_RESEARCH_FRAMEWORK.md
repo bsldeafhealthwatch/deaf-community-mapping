@@ -4,7 +4,7 @@
 **Parent project:** GeometricMind
 **Related sub-project:** Deaf Network Health Group
 **Status:** All 16 domains have a first-pass briefing (Domain 16, end-of-life & palliative care, added 8 September 2026 from a four-prompt Grok research batch); direct primary-source verification is now underway (see `VERIFICATION_STATUS.md` Section 19 for the first completed pass, covering AIS/NHS commissioning/SWL-specific GP data/DeafBlind population figures — closing gaps identified against `prompts/supergrok-prompt-deaf-health-access.md`)
-**Last updated:** 8 September 2026
+**Last updated:** 8 September 2026 (Domain 1 / NHS interpreter provision extended same day with prompts 34-37 findings on AIS legal enforcement, flag/booking-failure data, comparative practice and lived experience — see that domain file's new dated subsection; one contested claim on CQC's assurance role logged, pending re-read)
 
 ---
 

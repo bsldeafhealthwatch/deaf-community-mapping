@@ -2,7 +2,7 @@
 
 **Purpose:** Ready-to-paste prompts for SuperGrok to generate sourced, structured data for the remaining pending domains and audience gaps. This extends the same "Grok cross-check pass" discipline already used to verify the stakeholder matrix (v7→v10).
 
-**⚠️ NEXT PROMPT NUMBER TO USE: 34.** The highest prompt number issued anywhere in this project so far is **33** (see the index below). Before adding a new section to this file, check this line, confirm it against the index table, then start your new prompts at the next free number and update this line and the index in the same edit. Never start a new batch back at 1 — see "Numbering discipline" below for why this matters.
+**⚠️ NEXT PROMPT NUMBER TO USE: 38.** The highest prompt number issued anywhere in this project so far is **37** (see the index below). Before adding a new section to this file, check this line, confirm it against the index table, then start your new prompts at the next free number and update this line and the index in the same edit. Never start a new batch back at 1 — see "Numbering discipline" below for why this matters.
 
 **How to use this pack:**
 1. Paste a prompt into SuperGrok as-is, or fill in the `[bracketed]` placeholders first
@@ -29,7 +29,8 @@ A previous attempt to reconstruct "the original prompts 1–19" from memory of a
 | C1–C3 | Charity/business audience gap | `SUPERGROK_PROMPTS.md` | Lettered, not numbered 17–19 — do not renumber retroactively |
 | 20–26 | DWP / Welfare & Employment (national) | This file | Prompt text below |
 | 27–33 | Jobcentre Plus (local/in-person) | This file | Prompt text below |
-| 34+ | *(not yet issued)* | — | Next available |
+| 34–37 | Accessible Information Standard (AIS): legal status/enforcement, data findings on flag/interpreter-booking failures, comparative practice, lived experience | Claude project doc `claude/grok-prompts-ais.md` (Deaf Network Health Group project) | Prompt text in that doc, not this file |
+| 38+ | *(not yet issued)* | — | Next available |
 
 **Note on A1–C3:** these are commonly referred to elsewhere in this project as "the original 19 prompts" (5+11+3=19), but the source file itself never numbered them sequentially — it used Category A/B/C with sub-numbers. Do not create a "Prompts 1–19" section reproducing invented text; if the original prompt wording is needed, read it from `SUPERGROK_PROMPTS.md` directly.
 
