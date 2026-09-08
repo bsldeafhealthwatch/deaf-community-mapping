@@ -327,14 +327,29 @@
   .contested-box .resolved-meta{font-size:12.5px; color:var(--muted-text); margin-top:4px;}
 
   /* ---------- FOI LIST ---------- */
-  .foi-list{list-style:none; counter-reset:foi;}
+  .foi-controls{display:flex; align-items:center; gap:10px; flex-wrap:wrap; margin-bottom:22px;}
+  .foi-controls label{font-size:13px; color:var(--ink-soft); font-family:'Inter',sans-serif;}
+  .foi-domain-select{
+    font-family:'Inter',sans-serif; font-size:13.5px; padding:9px 14px; border:1.5px solid var(--ink);
+    background:var(--paper); color:var(--ink); cursor:pointer; min-height:44px; max-width:100%;
+  }
+  .foi-group{margin-bottom:6px;}
+  .foi-group + .foi-group{margin-top:34px;}
+  .foi-group-head{
+    display:flex; align-items:baseline; gap:10px; padding-bottom:8px; margin-bottom:4px;
+    border-bottom:1.5px solid var(--ink); flex-wrap:wrap;
+  }
+  .foi-group-head h3{font-family:'Fraunces',serif; font-weight:600; font-size:18px; color:var(--ink);}
+  .foi-group-count{font-family:'Inter',sans-serif; font-size:12px; color:var(--ink-soft); background:var(--paper-card); padding:2px 9px; border-radius:10px;}
+  .foi-list{list-style:none;}
   .foi-list li{
-    counter-increment:foi; padding:14px 0; border-top:1px solid var(--line); display:flex; gap:16px;
+    padding:14px 0; border-top:1px solid var(--line); display:flex; gap:16px;
   }
   .foi-list li:before{
-    content:counter(foi); font-family:'Fraunces',serif; font-size:20px; color:var(--gold-text); flex-shrink:0; width:28px;
+    content:attr(data-n); font-family:'Fraunces',serif; font-size:20px; color:var(--gold-text); flex-shrink:0; width:28px;
   }
   .foi-list li span{font-size:14px; color:var(--ink-soft);}
+  .foi-empty{font-size:14px; color:var(--ink-soft); padding:18px 0; font-style:italic;}
 
   /* ---------- COMMUNITY VOICES STUB ---------- */
   .community-box{
@@ -633,7 +648,13 @@
         <p class="section-desc">Feeds directly into the team's FOI companion log — check WhatDoTheyKnow first, and the Section 12 cost limit (£450 / 18 hours), before submitting.</p>
       </div>
     </div>
-    <ul class="foi-list" id="foi-list"></ul>
+    <div class="foi-controls">
+      <label for="foi-domain-filter">Filter by domain:</label>
+      <select class="foi-domain-select" id="foi-domain-filter" aria-label="Filter FOI targets by domain">
+        <option value="all">All domains (50)</option>
+      </select>
+    </div>
+    <div id="foi-groups"></div>
   </div>
 </section>
 
@@ -959,61 +980,56 @@ const DEFAULT_DOMAINS = [
 ];
 
 const DEFAULT_FOI = [
-  'DHSC / NHS England — request whether any independent NHS or Treasury costing of Deaf healthcare accessibility failures has ever been commissioned, given the widely-cited £80–100m figure traces back to a charity’s own inflation-adjusted estimate, not a measured NHS cost.',
-  'SWL ICB constituent Trusts — annual spend on BSL/Deaf interpreting, named provider(s), and whether contracts are VCSE or commercial.',
-  'SWL ICB / Trusts — number of Accessible Information Standard compliance audits conducted in the last 24 months, and results.',
-  'DA Languages contract holder — contract value, rate card, and interpreter-facing pay vs. billed rate.',
-  'SWL ICB Trusts — BSL interpreter booking cancellation/no-show rates and average lead time, if held.',
-  'HMPPS — whether any plan exists to begin recording Deaf/DeafBlind/BSL-user status for prisoners, given the Offender Equalities Annual Report 2024–25 states disability data “continues to be limited.”',
-  'DHSC / NHS England — whether Section 256 (NHS Act 2006) has ever specifically funded a Deaf/deafblind-led VCSE organisation, now that the Provider Selection Regime is confirmed as a working (if narrow) route via two SignHealth awards and one RNID award.',
-  'NHS England (VCSE Health and Wellbeing Alliance secretariat) — why no Deaf/deafblind/hearing-loss-specific organisation has ever been admitted as a full member or consortium partner.',
-  'SWLSTG (South East region) and Somerset NHS FT (South West) — referral and waiting-time data for their specialist community Deaf CAMHS teams, two of the four regions (alongside Central and North) that replaced Corner House’s inpatient unit from July 2026; the inpatient-era age-range discrepancy itself is now resolved (see the domain file). Partial data has since emerged: the North region (Leeds and York Partnership NHS FT) published waiting times of 18 months (Manchester), 12 months (Newcastle) and 14 months (York) as of 13 Aug 2026 — not confirmed Deaf-specific rather than general CAMHS queue; Central (Black Country Healthcare NHS FT) publishes no waiting-time data.',
-  'Each of the six SWL boroughs — current adult sensory-impairment/Deaf/deafblind register headcounts (none currently publishes one).',
-  'London Borough of Camden — confirmation of the reported 2026-2030 procurement strategy’s Deaf-led BSL-specific Light Touch Regime procurement (currently an unverified lead, highest priority to confirm).',
-  'SEL ICB — the specific board-pack enclosure (“Interpreting Service procurement,” Enclosure 7) confirming its ~£700k interpreting envelope and 2023/24 activity figures.',
-  'NCL ICB / RAD — a manual (non-automated) retrieval of FOI.25.NCL 092 to confirm RAD’s prior £48,948.10 BSL interpreting contract figure and dates.',
-  'DWP — direct resolution of the Access to Work annual funding cap discrepancy (£69,260 vs £69,620 for 2025-26) against DWP’s own primary factsheet.',
-  'DWP — a breakdown of the £227m Access to Work support-worker spend (2024-25) separating BSL interpreters from other job aides.',
-  'NHS Supply Chain / NHS PiP framework holders — call-off data to isolate BSL-only spend from bundled multi-language interpreting frameworks, the single most valuable missing figure across public spending, Access to Work, and waste-vs-grassroots.',
-  'Department for Education / Ofqual — the current status of Signature’s application for Ofqual recognition as a BSL GCSE awarding organisation (sought from Jan 2026), and whether its 2030 first-teaching aim still stands, now that all four incumbent exam boards have declined to develop the qualification.',
-  'Student Finance England — the current Disabled Students’ Allowance maximum for England (Wales’s £34,671/year figure is confirmed; England’s is not).',
-  'NRCPD — how many of the current 19 Registered Interpreters for Deafblind People (RIDB) actually accept NHS work, and whether the 4 sitting in London/South East regions are available for London bookings specifically, not just home-registered there.',
-  'Bexley, Bromley and Greenwich Place primary care teams — confirmed absence of any named BSL/Deafblind GP interpreting provider for these three boroughs (the SEL Primary Care Interpreting Service explicitly excludes them); ask directly what arrangement, if any, exists.',
-  'Deafblind Enablement — direct confirmation of the DA Languages and LanguageLine subcontract relationship, typical turnaround time for a Deafblind booking, and whether any South London hospital (following the Moorfields precedent) could be added.',
-  'Guy’s & St Thomas’, Lewisham & Greenwich, Croydon Health Services, Epsom & St Helier and Oxleas NHS Trusts — name the interpreting agency actually delivering the BSL access each trust advertises on its own site without naming a supplier.',
-  'King’s College Hospital NHS Foundation Trust — status and expected re-tender date for the £1.2m interpreting contract (explicitly including BSL, covering Denmark Hill, PRUH and Queen Mary’s Sidcup) cancelled 6 August 2026.',
-  'NHS South East London ICB — award status of the successor BSL Talking Therapies contract (2+1 years, envelope up to £330,000, tendered from 1 July 2026) that would continue SignHealth’s current SEL-wide service — the only confirmed BSL health service reaching Bexley, Bromley and Greenwich, via therapy rather than a general interpreting desk.',
-  'DWP — isolate VRS-specific spend within the Access to Work support-worker budget (currently only a bundled £227m 2024-25 total exists, not broken out by VRS vs other support-worker costs).',
-  'Ofcom — request any internal analysis, since the 2011 Review of Relay Services consultation, of the cost of extending VRS to a universal (any-number) service, given the BSL Advisory Board’s 2025 recommendation for a national 24/7 VRS — has the 2011 £41.6–£113.4m estimate ever been revisited?',
-  'NHS England — the specific decision record and rationale for withdrawing BSL Health Access funding on 31 March 2021, given the service’s 25,000+ conversation volume and its status as the only genuinely universal (non-per-organisation) VRS the NHS has run.',
-  'Financial Ombudsman Service / FCA — any published complaint outcomes involving a bank or financial firm declining to proceed with a customer interaction because it was relayed via a third-party BSL interpreter/VRS, to test whether the Kalinova-style refusal pattern has a UK precedent.',
-  'Crown Commercial Service — total spend to date under RM6302 Lot 4 (“Visual Interpreting Services”), broken out by VRS vs face-to-face interpreting, and by BSL vs other sign languages.',
-  'DVLA — whether the £30,000/12-month VRS contract has been renewed, retendered, or its value changed since April 2025.',
-  'Resolved 6 Sept 2026: Contact Scotland BSL is confirmed as a genuine any-number VRS via its own FAQ page, not a public-service directory. See the domain file for the full finding, including a resolved launch-date question and the operator-change finding (Sign Solutions from 1 Dec 2025).',
-  'ICO — direct request for a copy of its 2 October 2018 letter to the UK Council on Deafness, to obtain and quote the original GDPR/relay-service guidance first-hand rather than relying on Ofcom’s paraphrase and a WhatDoTheyKnow FOI trail.',
-  'NHS England / a sample of NHS interpreting agencies — whether booking-data non-sharing (the GDPR-attributed barrier documented in Locked Out and a 2019 NUBSLI/LanguageLine complaint) has been addressed since 2019, or whether interpreters are still not told a service user’s name/setting before accepting a booking.'
-,
-  'NHS England (national data/IG team) — ask directly whether the AIS implementation guidance\'s "with consent" language and the RADF action checklist\'s "implied consent" language have ever been formally reconciled, and which standard governs when the two conflict.',
-  'ICO — ask directly whether a "requires a BSL interpreter" flag (as distinct from a "Deaf" or disability diagnosis label) is, in the ICO\'s view, special-category data under Article 9 — closing the open legal question this domain currently cannot resolve from published guidance alone.'
-,
-  'Financial Ombudsman Service — ask directly (via their enquiries process, since FOS is not subject to FOIA) whether they hold any unpublished complaint data matching the "refused to continue a call because an interpreter/VRS operator was on the line" pattern, since only published decisions were searched in this pass.',
-  'EHRC (GB) — ask whether the "no third-party calls policy can be indirect discrimination" paragraph in its 2014 business guidance has ever been applied to a bank enforcement matter involving a BSL interpreter or VRS operator specifically, as opposed to a support worker (the example given in the guidance itself).'
-,
-  'DCMS — ask directly whether extending General Condition C5 from emergency-only to everyday/any-number VRS has been discussed with Ofcom since Locked Out (27 Nov 2025) recommended a national 24/7 VRS, and whether this has been framed as a GC-modification or as requiring new primary legislation.'
-,
-  'Scottish Government / Sign Solutions — request a current Contact Scotland BSL KPI report giving actual monthly/annual call volumes (to confirm or correct the unsourced "3,000-4,000 calls/month" figure), and the exact wording of the service\'s international/work-related call exclusion.'
-,
-'NHS England / a sample of NHS trusts — ask whether any national or regional guidance requires (or is planned to require) finance systems to record interpreting spend by delivery method (VRS vs face-to-face vs telephone), given that 84% of NHS organisations currently cannot separate this in their own accounts.',
-'Crown Commercial Service — ask whether RM6302 Lot 4 (\'Visual Interpreting Services\') suppliers must submit delivery-mode-disaggregated pricing or spend data, and whether this is being considered for the next framework refresh.',
-'BSL Advisory Board / DHSC — ask whether the Locked Out report\'s GBP 80-100 million/year cost-of-exclusion estimate has a published methodology note, and whether it has ever been set directly against the Ofcom GBP 41.6m-113.4m/year provision-cost estimate.',
-'DWP / Access to Work — request a direct copy of the current Support Worker/BSL interpreter hourly rate bands and VRS/VRI monthly-bundle pricing, if any such published table genuinely exists, given that independent verification could not locate it despite exhaustive search.',
-'NHS Wales / NHS 111 Wales — ask directly whether any dedicated BSL video relay service exists for NHS 111 in Wales, given that no evidence of one could be found.',
-'DWP / Access to Work — ask directly whether AtW has ever considered funding employer-side IT/network changes (firewall allow-listing, VPN exceptions) needed to run a VRS app on a work device, since AtW funds interpreting minutes but nothing in its published guidance addresses this technical access barrier.',
-'Scottish Government / SLI — ask directly for the exact start date of SLI\'s operatorship of Contact Scotland BSL, to close the one remaining date gap in this domain\'s now-resolved Contact Scotland operator history.',
-  'SWL acute/community trusts and named hospices (Royal Trinity, Princess Alice, St Raphael’s, Shooting Star, plus any ICB-funded hospice-at-home) — RIDB / communicator-guide / Deafblind Manual / hands-on BSL bookings in the last 24 months, by setting and urgency (planned / same-day / out-of-hours), fulfilment and cancellation.',
-  'Same trusts and hospices — whether a written last-days protocol exists naming tactile methods or hospital haptices, and whether any English hospice has ever booked an RIDB for an inpatient death, and for how many hours.',
-  'SWL trusts and hospices — whether communication support (BSL or Deafblind interpreting) is recorded as being in place during the prognosis conversation that precedes a DWP SR1 form (Special Rules for End of Life).',
-  'DWP — whether SR1/SREL claim records flag BSL or Deafblind communication needs at all, BSL VRS call volumes specifically for SREL claims, and any recorded complaints about interpreter refusal at the register office or coroner stage after a death.'
+  { n:1, domain:'nhs-interpreter', text:'DHSC / NHS England — request whether any independent NHS or Treasury costing of Deaf healthcare accessibility failures has ever been commissioned, given the widely-cited £80–100m figure traces back to a charity’s own inflation-adjusted estimate, not a measured NHS cost.' },
+  { n:2, domain:'nhs-interpreter', text:'SWL ICB constituent Trusts — annual spend on BSL/Deaf interpreting, named provider(s), and whether contracts are VCSE or commercial.' },
+  { n:3, domain:'nhs-interpreter', text:'SWL ICB / Trusts — number of Accessible Information Standard compliance audits conducted in the last 24 months, and results.' },
+  { n:4, domain:'nhs-interpreter', text:'DA Languages contract holder — contract value, rate card, and interpreter-facing pay vs. billed rate.' },
+  { n:5, domain:'nhs-interpreter', text:'SWL ICB Trusts — BSL interpreter booking cancellation/no-show rates and average lead time, if held.' },
+  { n:6, domain:'victims-prisoners', text:'HMPPS — whether any plan exists to begin recording Deaf/DeafBlind/BSL-user status for prisoners, given the Offender Equalities Annual Report 2024–25 states disability data “continues to be limited.”' },
+  { n:7, domain:'public-spending', text:'DHSC / NHS England — whether Section 256 (NHS Act 2006) has ever specifically funded a Deaf/deafblind-led VCSE organisation, now that the Provider Selection Regime is confirmed as a working (if narrow) route via two SignHealth awards and one RNID award.' },
+  { n:8, domain:'charities', text:'NHS England (VCSE Health and Wellbeing Alliance secretariat) — why no Deaf/deafblind/hearing-loss-specific organisation has ever been admitted as a full member or consortium partner.' },
+  { n:9, domain:'mental-health', text:'SWLSTG (South East region) and Somerset NHS FT (South West) — referral and waiting-time data for their specialist community Deaf CAMHS teams, two of the four regions (alongside Central and North) that replaced Corner House’s inpatient unit from July 2026; the inpatient-era age-range discrepancy itself is now resolved (see the domain file). Partial data has since emerged: the North region (Leeds and York Partnership NHS FT) published waiting times of 18 months (Manchester), 12 months (Newcastle) and 14 months (York) as of 13 Aug 2026 — not confirmed Deaf-specific rather than general CAMHS queue; Central (Black Country Healthcare NHS FT) publishes no waiting-time data.' },
+  { n:10, domain:'nhs-interpreter', text:'Each of the six SWL boroughs — current adult sensory-impairment/Deaf/deafblind register headcounts (none currently publishes one).' },
+  { n:11, domain:'public-spending', text:'London Borough of Camden — confirmation of the reported 2026-2030 procurement strategy’s Deaf-led BSL-specific Light Touch Regime procurement (currently an unverified lead, highest priority to confirm).' },
+  { n:12, domain:'nhs-interpreter', text:'SEL ICB — the specific board-pack enclosure (“Interpreting Service procurement,” Enclosure 7) confirming its ~£700k interpreting envelope and 2023/24 activity figures.' },
+  { n:13, domain:'nhs-interpreter', text:'NCL ICB / RAD — a manual (non-automated) retrieval of FOI.25.NCL 092 to confirm RAD’s prior £48,948.10 BSL interpreting contract figure and dates.' },
+  { n:14, domain:'access-to-work', text:'DWP — direct resolution of the Access to Work annual funding cap discrepancy (£69,260 vs £69,620 for 2025-26) against DWP’s own primary factsheet.' },
+  { n:15, domain:'access-to-work', text:'DWP — a breakdown of the £227m Access to Work support-worker spend (2024-25) separating BSL interpreters from other job aides.' },
+  { n:16, domain:'nhs-interpreter', text:'NHS Supply Chain / NHS PiP framework holders — call-off data to isolate BSL-only spend from bundled multi-language interpreting frameworks, the single most valuable missing figure across public spending, Access to Work, and waste-vs-grassroots.' },
+  { n:17, domain:'education', text:'Department for Education / Ofqual — the current status of Signature’s application for Ofqual recognition as a BSL GCSE awarding organisation (sought from Jan 2026), and whether its 2030 first-teaching aim still stands, now that all four incumbent exam boards have declined to develop the qualification.' },
+  { n:18, domain:'education', text:'Student Finance England — the current Disabled Students’ Allowance maximum for England (Wales’s £34,671/year figure is confirmed; England’s is not).' },
+  { n:19, domain:'deafblind-provision', text:'NRCPD — how many of the current 19 Registered Interpreters for Deafblind People (RIDB) actually accept NHS work, and whether the 4 sitting in London/South East regions are available for London bookings specifically, not just home-registered there.' },
+  { n:20, domain:'nhs-interpreter', text:'Bexley, Bromley and Greenwich Place primary care teams — confirmed absence of any named BSL/Deafblind GP interpreting provider for these three boroughs (the SEL Primary Care Interpreting Service explicitly excludes them); ask directly what arrangement, if any, exists.' },
+  { n:21, domain:'deafblind-provision', text:'Deafblind Enablement — direct confirmation of the DA Languages and LanguageLine subcontract relationship, typical turnaround time for a Deafblind booking, and whether any South London hospital (following the Moorfields precedent) could be added.' },
+  { n:22, domain:'nhs-interpreter', text:'Guy’s & St Thomas’, Lewisham & Greenwich, Croydon Health Services, Epsom & St Helier and Oxleas NHS Trusts — name the interpreting agency actually delivering the BSL access each trust advertises on its own site without naming a supplier.' },
+  { n:23, domain:'nhs-interpreter', text:'King’s College Hospital NHS Foundation Trust — status and expected re-tender date for the £1.2m interpreting contract (explicitly including BSL, covering Denmark Hill, PRUH and Queen Mary’s Sidcup) cancelled 6 August 2026.' },
+  { n:24, domain:'nhs-interpreter', text:'NHS South East London ICB — award status of the successor BSL Talking Therapies contract (2+1 years, envelope up to £330,000, tendered from 1 July 2026) that would continue SignHealth’s current SEL-wide service — the only confirmed BSL health service reaching Bexley, Bromley and Greenwich, via therapy rather than a general interpreting desk.' },
+  { n:25, domain:'video-relay-telecoms', text:'DWP — isolate VRS-specific spend within the Access to Work support-worker budget (currently only a bundled £227m 2024-25 total exists, not broken out by VRS vs other support-worker costs).' },
+  { n:26, domain:'video-relay-telecoms', text:'Ofcom — request any internal analysis, since the 2011 Review of Relay Services consultation, of the cost of extending VRS to a universal (any-number) service, given the BSL Advisory Board’s 2025 recommendation for a national 24/7 VRS — has the 2011 £41.6–£113.4m estimate ever been revisited?' },
+  { n:27, domain:'video-relay-telecoms', text:'NHS England — the specific decision record and rationale for withdrawing BSL Health Access funding on 31 March 2021, given the service’s 25,000+ conversation volume and its status as the only genuinely universal (non-per-organisation) VRS the NHS has run.' },
+  { n:28, domain:'video-relay-telecoms', text:'Financial Ombudsman Service / FCA — any published complaint outcomes involving a bank or financial firm declining to proceed with a customer interaction because it was relayed via a third-party BSL interpreter/VRS, to test whether the Kalinova-style refusal pattern has a UK precedent.' },
+  { n:29, domain:'video-relay-telecoms', text:'Crown Commercial Service — total spend to date under RM6302 Lot 4 (“Visual Interpreting Services”), broken out by VRS vs face-to-face interpreting, and by BSL vs other sign languages.' },
+  { n:30, domain:'video-relay-telecoms', text:'DVLA — whether the £30,000/12-month VRS contract has been renewed, retendered, or its value changed since April 2025.' },
+  { n:31, domain:'video-relay-telecoms', text:'Resolved 6 Sept 2026: Contact Scotland BSL is confirmed as a genuine any-number VRS via its own FAQ page, not a public-service directory. See the domain file for the full finding, including a resolved launch-date question and the operator-change finding (Sign Solutions from 1 Dec 2025).' },
+  { n:32, domain:'legislation', text:'ICO — direct request for a copy of its 2 October 2018 letter to the UK Council on Deafness, to obtain and quote the original GDPR/relay-service guidance first-hand rather than relying on Ofcom’s paraphrase and a WhatDoTheyKnow FOI trail.' },
+  { n:33, domain:'nhs-interpreter', text:'NHS England / a sample of NHS interpreting agencies — whether booking-data non-sharing (the GDPR-attributed barrier documented in Locked Out and a 2019 NUBSLI/LanguageLine complaint) has been addressed since 2019, or whether interpreters are still not told a service user’s name/setting before accepting a booking.' },
+  { n:34, domain:'nhs-interpreter', text:'NHS England (national data/IG team) — ask directly whether the AIS implementation guidance\'s "with consent" language and the RADF action checklist\'s "implied consent" language have ever been formally reconciled, and which standard governs when the two conflict.' },
+  { n:35, domain:'legislation', text:'ICO — ask directly whether a "requires a BSL interpreter" flag (as distinct from a "Deaf" or disability diagnosis label) is, in the ICO\'s view, special-category data under Article 9 — closing the open legal question this domain currently cannot resolve from published guidance alone.' },
+  { n:36, domain:'legislation', text:'Financial Ombudsman Service — ask directly (via their enquiries process, since FOS is not subject to FOIA) whether they hold any unpublished complaint data matching the "refused to continue a call because an interpreter/VRS operator was on the line" pattern, since only published decisions were searched in this pass.' },
+  { n:37, domain:'legislation', text:'EHRC (GB) — ask whether the "no third-party calls policy can be indirect discrimination" paragraph in its 2014 business guidance has ever been applied to a bank enforcement matter involving a BSL interpreter or VRS operator specifically, as opposed to a support worker (the example given in the guidance itself).' },
+  { n:38, domain:'video-relay-telecoms', text:'DCMS — ask directly whether extending General Condition C5 from emergency-only to everyday/any-number VRS has been discussed with Ofcom since Locked Out (27 Nov 2025) recommended a national 24/7 VRS, and whether this has been framed as a GC-modification or as requiring new primary legislation.' },
+  { n:39, domain:'video-relay-telecoms', text:'Scottish Government / Sign Solutions — request a current Contact Scotland BSL KPI report giving actual monthly/annual call volumes (to confirm or correct the unsourced "3,000-4,000 calls/month" figure), and the exact wording of the service\'s international/work-related call exclusion.' },
+  { n:40, domain:'public-spending', text:'NHS England / a sample of NHS trusts — ask whether any national or regional guidance requires (or is planned to require) finance systems to record interpreting spend by delivery method (VRS vs face-to-face vs telephone), given that 84% of NHS organisations currently cannot separate this in their own accounts.' },
+  { n:41, domain:'video-relay-telecoms', text:'Crown Commercial Service — ask whether RM6302 Lot 4 (\'Visual Interpreting Services\') suppliers must submit delivery-mode-disaggregated pricing or spend data, and whether this is being considered for the next framework refresh.' },
+  { n:42, domain:'public-spending', text:'BSL Advisory Board / DHSC — ask whether the Locked Out report\'s GBP 80-100 million/year cost-of-exclusion estimate has a published methodology note, and whether it has ever been set directly against the Ofcom GBP 41.6m-113.4m/year provision-cost estimate.' },
+  { n:43, domain:'access-to-work', text:'DWP / Access to Work — request a direct copy of the current Support Worker/BSL interpreter hourly rate bands and VRS/VRI monthly-bundle pricing, if any such published table genuinely exists, given that independent verification could not locate it despite exhaustive search.' },
+  { n:44, domain:'video-relay-telecoms', text:'NHS Wales / NHS 111 Wales — ask directly whether any dedicated BSL video relay service exists for NHS 111 in Wales, given that no evidence of one could be found.' },
+  { n:45, domain:'access-to-work', text:'DWP / Access to Work — ask directly whether AtW has ever considered funding employer-side IT/network changes (firewall allow-listing, VPN exceptions) needed to run a VRS app on a work device, since AtW funds interpreting minutes but nothing in its published guidance addresses this technical access barrier.' },
+  { n:46, domain:'video-relay-telecoms', text:'Scottish Government / SLI — ask directly for the exact start date of SLI\'s operatorship of Contact Scotland BSL, to close the one remaining date gap in this domain\'s now-resolved Contact Scotland operator history.' },
+  { n:47, domain:'end-of-life-palliative', text:'SWL acute/community trusts and named hospices (Royal Trinity, Princess Alice, St Raphael’s, Shooting Star, plus any ICB-funded hospice-at-home) — RIDB / communicator-guide / Deafblind Manual / hands-on BSL bookings in the last 24 months, by setting and urgency (planned / same-day / out-of-hours), fulfilment and cancellation.' },
+  { n:48, domain:'end-of-life-palliative', text:'Same trusts and hospices — whether a written last-days protocol exists naming tactile methods or hospital haptices, and whether any English hospice has ever booked an RIDB for an inpatient death, and for how many hours.' },
+  { n:49, domain:'end-of-life-palliative', text:'SWL trusts and hospices — whether communication support (BSL or Deafblind interpreting) is recorded as being in place during the prognosis conversation that precedes a DWP SR1 form (Special Rules for End of Life).' },
+  { n:50, domain:'end-of-life-palliative', text:'DWP — whether SR1/SREL claim records flag BSL or Deafblind communication needs at all, BSL VRS call volumes specifically for SREL claims, and any recorded complaints about interpreter refusal at the register office or coroner stage after a death.' },
 ];
 
 const DEFAULT_RIGHTS = [
@@ -1448,8 +1464,82 @@ function showToast(msg, isError){
 // ---------------- RENDER: FOI ----------------
 function renderFoi(list){
   window.__foiList = list;
-  const el = document.getElementById('foi-list');
-  el.innerHTML = list.map(item => `<li><span>${escapeHtml(item)}</span></li>`).join('');
+
+  // Domain id -> title, drawn from the same domain data used by the domain grid,
+  // so this section never drifts out of sync with domain names/titles.
+  const domainTitleMap = {};
+  (typeof domainsData !== 'undefined' ? domainsData : DEFAULT_DOMAINS).forEach(d => {
+    domainTitleMap[d.id] = d.title;
+  });
+
+  // Preferred display order: domains actually used by FOI items, grouped
+  // roughly health -> welfare -> law -> money -> education, matching the
+  // cluster order used elsewhere in the dossier.
+  const clusterOrder = ['nhs-interpreter','mental-health','deafblind-provision','end-of-life-palliative',
+    'devices-technology','access-to-work','pip-dla','jobcentre-plus','neurodivergence',
+    'victims-prisoners','legislation','interpreter-regulation','bsl-history',
+    'charities','public-spending','waste-vs-grassroots','education','video-relay-telecoms'];
+
+  const byDomain = {};
+  list.forEach(item => {
+    const d = item.domain || 'uncategorised';
+    if(!byDomain[d]) byDomain[d] = [];
+    byDomain[d].push(item);
+  });
+
+  const domainsPresent = Object.keys(byDomain).sort((a,b) => {
+    const ai = clusterOrder.indexOf(a), bi = clusterOrder.indexOf(b);
+    if(ai === -1 && bi === -1) return a.localeCompare(b);
+    if(ai === -1) return 1;
+    if(bi === -1) return -1;
+    return ai - bi;
+  });
+
+  // Populate the dropdown (once per render, preserving current selection where possible)
+  const select = document.getElementById('foi-domain-filter');
+  const prevValue = select ? select.value : 'all';
+  if(select){
+    const opts = [`<option value="all">All domains (${list.length})</option>`];
+    domainsPresent.forEach(d => {
+      const title = domainTitleMap[d] || d;
+      opts.push(`<option value="${escapeAttr(d)}">${escapeHtml(title)} (${byDomain[d].length})</option>`);
+    });
+    select.innerHTML = opts.join('');
+    select.value = domainsPresent.includes(prevValue) || prevValue === 'all' ? prevValue : 'all';
+  }
+  const activeFilter = select ? select.value : 'all';
+
+  const groupsEl = document.getElementById('foi-groups');
+  if(!groupsEl) return;
+
+  const domainsToShow = activeFilter === 'all' ? domainsPresent : [activeFilter];
+
+  if(domainsToShow.length === 0 || !domainsToShow.some(d => byDomain[d] && byDomain[d].length)){
+    groupsEl.innerHTML = '<p class="foi-empty">No FOI targets in this domain yet.</p>';
+    return;
+  }
+
+  groupsEl.innerHTML = domainsToShow.map(d => {
+    const items = byDomain[d] || [];
+    if(items.length === 0) return '';
+    const title = domainTitleMap[d] || d;
+    return `
+      <div class="foi-group" data-domain="${escapeAttr(d)}">
+        <div class="foi-group-head">
+          <h3>${escapeHtml(title)}</h3>
+          <span class="foi-group-count">${items.length} FOI target${items.length === 1 ? '' : 's'}</span>
+        </div>
+        <ul class="foi-list">
+          ${items.map(item => `<li data-n="${item.n}"><span>${escapeHtml(item.text)}</span></li>`).join('')}
+        </ul>
+      </div>
+    `;
+  }).join('');
+}
+
+const foiFilterEl = document.getElementById('foi-domain-filter');
+if(foiFilterEl){
+  foiFilterEl.addEventListener('change', () => renderFoi(window.__foiList || DEFAULT_FOI));
 }
 
 // ---------------- RENDER: DOMAIN GRID ----------------
@@ -1692,8 +1782,9 @@ function buildSearchIndex(){
     items.push({kind:'Contested figure', title:h.textContent, text:paras, href:'#contested'});
   });
 
-  (window.__foiList || []).forEach(text => {
-    items.push({kind:'FOI target', title:text.length > 70 ? text.slice(0,70) + '…' : text, text, href:'#foi'});
+  (window.__foiList || []).forEach(item => {
+    const t = item && typeof item === 'object' ? item.text : item;
+    items.push({kind:'FOI target', title:t.length > 70 ? t.slice(0,70) + '…' : t, text:t, href:'#foi'});
   });
 
   const audienceKinds = {
