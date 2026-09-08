@@ -1,4 +1,6 @@
-# SuperGrok Research Prompt Pack
+# SuperGrok Research Prompt Pack (original — Categories A/B/C)
+
+**⚠️ This is the file commonly referred to elsewhere as "the original 19 prompts" (Categories A1–A5 + B1–B11 + C1–C3 = 19). It was never numbered 1–19 sequentially — that shorthand describes it, it isn't a section title inside it.** The master running index of every numbered prompt batch in this project (including this file's place in the sequence, and the next free number for a new batch) lives in `SuperGrok_Research_Prompt_Pack.md` — check there before adding a new batch anywhere, so numbering never collides or restarts at 1 by mistake.
 
 **Purpose:** Ready-to-paste prompts for SuperGrok to generate sourced, structured data for the remaining pending domains and the new charities/business audience section. This extends the same "Grok cross-check pass" discipline already used to verify the stakeholder matrix (v7→v10).
 

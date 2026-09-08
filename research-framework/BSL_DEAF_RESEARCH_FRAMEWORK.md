@@ -3,8 +3,8 @@
 **Document type:** Methodology & source map (living document)
 **Parent project:** GeometricMind
 **Related sub-project:** Deaf Network Health Group
-**Status:** All 15 domains have a first-pass briefing; direct primary-source verification is now underway (see `VERIFICATION_STATUS.md` Section 19 for the first completed pass, covering AIS/NHS commissioning/SWL-specific GP data/DeafBlind population figures — closing gaps identified against `prompts/supergrok-prompt-deaf-health-access.md`)
-**Last updated:** 5 September 2026
+**Status:** All 16 domains have a first-pass briefing (Domain 16, end-of-life & palliative care, added 8 September 2026 from a four-prompt Grok research batch); direct primary-source verification is now underway (see `VERIFICATION_STATUS.md` Section 19 for the first completed pass, covering AIS/NHS commissioning/SWL-specific GP data/DeafBlind population figures — closing gaps identified against `prompts/supergrok-prompt-deaf-health-access.md`)
+**Last updated:** 8 September 2026
 
 ---
 
@@ -20,7 +20,7 @@ This document defines a repeatable research methodology for building an accurate
 
 ## 2. Domain Map
 
-Fifteen domains, grouped into five clusters. Each will eventually get its own briefing document (`BSL_DOMAIN_<name>.md`) following the template in Section 4.
+Sixteen domains, grouped into five clusters. Each will eventually get its own briefing document (`BSL_DOMAIN_<name>.md`) following the template in Section 4.
 
 ### Cluster A — Health & Communication Access
 | # | Domain | Status |
@@ -29,6 +29,7 @@ Fifteen domains, grouped into five clusters. Each will eventually get its own br
 | 2 | Mental health services & Deaf/DeafBlind access (incl. BSMHD) | 🟢 In progress |
 | 3 | DeafBlind-specific provision (guide-communicators, intervenors) | 🟢 In progress |
 | 14 | Devices & technology, including AI (hearing aids, cochlear implants, AI sign-language translation, assistive/alerting tech) | 🟢 In progress |
+| 16 | End-of-life & palliative care (BSL and DeafBlind access to hospice/last-days care; DWP Special Rules for End of Life) | 🟢 In progress |
 
 ### Cluster B — Welfare, Benefits & Employment
 | # | Domain | Status |
@@ -58,6 +59,8 @@ Fifteen domains, grouped into five clusters. Each will eventually get its own br
 | 15 | Education, early years to higher education (Teacher of the Deaf workforce, BSL GCSE, SEND/EHCP system, Disabled Students' Allowance) | 🟢 In progress |
 
 **Note on Cluster E:** added after an initial gap in the framework — education access sits upstream of nearly every other domain. The language deprivation cited as a root cause in Domain 1's own health-access statistics traces directly back to early-years and school-age education failures, making this less a standalone topic than the foundation several other domains already assume.
+
+**Note on Domain 18:** deliberately split out from Domain 5 (Access to Work), which now also carries the national-DWP-level assessment/UC-digital/equality-wording material (PIP/AtW interpreter provision, DWP's own strategy documents). Domain 18 covers only what happens at a named local Jobcentre — a national policy document is evidence of capability, not of local practice, unless it names the specific office or booking.
 
 **Note on Domain 12:** this is explicitly a cross-cutting lens applied *within* each other domain (e.g., "how much of Access to Work's interpreter budget goes to agency margin vs. interpreter pay" is a Domain 5 + Domain 12 question), not a standalone pot of facts. Each domain briefing should include a "money trail" subsection addressing it directly.
 
@@ -130,6 +133,7 @@ Each `BSL_DOMAIN_<name>.md` should follow this structure so briefings are consis
 | `BSL-request-data-gap-tracker.docx` | FOI targets identified per domain feed into this tracker |
 | `BSL-FOI-companion-log.xlsx` | Tracks FOI requests arising from each domain briefing |
 | `bsl-access-register-status.md` (Claude project doc, not in this folder) | Domain 1 (NHS interpreter provision) is the direct evidence base underpinning that project's health-access focus. Supersedes an earlier reference to a `DEAF_NETWORK_HEALTH_SUMMARY.md` file that was never created in this folder. |
+| `prompts/SuperGrok_Research_Prompt_Pack.md` | The master prompt-numbering index for every SuperGrok research batch across this project (see that file's own index table) — check it before issuing a new numbered batch of prompts for any domain. |
 
 ---
 
@@ -151,8 +155,9 @@ Each `BSL_DOMAIN_<name>.md` should follow this structure so briefings are consis
 14. 🟢 **In progress:** Domain 13 — Victims & prisoners (Deaf/DeafBlind access to justice)
 15. 🟢 **In progress:** Domain 14 — Devices & technology, including AI
 16. 🟢 **In progress:** Domain 15 — Education, early years to higher education
-17. 🟢 **Verification work is well underway, not a future priority.** Updated 7 Sep 2026. `VERIFICATION_STATUS.md` has grown from its original state to 50 numbered sections (Sections 19-50 added since this item was last written), covering direct primary-source verification across most domains, a new Domain 17 (Video Relay Service & Telecoms Equity, added 6 Sep 2026 and now the single most-verified domain in the project at 12+ research rounds plus multiple follow-up passes), corrections to fabricated or uncorroborated figures where found, and several genuine negative results (confirmed absences, not unresearched gaps) logged with the same discipline as positive findings. Two companion outputs — `bsl_dossier.html` and the published "BSL Access Register" artifact — are kept in sync with VERIFICATION_STATUS.md as each section lands, not just the domain files themselves. Remaining verification work is tracked as specific, dated follow-ups inside `VERIFICATION_STATUS.md`'s own sections (e.g. Section 44's ~Dec 2026 BSL GCSE re-check, Section 43's unconfirmed South East/South West Deaf CAMHS waiting-time data) rather than as a single undifferentiated backlog — check the tracker's own header line for the current running summary before assuming a domain is unverified.
-18. 🔴 Build `GEOMETRICMIND_PROJECT_INDEX.md` (previously flagged gap, still outstanding)
+17. 🟢 **In progress, added 8 September 2026:** Domain 18 — Jobcentre Plus (in-person/local service delivery). Built from a dedicated research pass (prompts 27-33). The two named legal/complaint cases (Rimmer, Clarke) and the DWP BSL 5-year plan were independently confirmed against primary sources the same day; several individual Parliamentary Questions cited in that pass were not yet re-verified (see the domain file's own Verification note).
+18. 🟢 **Verification work is well underway, not a future priority.** Updated 7 Sep 2026. `VERIFICATION_STATUS.md` has grown from its original state to 50 numbered sections (Sections 19-50 added since this item was last written), covering direct primary-source verification across most domains, a new Domain 17 (Video Relay Service & Telecoms Equity, added 6 Sep 2026 and now the single most-verified domain in the project at 12+ research rounds plus multiple follow-up passes), corrections to fabricated or uncorroborated figures where found, and several genuine negative results (confirmed absences, not unresearched gaps) logged with the same discipline as positive findings. Two companion outputs — `bsl_dossier.html` and the published "BSL Access Register" artifact — are kept in sync with VERIFICATION_STATUS.md as each section lands, not just the domain files themselves. Remaining verification work is tracked as specific, dated follow-ups inside `VERIFICATION_STATUS.md`'s own sections (e.g. Section 44's ~Dec 2026 BSL GCSE re-check, Section 43's unconfirmed South East/South West Deaf CAMHS waiting-time data) rather than as a single undifferentiated backlog — check the tracker's own header line for the current running summary before assuming a domain is unverified.
+19. 🔴 Build `GEOMETRICMIND_PROJECT_INDEX.md` (previously flagged gap, still outstanding)
 
 ## 8. Audience Map & Communications Strategy
 

@@ -1,8 +1,8 @@
 # Domain 5: Access to Work (DWP)
 
-**Last verified:** 4 September 2026
+**Last verified:** 8 September 2026
 **Re-check cadence:** Quarterly, or on any DWP backlog/funding-cap announcement
-**Confidence level:** Medium (figures trace to NAO/PAC/Commons Library and a named charity survey, but this session's pass is a Grok cross-check — none of the underlying PDFs have been opened directly yet; see Verification Status)
+**Confidence level:** Medium-High (core AtW/NAO/Rimmer figures independently confirmed 8 Sep 2026 by opening the primary sources directly — see Verification note at the end of this file. Employer-survey and business-case figures remain Lead-only per the previous pass.)
 
 ---
 
@@ -105,6 +105,31 @@ The Employer Awareness section above establishes that most employers don't know 
 
 ---
 
+## National DWP Accessibility: Assessments, UC Digital Services, and Equality Wording
+
+Added 8 September 2026 from a dedicated national-DWP research pass (prompts 20-26, distinct from the Jobcentre Plus floor-level findings now in Domain 18). This section covers ground AtW's own scheme performance does not: whether DWP provides BSL interpreters at PIP/ESA/UC assessments, whether DWP's digital services are BSL/DeafBlind-accessible, and how DWP's own equality strategy documents name (or fail to name) BSL and Deaf/DeafBlind people.
+
+**Headline:** DWP does not operate under the NHS/social-care Accessible Information Standard (AIS) — the applicable duty is Equality Act 2010 ss.20-21 (reasonable adjustments) and s.149 (PSED), plus the Public Sector Bodies Accessibility Regulations 2018 for digital services. Treat any claim that AIS applies to DWP as a citation error, not a finding — this project's own reminder to Grok for this batch flagged exactly that risk in advance.
+
+| Figure | Source | Date |
+|---|---|---|
+| No statutory guarantee of a BSL interpreter at a PIP/ESA/UC assessment. Customer must tell Jobcentre Plus/DWP before the interview if they want one (BSL, lipspeaker, or Deafblind interpreter listed as types) | DWP IB reassessment factsheet (stale but still live) | 5 Aug 2020 |
+| Last named language-services contractor: DA Languages Ltd ("Dals"), CCS RM6141 Lot 1, £13.1m. Historic F2F supplier before this was thebigword, to June 2022 (confirmed directly in the Rimmer judgment, see below) | FOI 59700; Contracts Finder; Rimmer ET judgment | Various |
+| Inbound-only Video Relay Service to DWP via InterpretersLive! (Dals-contracted). Claimant calls in on their own device; not a three-way in-person assessment booth unless separately booked | Dals DWP VRS page; GOV.UK contact pages | Current |
+| No standalone DWP "BSL users at PIP/WCA" assessment protocol found beyond the generic reasonable-adjustments list (interpreter, loop, private room, home visit) | GOV.UK accessibility needs page | — |
+| No AIS-equivalent obligation on DWP. DWP digital services (UC journal, telephony) sit under PSBAR 2018 and the Equality Act, not AIS (AIS is NHS/adult social care, DAPB4019) | DAPB4019; PSBAR 2018 | — |
+| UC journal: front-end GOV.UK pages carry WCAG 2.2 AA statements, but no published independent audit confirms the signed-in UC journal itself is usable in BSL or with a refreshable braille display | DWP accessibility statements | Oct 2025 (tested) |
+| Textphone access removed from the GOV.UK accessibility-needs page on 30 September 2025 ("Relay UK can be used instead") | GOV.UK update | 30 Sep 2025 |
+| No official DWP data breaks out PIP award rates, under-award patterns, or appeal/tribunal outcomes by deafness, BSL use, or DeafBlind status — this absence is the headline finding for PIP specifically (consistent with Domain 4's own existing "no reliable figure found" conclusion) | PIP official statistics series | — |
+| DWP equality objectives 2023-25 name "disabled people," "disabilities and health conditions," and "disability employment gap" — BSL, Deaf, DeafBlind, and hearing impairment are not named anywhere in the six objectives | gov.uk DWP equality-and-diversity page | — |
+| The DWP BSL 5-year plan (21 Jul 2025) is the first DWP strategy document located that names "BSL users" as a distinct group — confirmed directly by opening the plan: "Within 2 years we will introduce video communications technology to improve access to BSL interpreters for all our customers," and a commitment to train colleagues in D/deaf awareness "starting with Disability Employer Advisers, then moving on to Work Coaches and Operational Delivery Colleagues," with all DWP colleagues trained by end of year 5 | DWP British Sign Language 5-year plan, gov.uk | Published 21 Jul 2025; last updated 13 Aug 2026 |
+
+**Known gap carried into this section:** no official FTA/sanction count exists coded specifically to "missing BSL interpreter" or "DeafBlind communication failure" as the recorded reason. Advocacy-sourced cases (Sense, RNID, SignHealth) document individual failures but there is no DWP-published sanctions series broken out this way — log as a standing FOI target rather than filling with an advocacy estimate.
+
+**Cross-reference:** the in-person Jobcentre Plus equivalent of this section — booking practice at the desk, work coach training, physical/DeafBlind premises access, and the six SWL borough Jobcentres — is now Domain 18 (`BSL_DOMAIN_jobcentre_plus.md`), split out deliberately because national policy is not evidence of local practice.
+
+---
+
 ## Key Organisations & Actors
 
 - **DWP (Department for Work and Pensions)** — administers AtW; subject of the NAO report and PAC inquiry
@@ -190,3 +215,5 @@ AtW is a discretionary, demand-led DWP grant scheme, not a statutory entitlement
 *Cross-references: Domain 14 (Devices & technology — equipment funding overlap), Domain 12 (Waste vs. grassroots — processing delay as a form of money not reaching claimants), Domain 4 (PIP/DLA — contrast between AtW's discretionary cap and PIP's statutory award structure).*
 
 *Note on sourcing this pass: the scheme-performance figures (cap, backlog, processing time) were built from a single Grok/SuperGrok cross-check response. The Employer Awareness & Compliance section was added from a second Grok pass citing the DWP Employer Survey 2024 (IFF Research) directly by name, publication date, and base size — a genuinely strong tier-1 source per the framework's hierarchy. The Business Case section was added from a third Grok pass; its strongest citation is the *Rimmer v SSWP* Employment Tribunal judgment, a genuine primary legal document (a published GOV.UK judgment PDF), while the MoJ tribunal award statistics and the Womble Bond Dickinson Vento-bands factsheet are both well-identified, dated, named sources. None of these three passes have had their primary documents independently opened by a team member yet. Per the framework's verification discipline, every figure here should be treated as 🟡 Lead-only (or 🟠 Advocacy-estimate for the RNID/DeafATW/Sense/manager-attitude survey figures) until someone on the team opens the cited documents directly — see VERIFICATION_STATUS.md. The *Rimmer* judgment PDF and the DWP Employer Survey 2024 are the two fastest Lead-only → Confirmed upgrades in this domain, since both are single, well-identified, primary documents rather than secondary reporting.
+
+**Verification update, 8 September 2026:** the following were independently opened and confirmed directly this session (not just cited): (1) NAO *The Access to Work scheme* summary PDF — confirmed the £90.3m/28% Deaf-or-HoH spend figure and the 109-working-day average processing time against DWP's 25-day target; (2) DWP Access to Work statistics April 2007-March 2025 detailed release — confirmed 3,210 BSL Interpreter customers (16% of Support Worker payments), 4,980 Deaf/HoH customers (8% of element recipients), £90.3m/28% spend, and £16,900 average annual Deaf/HoH payment, all matching exactly; (3) the Rimmer v SSWP Employment Tribunal judgment PDF itself — confirmed the £49,880 total award, the Park Place (Leeds) location, the "blind to the claimant's disability" finding, the DEA's "failed to engage and complained about multiple provision" quote, the November-December 2017 sanction dates, thebigword as supplier 2017-June 2022, and the judge's deaf-awareness training order; (4) the DWP BSL 5-year plan itself — confirmed the 2-year video-communications commitment and the DEA-first training sequence. These four are now upgraded from 🟡 Lead-only to ✅ Confirmed. The employer-survey and business-case figures were not re-verified this pass and remain at their previous status.
