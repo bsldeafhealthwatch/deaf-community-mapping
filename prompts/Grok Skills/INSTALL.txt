@@ -1,0 +1,7 @@
+Grok install (done 10 Sep 2026): /home/workdir/.grok/skills/grok-research-prompt-batch/
+
+Claude install: upload this folder as a project skill (SKILL.md + references/).
+Claude save path stays project docs (grok-prompts-<topic>.md / grok-findings-<topic>.md).
+Grok save path stays artifacts/<Topic>-prompt-NN-slug.md and artifacts/<Topic>-prompts-NN-NN-claude-feedback.md.
+
+Do not invent a claude/ folder inside the Grok artifacts workspace.

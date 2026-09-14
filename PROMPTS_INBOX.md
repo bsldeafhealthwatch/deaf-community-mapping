@@ -30,4 +30,6 @@ A running log of research questions and prompts the team has sent Graeme, to be 
 
 -->
 
-*(nothing completed yet)*
+### 2026-09-09 — from Graeme
+**Prompt:** BSL rights for pensioners, care homes, etc. Flagged that it can be incredibly lonely for Deaf elders, who often don't have access or can't travel.
+**Outcome:** Drafted as Grok prompts 66-71 in `claude/grok-prompts-elderly-deaf.md` (Claude project doc), indexed in `prompts/SuperGrok_Research_Prompt_Pack.md`. Covers DWP Pension Service/Pension Credit access, Care Act assessments & CQC care-home BSL provision, loneliness/isolation research, transport/mobility barriers, international comparisons, and lived experience. Not yet run through Grok or verified — next step is pasting into SuperGrok and reviewing findings before anything goes into the dossier.
