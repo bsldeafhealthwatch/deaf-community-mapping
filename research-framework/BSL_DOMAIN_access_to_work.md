@@ -154,7 +154,7 @@ AtW is a discretionary, demand-led DWP grant scheme, not a statutory entitlement
 
 ## Known Gaps & Contested Figures
 
-- **Funding cap: £69,260 vs £69,620.** NAO/Commons Library state £69,260; RNID's own DeafATW survey report states £69,620. Both are described as the 2025-26 figure — this needs resolving against DWP's own primary factsheet before either number is used publicly.
+- ~~**Funding cap: £69,260 vs £69,620.**~~ **Resolved (VERIFICATION_STATUS.md Section 34, 6 Sep 2026):** £69,260 confirmed directly against DWP's own live GOV.UK cap table, which already includes 2025-26 and 2026-27 unchanged from 2024/25. RNID/DeafATW's £69,620 figure could not be found anywhere in this pass and should be treated as unsourced/possibly fabricated, not a competing official figure.
 - **No published BSL-only share of the £227m support-worker spend line.** The NAO breaks out "deaf/HoH condition category" spend (£90m) and "support-worker" spend (£227m, which includes both interpreters and non-BSL job aides) as two different, overlapping cuts of the data — there is no single confirmed "AtW spend on BSL interpreters" figure.
 - **No BDA- or NDCS-specific statistical brief on AtW** was located in this pass beyond the RNID/DeafATW survey and PAC written evidence — worth checking directly with BDA/NDCS whether one exists.
 - DWP's own claimed outcomes (payment delays "eliminated," 96% of urgent cases cleared within 28 days) are self-reported in a press release, not yet independently audited by NAO/PAC — treat as a DWP claim, not a confirmed outcome, until a follow-up NAO/PAC review appears.
@@ -174,7 +174,7 @@ AtW is a discretionary, demand-led DWP grant scheme, not a statutory entitlement
 
 ## FOI Targets Arising
 
-1. **DWP** — the confirmed, current-year funding cap figure (resolving the £69,260 vs £69,620 discrepancy) and its methodology for setting/reviewing the cap against interpreter fee inflation
+1. **DWP** — trace the origin of RNID/DeafATW's £69,620 (2025-26) cap figure, which does not appear in DWP's own live cap table (confirmed £69,260) or in NAO/Commons Library reporting; also DWP's methodology for setting/reviewing the cap against interpreter fee inflation
 2. **DWP** — a breakdown of the £227m support-worker spend line separating BSL interpreter costs from other job aides/support workers
 3. **DWP** — current (post-May-2026-announcement) backlog and average processing time figures specifically for deaf/HoH claimants, to test whether the staffing surge is closing the gap for this group specifically
 4. **DWP** — independent verification data behind the claimed "96% of urgent cases cleared within 28 days" figure
