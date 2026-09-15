@@ -1225,6 +1225,9 @@ let audienceData = {charities:[], business:[], policymakers:[], media:[]};
 let rightsData = [];
 let currentFilter = 'all';
 let openDomainId = null;
+// Labels (as "domainId::label") the team has explicitly deleted, so a
+// later code-side sync never resurrects a figure they removed on purpose.
+let deletedFigureLabels = new Set();
 
 // ---------------- STORAGE ----------------
 // This dossier is a standalone HTML file — it has no server and no shared
@@ -1250,23 +1253,108 @@ window.storage = {
   }
 };
 
+// A figure's identity is its label (verified unique within a domain in the
+// shipped data) -- not its full content -- so a code-side wording correction
+// to an existing fact can be told apart from an unrelated new fact.
+function figuresEqual(a, b){
+  return a.label === b.label && a.value === b.value && a.source === b.source &&
+    a.sourceUrl === b.sourceUrl && a.lastVerified === b.lastVerified && a.status === b.status;
+}
+
+// Three-way merge of one domain's figures: saved (this browser's current
+// copy, may include local edits/additions/deletions), oldDefaults (the
+// code-shipped figures as of the last successful sync -- absent on a
+// browser's first-ever load), newDefaults (the code-shipped figures now),
+// tombstones (labels this browser's team has explicitly deleted for this
+// domain -- never resurrected even if code re-ships that label).
+//
+// Rule: a figure the team never edited since last sync (still byte-identical
+// to oldDefaults) tracks the code -- it disappears if code removed it, and
+// its wording updates if code corrected it. A figure the team edited, or
+// added under a label the code doesn't know, is always kept exactly as the
+// team left it -- a simultaneous code-side change to the same label is never
+// applied over a local edit. A genuinely new code label not seen in this
+// browser's saved copy is appended, unless the team has tombstoned it.
+function mergeDomainFigures(saved, oldDefaults, newDefaults, tombstones){
+  const savedFigs = saved || [];
+  const oldByLabel = new Map((oldDefaults || []).map(f => [f.label, f]));
+  const newByLabel = new Map((newDefaults || []).map(f => [f.label, f]));
+  const stones = tombstones || new Set();
+
+  const result = [];
+  const seenLabels = new Set();
+
+  savedFigs.forEach(f => {
+    seenLabels.add(f.label);
+    const oldVer = oldByLabel.get(f.label);
+    if(!oldVer){
+      // No prior-sync record under this label -- a team addition (or, on a
+      // first-ever load with no oldDefaults at all, just keep what's saved).
+      result.push(f);
+      return;
+    }
+    const teamTouched = !figuresEqual(f, oldVer);
+    if(teamTouched){
+      result.push(f); // team edit always wins, never silently overwritten
+    }else{
+      const newVer = newByLabel.get(f.label);
+      if(newVer) result.push(newVer); // untouched -- track the code's current version
+      // else: code removed this figure and the team never touched it -- let it drop.
+    }
+  });
+
+  (newDefaults || []).forEach(f => {
+    if(!seenLabels.has(f.label) && !stones.has(f.label)) result.push(f);
+  });
+
+  return result;
+}
+
+function mergeDomainsWithDefaults(saved, oldDefaultsList, newDefaultsList, tombstoneSet){
+  const oldById = new Map((oldDefaultsList || []).map(d => [d.id, d]));
+  const newById = new Map(newDefaultsList.map(d => [d.id, d]));
+  const savedIds = new Set(saved.map(d => d.id));
+  const merged = saved.map(d => {
+    const newD = newById.get(d.id);
+    if(!newD) return d; // domain removed from code -- leave the team's copy alone
+    const domainTombstones = new Set(
+      [...tombstoneSet].filter(t => t.startsWith(d.id + '::')).map(t => t.slice(d.id.length + 2))
+    );
+    return Object.assign({}, newD, {
+      figures: mergeDomainFigures(d.figures, oldById.has(d.id) ? oldById.get(d.id).figures : null, newD.figures, domainTombstones)
+    });
+  });
+  // Wholly new domains the code has added.
+  newDefaultsList.forEach(d => {
+    if(!savedIds.has(d.id)) merged.push(d);
+  });
+  return merged;
+}
+
 async function loadData(){
   try{
     const res = await window.storage.get('domains', true);
-    domainsData = JSON.parse(res.value);
-    // Migration: add any domains defined in code that aren't in saved data yet,
-    // without touching or reordering anything the team has already edited.
-    const existingIds = new Set(domainsData.map(d => d.id));
-    const newOnes = DEFAULT_DOMAINS.filter(d => !existingIds.has(d.id));
-    if(newOnes.length > 0){
-      domainsData = domainsData.concat(newOnes);
-      await window.storage.set('domains', JSON.stringify(domainsData), true);
-    }
+    const saved = JSON.parse(res.value);
+    let oldDefaults = null;
+    try{
+      const snap = await window.storage.get('defaults-snapshot', true);
+      oldDefaults = JSON.parse(snap.value);
+    }catch(e){ /* no snapshot yet — first load since this merge logic shipped */ }
+    try{
+      const delRes = await window.storage.get('deleted-figures', true);
+      deletedFigureLabels = new Set(JSON.parse(delRes.value));
+    }catch(e){ /* no tombstones recorded yet */ }
+
+    domainsData = mergeDomainsWithDefaults(saved, oldDefaults, DEFAULT_DOMAINS, deletedFigureLabels);
+    await window.storage.set('domains', JSON.stringify(domainsData), true);
+    await window.storage.set('defaults-snapshot', JSON.stringify(DEFAULT_DOMAINS), true);
+
     document.getElementById('sync-status').textContent = 'Loaded — edits save to this browser only';
   }catch(e){
     domainsData = DEFAULT_DOMAINS;
     try{
       await window.storage.set('domains', JSON.stringify(domainsData), true);
+      await window.storage.set('defaults-snapshot', JSON.stringify(DEFAULT_DOMAINS), true);
       document.getElementById('sync-status').textContent = 'Loaded — edits save to this browser only (initialised)';
     }catch(e2){
       document.getElementById('sync-status').textContent = 'Could not load saved data — changes will not save';
@@ -1805,7 +1893,14 @@ function renderFigures(d){
       const i = btn.dataset.delete;
       const d = domainsData.find(x => x.id === openDomainId);
       if(!confirm('Delete this figure? This cannot be undone.')) return;
+      const deleted = d.figures[i];
       d.figures.splice(i, 1);
+      // Record a tombstone so a future code-side sync doesn't resurrect a
+      // figure this browser's team deliberately removed.
+      if(deleted && deleted.label){
+        deletedFigureLabels.add(d.id + '::' + deleted.label);
+        await window.storage.set('deleted-figures', JSON.stringify([...deletedFigureLabels]), true);
+      }
       await saveDomains();
       renderFigures(d);
       renderDomainGrid();
