@@ -82,3 +82,44 @@ There is no single statutory requirement mandating which register(s) a public bo
 *Cross-references: Domain 3 (DeafBlind-specific provision — same 19-vs-8 contested figure), Domain 7 (Legislation — same £15k funding figure), Domain 1 (NHS interpreter provision — the 20.6%/7.65% healthcare/mental-health interpreter willingness figures), Domain 2 (Mental health services — 7.65% figure again in context).*
 
 *Note on sourcing this pass: built from a single Grok/SuperGrok cross-check response. NRCPD's own register page is close to a primary source (it's the regulator's own published data), but it is an undated live snapshot rather than a dated report — note the retrieval date, not a publication date, when citing it. Treat everything else here as 🟡 Lead-only until independently opened. See VERIFICATION_STATUS.md.*
+
+
+---
+
+## ✅ New (15 September 2026): Independent review of Grok prompts 81–83 — voluntary-register gate re-verified, RIDB regional gap confirmed
+
+Closes the gap between this domain file (last touched 4 September 2026) and the dossier, which already carries the 19-nationally RIDB figure and cap figures from this week's batches. This section adds the regulatory-architecture layer plus the corrected numbering/cross-reference history.
+
+**Batch scope:** prompts 81–83 — NRCPD/RBSLI regulatory status, agency procurement model, workforce sufficiency and reform.
+
+**Independent spot-check (13 September 2026), both claims holding verbatim:**
+
+1. **NRCPD registration-figures table**, fetched live: Sign Language Interpreter **1,664**; Deafblind Interpreter **19**, with East Midlands, South West, and Yorkshire and The Humber all showing no registrants; page's own dual-registration caveat confirmed verbatim ("The total includes dual registrations"). A later re-check on 14 September 2026 (DeafBlind-adjustments batch) found the RIDB total still **19** with the same regional pattern, and RSLI still **1,664** — consistent across both passes.
+2. **NRCPD statutory-regulation page**, fetched live: NRCPD holds "voluntary Registers," not a statutory one; statutory regulation is described by NRCPD itself as a "long term aim" with "we are not going to set a timescale for achieving it" and NRCPD does "not know how long it will take, or even if we will achieve it." **This is the gate claim the whole domain depends on and it holds.** There is no UK statute making unregistered BSL interpreting a criminal offence.
+
+**Don't list (binding):**
+- Do not write "using an unregistered interpreter is illegal" — not a criminal offence under any UK statute found.
+- Do not write "NRCPD is the statutory regulator" — it is a charity/company (charity 1170904 England & Wales, SC051776 Scotland) holding voluntary registers with no published statutory timetable.
+- Do not write "there are now 68 RIDB" — 68 is the GOV.UK 23 June 2026 grant *target*; the live table on both 13 and 14 September 2026 still shows **19**.
+- Do not add NRCPD category totals together to produce a unique-person headcount — the table's own caveat states duals are included.
+- Do not reprint RBSLI "52" from a 2019 academic paper as current — no 2025–26 RBSLI headcount was found.
+- Do not write "Ofqual licenses BSL interpreters" — Ofqual regulates Signature as an awarding body and the INTRA6 qualification; NRCPD registration is a separate, second gate.
+- Do not write that the AIS/Equality Act duty "transfers" to the agency when a booking fails — SC12.3 binds the NHS Provider; the Equality Act binds the service the patient is trying to use.
+- Do not print RM6302 Lot 4 unit rates or invent a CCS BSL hourly rate — Framework Schedule 3 is not public.
+- Do not print *Locked Out*'s "92% fulfilment KPI" as an official CCS figure — it is the Board's own description, not confirmed on the public CCS page.
+- Do not print an official interpreter-to-Deaf-population ratio — none exists; the ~1:60 figure already in this file's Key Figures table is a researcher-derived ratio from two different denominators, not a published standard.
+- Do not print "20.6% accept healthcare work / 7.65% accept mental health work" as NRCPD administrative data — it is *Locked Out*'s own Board-cited percentage, not independently re-opened.
+- Do not claim England has a funded general-RSLI workforce plan — the only named growth funding is the £15,000 RIDB competency-assessment grant; nothing equivalent exists for the general Sign Language Interpreter register.
+
+**What this changes / what it doesn't:** this batch does not resolve the 19-vs-8 Deafblind interpreter discrepancy already logged as contested in this file (see Known Gaps below) — it independently re-confirms the live 19 figure on a second date, strengthening rather than closing that contested-figure entry. It is distinct from AIS 34–37 (the legal duty itself, already sourced separately) and from VRS-Telecoms (a fully closed, separately reviewed domain as of 14 September 2026 — do not treat this batch as extending it).
+
+**Numbering correction carried into this file:** a prior self-review (dated 10 September 2026) referenced a lived-experience follow-up as "prompt 85" — this is now known to be stale. The master index's next free prompt number as of 14 September 2026 is 165 (VRS-Telecoms closed at 164). If a lived-experience leg for interpreter regulation is ever run, it must be issued fresh from 165+, not 85 — 85 was independently issued to the Neurodivergence batch.
+
+**What actually closes the gap (ranked):**
+1. Fold into the existing FOI companion log — do not build a dedicated interpreter-regulation FOI wave. At most: named SWL/SEL trusts + ICB on last-FY BSL bookings requested/fulfilled/cancelled by supplier; NRCPD via right of reply on a unique-person count by category/nation at a stated date and complaints received/closed/sanctioned 2023–25; CCS or one ICB on whether a BSL-specific fulfilment KPI exists in RM6302 Lot 4.
+2. Link the live resources — NRCPD/RBSLI/SRLPDC register-check tools, NRCPD's concerns/complaints page, PALS/PHSO escalation path.
+3. A dated stub only, updated with the 13–14 September 2026 spot-check figures, superseding the 4 September 2026 snapshot in this file's Key Figures table where they've moved (RIDB 19 unchanged; the file's existing £15k/8→68 figures remain accurate and unchanged).
+
+**Sources:** nrcpd.org.uk/registration-figures (fetched 13 and 14 Sep 2026); nrcpd.org.uk/statutory-regulation (fetched 13 Sep 2026); GOV.UK 23 June 2026 Deafblind interpreter funding announcement; AIS 1.32 / NHS Standard Contract SC12.3 (already sourced in the AIS domain file, applied not re-sourced here).
+
+*Cross-reference: dossier `bsl_dossier.html` DeafBlind-adjustments entries (14 Sep 2026) independently re-confirm the same RIDB 19 / regional-zero figures from a different batch on the same date — both are consistent.*

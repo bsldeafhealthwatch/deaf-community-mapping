@@ -73,3 +73,45 @@ No dedicated legislation or national policy specific to Deaf-neurodivergent dual
 *Cross-references: Domain 2 (Mental health services — SignHealth overlap), Domain 15 (Education — SEND/EHCP system for children with additional needs), Domain 1 (NHS interpreter provision — general accessibility framing).*
 
 *Note on sourcing this pass: built from a single Grok/SuperGrok cross-check response. This is the thinnest-evidenced domain in the project — almost every figure here is either "no reliable figure found" or an inference rather than a directly stated fact. Treat everything as 🟡 Lead-only at best, and flag this domain internally as a research priority rather than a source of public-facing figures until primary sources are opened. See VERIFICATION_STATUS.md.*
+
+
+---
+
+## ✅ New (15 September 2026): Independent review of Grok prompts 85–91 — verdict confirmed, two figures held open
+
+Closes the gap between this domain file (last touched 4 September 2026) and the dossier's Neurodivergence Overlap entries, which were already updated this week from the same batch. This section adds the fuller research-framework layer — sourcing, Don't list, and FOI plan — that the dossier's headline figures summarise.
+
+**Batch scope:** prompts 85–91, the Deaf/BSL × autism/ADHD/dyslexia intersection across all ages. This batch supersedes an earlier lettered placeholder (B3) that was never run as a numbered batch and had left zero prior findings in this project.
+
+**Independent spot-check (14 September 2026) of the two most load-bearing claims:**
+
+1. **NHS England autism waiting-list statistics** — 270,701 open suspected-autism referrals as of March 2026, 89.7% (242,708) open 13+ weeks, published 14 May 2026 — **confirmed verbatim** against the NHS Digital "Autism Statistics, April 2025 to March 2026" publication's own Key Facts section. General-population pathway; **no Deaf/BSL split exists**.
+2. **BSL Advisory Board *Locked Out* report** (published 27 Nov 2025) — existence and publication date confirmed; general framing (gaps in specialist mental-health provision, no specialist ADHD/autism pathway for BSL users) corroborated by secondary coverage. **The two specific statistics attributed to it — "30–40% additional disabilities among people deaf from an early age" and "3.5% of autistic children are deaf" — could not be independently located** in the fetched excerpt or in secondary summaries. This does not mean the figures are wrong; it means they remain **open pending a direct read of the source PDF**, not a fetch-tool excerpt. Do not treat either figure as settled.
+
+**Confirmed absence, stated as the finding, not a gap:** there is no official UK figure for how many Deaf BSL-users are autistic or have ADHD, and no mandated combined diagnostic pathway. CRIDE's 24% "additional needs" rate for deaf children (12,844 of 53,225 under-20s) is the nearest published child statistic, and it is **not** autism-split or BSL-split — do not present it as a neurodivergence prevalence figure. Childhood assessment can go through National Deaf CAMHS/NDCAMHS; an adult BSL-led neurodevelopmental pathway is a *Locked Out* policy ask, not a live service.
+
+**Don't list (binding, from the source review — reprinted here for this file's own use):**
+- Do not print an official UK autism/ADHD/dyslexia rate among Deaf BSL-users — none exists.
+- Do not print *Locked Out*'s 30–40% or 3.5% figures as settled — both remain contested pending direct confirmation against the source PDF.
+- Do not print international prevalence figures (US 1–2% ASD-in-deaf-children, IDEA "Deaf Plus," NDIS lists, Kentalis) as UK facts.
+- Do not print an enforceable right to a combined or BSL-specific assessment pathway, or describe current pathways as unlawful — no statute, regulation, NICE "must," or judgment creates one.
+- Do not print NICE CG128/NG87 as a BSL-fluent-assessor mandate — CG128 requires access to skills for severe hearing impairment; NG87 lists hearing problems as a factor to account for. Neither names BSL.
+- Do not print the ADOS-2/ADI-R/SRS-2 Deaf adaptations as a commissioned national service — validated research instruments from one MRC-funded programme (UKRI MR/K015435/1) explicitly not provided to others.
+- Do not print an adult NHS or private BSL autism/ADHD pathway as existing.
+- Do not print "DeafDisabled" as a NICE/NHS England/GOV.UK term.
+- Do not print AtW as two grants or two caps for a compound Deaf-plus-neurodivergent need — one grant, separate tariffs, one cap (£69,260, frozen to 31 March 2027).
+- Do not print Oliver McGowan training or the Queen Square clinic (median age 71.5, dementia) as Deaf+autism services.
+- Do not generalise two NDCS family accounts, one Scottish judgment, and one video into a survey-level claim about how families experience the system.
+
+**What this changes / what it doesn't:** this section does not create a new legal duty or pathway — it documents that none is mandated. It is distinct from Domain: Deaf-older (no neurodivergence angle), CODA (Deaf-of-Deaf/hearing-of-Deaf children, not neurodivergent Deaf children), AIS (contact-method flags, not diagnostic tooling), and Access to Work/PIP general material (Deaf-specific but not the compound need).
+
+**What actually closes the gap (ranked):**
+1. FOI, folded into the existing companion log — not a new tracker: ICBs/mental-health trusts on whether a BSL-fluent (not interpreter-mediated) adult autism/ADHD assessment pathway is offered and how many such assessments ran in 2024/25; NDCAMHS providers on occupancy/wait times; the six SWL local authorities on EHCPs where deafness and autism/ADHD both appear.
+2. Link the live resources — NDCS *Deafness and autism*; *Locked Out* full report on GOV.UK; AtW BSL Adjustments Planner; NDCAMHS/Deaf CAMHS local pages (re-open before linking; team count is contested across sources — three regional descriptions do not agree).
+3. A dated stub only, no new domain page or campaign material.
+
+**Still open, not closed by this batch:** the *Locked Out* 3.5% and 30–40% footnotes (need the actual PDF, not a fetch tool); whether SignHealth's BSL therapy service accepts a primary presenting problem of autism/ADHD; BSMHD (charity 1057135) current activity status (last clearly dated activity: May 2021 AGM); NDCAMHS's actual current team count (three sources disagree: ten centres per research papers, four regional teams plus one inpatient unit per *Locked Out*, three Northern sites per the MFT page).
+
+**Sources:** NHS Digital, *Autism Statistics, April 2025 to March 2026* (Key Facts, confirmed verbatim 14 Sep 2026); GOV.UK, *Locked Out: BSL user experience of health and social care in the UK* (27 Nov 2025); CRIDE 2025 UK-wide summary (BATOD); NDCS *Deafness and autism* (last reviewed May 2025); AtW BSL Adjustments Planner (27 Nov 2024).
+
+*Cross-reference: dossier `bsl_dossier.html` Neurodivergence Overlap section, updated 5 Sep 2026 with the CRIDE and *Locked Out* headline figures — this section supplies the fuller sourcing, spot-check record, and Don't list behind those same figures; no new figures are being introduced that the dossier does not already carry.*

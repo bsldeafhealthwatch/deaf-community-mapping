@@ -104,3 +104,43 @@ Direct primary-source retrieval (not a Grok cross-check) of Sense's own "Deafbli
 *Cross-references: Domain 8 (Interpreter regulation — same 19-vs-8 contested figure, full NRCPD/SRLPDC/RBSLI picture), Domain 7 (Legislation — same £15k funding figure, Care Act 2014 gap flagged there too), Domain 5 (Access to Work — deafblind claimants likely bundled into the £90m deaf/HoH spend figure).*
 
 *Note on sourcing this pass: originally built from a single Grok/SuperGrok cross-check response (structural finding and interpreter-count figures — still 🟡 Lead-only / contested, per the framework's discipline). Updated 5 September 2026 with direct primary-source retrieval (Sense's own statistics page; Deafblind UK's own Aug 2025 impact report) — the 450,000 population figure's methodology and the impact-report activity figures are now ✅ Confirmed as correctly attributed to their named sources, though the 450,000 figure itself remains a 2017-vintage model, not a fresh count. See VERIFICATION_STATUS.md.*
+
+
+---
+
+## ✅ New (15 September 2026): Workplace adjustments — Grok prompts 115–120 (DeafBlind Adjustments batch)
+
+This domain file's existing content (last verified 5 September 2026) covers health-side DeafBlind provision — equipment schemes, local-authority commissioning, population figures. This section adds the **in-post workplace adjustment** layer, which is a distinct pipeline stage: tactile/deafblind-manual/visual-frame interpreting, guide-communicator support, assistive kit, and day-to-day navigation for an employed DeafBlind person, as opposed to community/social-care support. It does not duplicate the health-side material above.
+
+**Independent spot-check (14 September 2026), both holding:**
+
+1. **NRCPD RIDB live total re-confirmed**: **19** nationally on 14 September 2026, same regional pattern already logged above (London 1, South East 3, West Midlands 4, North West 3, Scotland 3, East of England 2, North East 1, Wales 1, Northern Ireland 1 — East Midlands, South West, and Yorkshire and The Humber at zero). RSLI total confirmed at 1,664. The register's overall total showed some live drift (2,217 vs 2,089 three days earlier) — a plausible live-counter movement, not a contradiction.
+2. **AtW annual cap** re-checked directly against the House of Commons Library briefing SN06666: "The cap of £69,260 has not increased from 2024/25 to 2026/27" — confirms the freeze through FY2026/27 already stated in this file.
+
+**Headline finding:** a DeafBlind employee's workplace adjustment is not the same product as a BSL interpreter for a hearing-sighted Deaf colleague. RIDB is a two-digit national bench, distinct from the RSLI register. Communicator-guide is a job, not an NRCPD category. Access to Work can fund a Support Worker or Travel Buddy for a DeafBlind employee and has **no separate DeafBlind tariff** — the cap is one number (£69,260), the same figure that applies to a BSL award, and cost-share does not apply to support workers. There is no official count of DeafBlind people in employment.
+
+**Don't list (binding):**
+- Do not print current AtW funding levels or absence of DeafBlind-specific guidance as unlawful discrimination without a named statute, regulation, or judgment.
+- Do not print "unregistered guide-communicator = illegal" — CG is not an NRCPD category; absence of a category is not a criminal offence.
+- Do not print **8 RIDB** as current — that is the Feb 2025/Jun 2026 government baseline. The live table (14 Sep 2026) is **19**.
+- Do not print **68 RIDB** as delivered — that is the £15k competency-grant aspiration, not a headcount reached.
+- Do not add Scotland's SRLPDC count (2 Deafblind Manual + 1 Guide Communicator) onto the NRCPD 19 — different registers, possible dual registration.
+- Do not print a separate AtW "RIDB hourly band" — none is published; the closest published band is BSL (National £26–£47 / London £30–£52).
+- Do not print the cap as any figure other than **£69,260** — do not repeat a printed £69,620 typo seen elsewhere.
+- Do not print cost-share as applying to support workers — the live employer factsheet puts support workers on the "consider up to 100%" list; only special aids/equipment and premises take the size-based cost share.
+- Do not print "HSE requires a workplace guide-communicator" — HSWA/MHSWR are general; HSE's disability pages do not mention deafblind, guiding, or workplace orientation.
+- Do not treat prompt 94's PEEP/lone-working/emergency-evacuation material as if it answers routine day-to-day navigation — different object.
+- Do not print Norway's uncapped NAV interpreter-guide hours, US SSP monthly caps, Australian EAF dollar caps, or NAATI RPDBI as UK rules — international context only.
+- Do not print a national "employers treat DeafBlind staff as Deaf" rate — the entire UK evidence base for that claim is two sources twelve years apart (Fletcher 2019; Sense 2014 written evidence ATW0075).
+- Do not use the ~125,000 modelled working-age Sense population figure as the denominator for the 19-person RIDB register — they describe different populations (mostly later-life acquired dual sensory loss vs. congenital/Usher/BSL-then-sight-loss).
+
+**What this changes / what it doesn't:** distinct from the health-side content in this file above (which covers community/social-care commissioning and the general 450,000/125,452 population figures). Distinct from Domain: Interpreter Regulation (does not re-argue whether NRCPD is a statutory regulator — treats the live RIDB column as a workforce fact). Distinct from Occupational Health/PEEP material (day-to-day navigation, not emergency evacuation). Distinct from HR/IT SLA material (this is the content of the adjustment request, not the speed of handling it).
+
+**What actually closes the gap (ranked):**
+1. FOI in the existing companion log: has the body received a request for RIDB/communicator-guide/workplace-navigation support as a reasonable adjustment in the last 24 months, and how many were fulfilled as requested vs. fulfilled with a BSL interpreter only vs. not fulfilled; does the interpreting contract name RIDB or deafblind-manual as a bookable product distinct from BSL.
+2. Link the live resources — NRCPD RIDB table (date-stamped on use); AtW staff guide/employer factsheet; ACAS reasonable adjustments; Sense's statistics page with the model sentence attached every time it's quoted.
+3. A dated stub only — a "three different people" (RSLI/RIDB/communicator-guide) explainer and a four-line AtW request sentence, after human sign-off. No rival Sense statistics page, no invented HSE protocol.
+
+**Sources:** NRCPD registration-figures table (fetched 14 Sep 2026); House of Commons Library briefing SN06666 (fetched 14 Sep 2026); AtW staff guide and employer factsheet; Sense, *Deafblindness statistics in the UK* (methodology already confirmed in this file's 5 Sep 2026 update above).
+
+*Cross-reference: dossier `bsl_dossier.html` DeafBlind-adjustments entries (14 Sep 2026) carry the same headline figures this section sources in full — RIDB 19/regional pattern, one AtW cap with no DeafBlind uplift, no official DeafBlind employment count.*

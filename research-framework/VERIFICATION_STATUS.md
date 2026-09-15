@@ -887,3 +887,42 @@ A dossier-vs-tracker gap audit flagged two loose ends this section closes.
 Neither case reaches this tracker's ✅ Confirmed bar in the strictest sense (a document opened and read directly this session) purely because of this environment's network policy, not because of any doubt raised about the claims — if anything, confidence rose, since the independent search pass surfaced substantially more narrative detail than either original citation carried, and none of it contradicted the domain file's existing figures. Rated 🟢 Corroborated rather than ✅ Confirmed or 🟡 Lead-only to distinguish this from an unconfirmed AI citation: it is safe to keep both figures in internal material and cite them with the "PHSO case, per its own case-summary page" attribution already used elsewhere in this project, but a manual direct-fetch pass (outside this restricted environment) should still be the first item in a future session before either goes on the public dossier as a bare fact.
 
 ---
+
+
+## 53. Domain 19 (new, CODA) and Domain 20 (new, Ageing/Later-Life) stood up; six domain files updated closing the week-long research-framework gap, 15 September 2026
+
+This entry documents the batch that closed the gap between `dossier/bsl_dossier.html` (updated 13–14 September 2026 with ~12 new research batches) and the `research-framework/` layer, which had not been touched for any of those batches — most files stale since 7–8 September, a full week before this entry. No live verification was re-run in this pass; this section documents what each batch's own independent review (dated 13–14 September 2026, filed in the Claude project under `claude/grok-findings-*.md`) had already confirmed, with the date each check was made.
+
+**New domain files created:**
+
+| File | Domain | Content | Spot-checks it carries forward |
+|---|---|---|---|
+| `BSL_DOMAIN_coda.md` | Domain 19 — CODA & Deaf-of-Deaf children | Population-definitions layer; explicitly not standardised as a public dossier page (cross-cut of AIS/safeguarding/SEND) | No live web spot-check in this batch — the finding is a confirmed absence (no UK headcount for either population), independently reviewed 10 Sep 2026 |
+| `BSL_DOMAIN_ageing_later_life.md` | Domain 20 — Ageing, retirement, later-life isolation | Standing-up checklist from the source review completed in full (title, Domain 16 boundary, six-line findings, ABSENT convention, FOI wave, four commissioning models, kill-switch note). Renumbered from the review's proposed "17" to "20" since 17 was already live (VRS-Telecoms, added 6 Sep 2026) | No live web spot-check in this batch — structural/absence findings independently reviewed 10 Sep 2026 |
+
+**Existing domain files extended with dated subsections:**
+
+| File | Addition | Spot-checks re-confirmed inline, with date |
+|---|---|---|
+| `BSL_DOMAIN_neurodivergence.md` | Grok prompts 85–91 independent review | NHS Digital autism waiting-list Key Facts (270,701 referrals, 89.7% over 13 weeks) confirmed verbatim 14 Sep 2026 against the primary publication; *Locked Out*'s 30–40%/3.5% figures explicitly left open pending the source PDF, not silently accepted |
+| `BSL_DOMAIN_interpreter_regulation.md` | Grok prompts 81–83 independent review | NRCPD registration-figures table (RIDB 19, RSLI 1,664, regional zero pattern) re-fetched live 13 Sep 2026; NRCPD statutory-regulation page ("voluntary Registers," no criminal offence) re-fetched live 13 Sep 2026 |
+| `BSL_DOMAIN_deafblind.md` | New "Workplace adjustments" subsection, Grok prompts 115–120 | RIDB 19 re-confirmed live 14 Sep 2026 (second independent re-check, same figure as the 13 Sep interpreter-regulation check); AtW cap £69,260 freeze re-checked directly against House of Commons Library briefing SN06666, 14 Sep 2026 |
+| `BSL_DOMAIN_welfare_employment_stubs.md` (new consolidated file) | Seven batches: recruitment-hiring (103–108), occupational health (92–96), HR/IT SLA (97–102), outsourced services (121–126), Chinese Walls/financial services (127–133), TUPE (158–163), grievance & escalation (109–114) | Each subsection's own spot-checks recorded inline with date — see file for the full per-subsection citation record. Highlights: Murphy v Sheffield Hallam EAT/6/99 verified against the primary BAILII transcript 14 Sep 2026 (not a secondary case note); Khan v Reed Talent Solutions judgment PDF read directly 14 Sep 2026, correcting a previously-propagated wrong date ("22 June 2023" → actual delivery evidence Aug–Oct 2023); FCA SYSC 10.2.2 R and UK MAR Art. 18 both re-fetched live 14 Sep 2026; AtW staff guide TUPE block browser-confirmed live 14 Sep 2026, correcting a stale "13 Nov 2025" update-date citation to the page's actual timestamps (18 Jun 2026 / 4 Sep 2026); Acas employment-tribunal time-limits and EC-notify BSL declaration list both re-fetched live 14 Sep 2026 |
+
+**Don't-list spot-checks performed this pass (grep-based, on the newly written/updated files):**
+
+| # | Check | Result |
+|---|---|---|
+| 1 | "8 RIDB" in `BSL_DOMAIN_deafblind.md` | Only appears inside a "do not print as current" warning — pass |
+| 2 | "68 RIDB" in `BSL_DOMAIN_deafblind.md` | Only appears inside a "do not print as delivered" warning — pass |
+| 3 | RNID "36%" in `BSL_DOMAIN_ageing_later_life.md` | Every occurrence carries the stigma-subset caveat; never stated as a bare age-banded loneliness rate — pass |
+| 4 | "Domain 17" in `BSL_DOMAIN_ageing_later_life.md` | Only appears inside the standing-up note explaining the renumbering to Domain 20 — pass |
+| 5 | NDCS "90%" in `BSL_DOMAIN_coda.md` | Every occurrence carries the "not a UK-measured figure" / Mitchell & Karchmer 2004 (US) qualifier — pass |
+| 6 | Khan v Reed "22 June 2023" in `BSL_DOMAIN_welfare_employment_stubs.md` | Only appears inside the correction note stating this date does NOT appear in the judgment — pass |
+| 7 | AtW staff guide "13 November 2025" in `BSL_DOMAIN_welfare_employment_stubs.md` | Both occurrences explicitly instruct not to cite this as the page's current update date — pass |
+
+All seven checks passed with no violations found — no banned figure, date, or claim appears stated as settled fact anywhere in the six files touched this pass.
+
+### Net assessment
+
+This entry closes a structural gap rather than adding new primary-source findings of its own: every fact carried into the six domain files traces to a spot-check already performed and dated by that batch's own independent review (13–14 September 2026), not to a fresh verification pass run specifically for this framework-sync exercise. The value of this pass is consolidation and consistency — cross-checking that the research-framework layer states the same facts as the already-published dossier (confirmed via direct comparison against `dossier/bsl_dossier.html`'s existing entries for these same batches, all consistent, no contradictions found) — plus the Don't-list discipline check above, which is new verification work specific to this pass. `BSL_DEAF_RESEARCH_FRAMEWORK.md`'s domain map, cluster tables, and "Last updated" line are updated in the same commit to reflect Domains 19 and 20 and the extended existing domains.
