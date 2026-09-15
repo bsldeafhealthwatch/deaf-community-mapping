@@ -1078,6 +1078,7 @@ const DEFAULT_DOMAINS = [
 ];
 
 const DEFAULT_FOI = [
+
   { n:1, domain:'nhs-interpreter', text:'DHSC / NHS England — request whether any independent NHS or Treasury costing of Deaf healthcare accessibility failures has ever been commissioned, given the widely-cited £80–100m figure traces back to a charity’s own inflation-adjusted estimate, not a measured NHS cost.' },
   { n:2, domain:'nhs-interpreter', text:'SWL ICB constituent Trusts — annual spend on BSL/Deaf interpreting, named provider(s), and whether contracts are VCSE or commercial.' },
   { n:3, domain:'nhs-interpreter', text:'SWL ICB / Trusts — number of Accessible Information Standard compliance audits conducted in the last 24 months, and results.' },
@@ -1130,6 +1131,81 @@ const DEFAULT_FOI = [
   { n:50, domain:'end-of-life-palliative', text:'DWP — whether SR1/SREL claim records flag BSL or Deafblind communication needs at all, BSL VRS call volumes specifically for SREL claims, and any recorded complaints about interpreter refusal at the register office or coroner stage after a death.' },
   { n:51, domain:'nhs-interpreter', text:'SWL ICB constituent Trusts — number of times a patient with a recorded BSL/communication-need flag was contacted by phone rather than the recorded accessible method, and number of planned/routine appointments where video relay was offered or used in place of a booked in-person BSL interpreter, both in the last 24 months (expected result: no current system tracks either as a discrete incident type — a null response is itself evidence for this dossier).' },
   { n:52, domain:'nhs-interpreter', text:'CQC — has CQC ever issued an enforcement notice, fixed penalty, or published inspection finding specifically categorised as an Accessible Information Standard breach, as opposed to a consent/dignity/person-centred-care breach where AIS/BSL happens to be the underlying fact pattern (as in the UHB "Mr X" case)? Tests whether "AIS breach" functions as a real enforcement category at all.' },
+{
+    n: 53,
+    domain: 'access-to-work',
+    text: 'DWP — for AtW-funded workplace-adjustment cases in the last 12 months, is the identity of the booker/payer for interpreting support (employer directly, AtW grant to employee, or agency) recorded as a discrete field, and can DWP provide a simple count of bookings and no-show/cancellation rates split by that field? Tests whether the funding-route question this dossier keeps hitting is even answerable from DWP\'s own records.'
+  },
+  {
+    n: 54,
+    domain: 'access-to-work',
+    text: 'FCA and Bank of England — under information-barrier ("Chinese wall") policies that restrict internal communication between conflicted teams, is a Deaf or BSL-using employee\'s need for an interpreter or captioning ever treated as information requiring the same restriction as the confidential material itself, and does either regulator hold any recorded guidance, complaint, or case where a reasonable adjustment was delayed or refused because of an information barrier?'
+  },
+  {
+    n: 55,
+    domain: 'access-to-work',
+    text: 'DWP — does the case-manager-facing AtW staff guidance (as opposed to the public employer factsheet) include a specific provision on TUPE-transferred staff carrying forward an existing AtW award, and if so, how many TUPE-transfer cases in the last 24 months have used that carry-forward provision, split by whether the transfer was public-to-private, private-to-public, or private-to-private?'
+  },
+  {
+    n: 56,
+    domain: 'access-to-work',
+    text: 'The six SWL local authorities and SWL ICB — for outsourced/TUPE-transferred services (interpreting, care, facilities, IT), does the outgoing or incoming contract specify continuity of any existing BSL/communication-support arrangement for affected staff or service users, and has any TUPE transfer in the last 3 years resulted in a recorded gap or interruption in interpreter provision?'
+  },
+  {
+    n: 57,
+    domain: 'access-to-work',
+    text: 'Named SWL/SEL employing bodies — one letter, yes/no/number only: does the current staff IT-support contract, payroll/HR shared-service contract, facilities helpdesk contract, whistleblowing/ethics line, and pension/benefits administrator helpline each specify a non-voice contact channel for employees, and who is contractually responsible for the cost if a Deaf employee needs a BSL interpreter or VRS minute to use it?'
+  },
+  {
+    n: 58,
+    domain: 'access-to-work',
+    text: 'Named SWL/SEL employing bodies — for the same IT/HR/facilities/whistleblowing/pension helplines, split by contract type (substantive staff vs agency/bank/contractor): the published SLA per queue if different, and the median calendar days to fulfilment of a reasonable-adjustment/interpreter request raised through that channel.'
+  },
+  {
+    n: 59,
+    domain: 'access-to-work',
+    text: 'The six SWL local authorities and SWL ICB — does the current occupational health provider\'s Personal Emergency Evacuation Plan (PEEP) template ask whether an employee works alone or out of hours, and how many vibrating or critical-alert pagers, or visual-alarm devices, have been issued to staff in the last 12 months? Is a BSL interpreter routinely offered for staff occupational health appointments, and if so, at whose cost?'
+  },
+  {
+    n: 60,
+    domain: 'interpreter-regulation',
+    text: 'Named SWL/SEL Trusts and the ICB — last financial year: number of BSL interpreter bookings requested, fulfilled, and cancelled; face-to-face vs video-relay-interpreting split; and the unit rate paid, if held centrally. Fold into the existing companion log rather than opening separately.'
+  },
+  {
+    n: 61,
+    domain: 'interpreter-regulation',
+    text: 'NRCPD, via right of reply before any FOI is filed (NRCPD itself is not a public authority) — unique registrant count by category (RSLI, TSLI, Deaf-relay) and by nation, and number of complaints received and closed, with any sanctions, 2023-25.'
+  },
+  {
+    n: 62,
+    domain: 'interpreter-regulation',
+    text: 'Crown Commercial Service, or one participating ICB — under the RM6302 (or successor) framework Lot covering interpreting services, does a BSL-specific fulfilment KPI exist separately from the general interpreting-service KPI, and if so what was performance against it last financial year?'
+  },
+  {
+    n: 63,
+    domain: 'neurodivergence',
+    text: 'SWL/SEL ICBs and mental-health trusts — is an adult autism and/or adult ADHD assessment pathway with a BSL-fluent clinician, or a contracted BSL interpreter for the full assessment, offered as standard, and how many such assessments were completed for a Deaf/BSL-using adult in the last 24 months (a null/zero response is itself evidence)?'
+  },
+  {
+    n: 64,
+    domain: 'neurodivergence',
+    text: 'The six SWL local authorities — number of Education, Health and Care Plans (EHCPs) in the last 3 years where deafness is recorded alongside autism or ADHD as a co-occurring need, and whether the EHCP template has a discrete field for a dual-need BSL/neurodivergent communication plan.'
+  },
+  {
+    n: 65,
+    domain: 'nhs-interpreter',
+    text: 'DfE, NDCS/CRIDE, or BATOD, via right of reply before any FOI — has parental hearing status (i.e. whether a Deaf child has one or more Deaf parents, or is a hearing child of Deaf parents) ever been a question in the CRIDE survey or the DfE School Census? If not currently, has it ever been proposed and rejected, and why?'
+  },
+  {
+    n: 66,
+    domain: 'nhs-interpreter',
+    text: 'The six SWL local authorities — number of young-carer assessments in the last 3 years that specifically cited interpreting or communication support for a Deaf/BSL-using parent as part of the young person\'s caring role, and whether the assessment template has a discrete field for this.'
+  },
+  {
+    n: 67,
+    domain: 'nhs-interpreter',
+    text: 'The six SWL local authorities — for social-care needs assessments and Freedom Pass/blue badge or equivalent concessionary-travel applications from people aged 65+, is Deaf or BSL-using communication need recorded as a discrete flag distinct from general hearing loss, and how many such flagged records exist? Tests whether older Deaf people are visible in adult social care data at all, separately from the acquired-hearing-loss population.'
+  }
 ];
 
 const DEFAULT_RIGHTS = [
